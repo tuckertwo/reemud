@@ -26,6 +26,7 @@ and combat aspects of Multi-User Dungeon (MUD) systems and their descendants.
 > To the west is Piedmont Avenue, and to the south is Harrisburg Street.
 >
 > Enter your action below; type `help` for advice.
+>
 > `>`
 
 The premise is as above,
