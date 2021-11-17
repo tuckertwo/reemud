@@ -191,6 +191,14 @@ class Attack(Command):
 
 commands = {
     "go": GoCmd(None),
+    "north": GoCmd("north"),
+    "n": GoCmd("north"),
+    "south": GoCmd("south"),
+    "s": GoCmd("south"),
+    "east": GoCmd("east"),
+    "e": GoCmd("east"),
+    "west": GoCmd("west"),
+    "w": GoCmd("west"),
 
     "pickup": PickupCmd(),
     "inventory": Inventory(),
