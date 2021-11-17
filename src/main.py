@@ -94,40 +94,49 @@ class Command():
                 self.help = ""
 
     def func(self, p, u, orig_cli):
-        return self.func_ap(p, u, self.cmdparse(orig_cli, self.args))
+        return self.func_ap(p, u, self.cmdparse(orig_cli))
 
-    def cmdparse(self, cmdstr, orig_cli):
+    def cmdparse(self, cmdstr):
         # Awful mutable data stuff ahead
         def parser(args_parsed, args_inp, args_to_fill):
-            tofill = args_to_fill[0]
-            toproc = args_inp[0]
             if len(args_inp) == 0:
-                if len(args_to_fill) == 0 or tofill.optional or \
-                    (tofill.infinite and
-                     tofill.name in args_parsed):
+                if len(args_to_fill) == 0 or args_to_fill[0].optional or \
+                    (args_to_fill[0].infinite and
+                     args_to_fill[0].name in args_parsed):
                     return args_parsed
                 else:
                     raise CmdParseError("not enough arguments")
             elif len(args_to_fill) == 0:
                 raise CmdParseError("too many arguments")
-            elif tofill is None:
-                return parser(args_parsed, args_inp, args_to_fill[1:])
-            elif tofill.nonsense:
-                if toproc == tofill.name:
-                    return parser(args_parsed, args_inp[1:], args_to_fill[1:])
-                else:
-                    return parser(args_parsed, args_inp, args_to_fill[1:])
-            elif tofill.infinite:
-                if tofill.name in args_parsed:
-                    args_parsed[tofill.name].append(toproc)
-                    return parser(args_parsed, args_inp[1:], args_to_fill[1:])
-                else:
-                    args_parsed[tofill.name] = [toproc]
-                    return parser(args_parsed, args_inp[1:], args_to_fill[1:])
             else:
-                    args_parsed[tofill.name] = toproc
+                tofill = args_to_fill[0]
+                toproc = args_inp[0]
+                if tofill is None:
                     return parser(args_parsed, args_inp[1:], args_to_fill[1:])
-        return parser({}, good_split_spc(orig_cli), self.args)
+                elif tofill.nonsense:
+                    if toproc == tofill.name:
+                        return parser(args_parsed, args_inp[1:],
+                                      args_to_fill[1:])
+                    else:
+                        return parser(args_parsed, args_inp, args_to_fill[1:])
+                elif tofill.infinite:
+                    if tofill.name in args_parsed:
+                        args_parsed[tofill.name].append(toproc)
+                        return parser(args_parsed, args_inp[1:],
+                                      args_to_fill[1:])
+                    else:
+                        args_parsed[tofill.name] = [toproc]
+                        return parser(args_parsed, args_inp[1:],
+                                      args_to_fill[1:])
+                else:
+                        args_parsed[tofill.name] = toproc
+                        return parser(args_parsed, args_inp[1:],
+                                      args_to_fill[1:])
+
+        if not self.args:
+            return None
+        else:
+            return parser({}, good_split_spc(cmdstr), self.args)
 
 class GoCmd(Command):
     def __init__(self, direction=None):
