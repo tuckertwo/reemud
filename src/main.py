@@ -288,9 +288,9 @@ def main(seed=random.randint(0, 2^64-1), replay=[]):
             else:
                 cmd_obj.func(player, updater, cmdstr)
         except CmdParseError as e: # Pass all other errors through, I guess.
-            print("Error parsing command: " + e)
+            print("Error parsing command: " + str(e))
         except CmdRunError as e:
-            print("Error running command: " + e)
+            print("Error running command: " + str(e))
         except EOFError:
             print()
             commands["exit"].func(player, updater, "^D")
