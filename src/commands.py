@@ -95,6 +95,14 @@ class Inventory(Command):
     def func(self, p, _u, _cmdstr):
         return p.showInventory()
 
+class Me(Command)
+    args = []
+    desc = "gives a summary of your condition"
+    sideeffects = False
+    
+    def func(self, player, _updater, args_passed):
+        return player.showStats()
+    
 class Help(Command):
     args = []
     desc = "Prints a summary of all commands"
@@ -227,6 +235,7 @@ commands = {
     "pickup": PickupCmd(),
     "drop": DropCmd(),
     "inventory": Inventory(),
+    "me": Me(),
     "exit": Exit(),
     "attack": Attack(),
     "wait": WaitCmd(),
