@@ -200,7 +200,7 @@ class SaveCmd(Command):
             f.write(repr((p.seed, p.log)))
             f.write("\n")
 
-def WaitCmd(Command):
+class WaitCmd(Command):
     args = [None, Arg("for", True, True, False),
             Arg("time", False, True, False), Arg("seconds", True, True, False)]
     desc = "Waits for time to pass"
