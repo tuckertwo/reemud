@@ -248,8 +248,8 @@ def main(seed=random.randint(0, 2^64-1), replay=[]):
     new_replay = []
     while player.playing and player.alive:
         printSituation()
-        cmd_raw = input("> ") # Does not have '\n' appended; I checked.
         try:
+            cmd_raw = input("> ") # Does not have '\n' appended; I checked.
             cmd_split = good_split_spc(cmd_raw)
             cmd_name = cmd_split[0].lower()
             cmd_obj = None
@@ -270,5 +270,8 @@ def main(seed=random.randint(0, 2^64-1), replay=[]):
             print("Error parsing command: " + e)
         except CmdRunError as e:
             print("Error running command: " + e)
+        except EOFError:
+            print()
+            commands["exit"].func(player, updater, "^D")
 
 main()
