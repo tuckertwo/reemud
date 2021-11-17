@@ -78,12 +78,19 @@ class Arg():
             r = "{}+".format(r)
         return r
 
+class CmdRunError(Exception):
+    def __init__(self, value):
+        self.value = value
+
+    def __str__(self):
+        return self.value
+
 class CmdParseError(Exception):
     def __init__(self, value):
         self.value = value
 
     def __str__(self):
-        return "Cannot parse command: " + self.value
+        return self.value
 
 class Command():
     def __init__(self):
@@ -171,7 +178,7 @@ class PickupCmd(Command):
             player.pickup(target)
             return True
         else:
-            raise CmdParseError("no such item")
+            raise CmdRunError("no such item")
 
 class Inventory(Command):
     args = []
@@ -216,7 +223,7 @@ class Attack(Command):
             player.attackMonster(target)
             return True
         else:
-            raise CmdParseError("no such monster")
+            raise CmdRunError("no such monster")
 
 commands = {
     "go": GoCmd(None),
@@ -260,6 +267,8 @@ def main(seed=random.randint(0, 2^64-1), replay=[]):
             else:
                 cmd_obj.func(player, updater, cmd_raw)
         except CmdParseError as e: # Pass all other errors through, I guess.
-            print(e)
+            print("Error parsing command: " + e)
+        except CmdRunError as e:
+            print("Error running command: " + e)
 
 main()
