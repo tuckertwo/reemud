@@ -38,13 +38,18 @@ class Player:
     def showInventory(self):
         print("You are currently carrying:")
         items_dict = {}
+        weight_dict = {}
         for i in self.items:
             if i.name in items_dict:
                 items_dict[i.name] += 1
+                weight_dict[i.name] += i.weight
             else:
                 items_dict[i.name] = 1
+                weight_dict[i.name] = i.weight
         for name, num in items_dict.items():
-            print("{:>10} ×{:02}".format(name, num))
+            # Weight is a mess
+            print("{:>10} ×{:02}, {:02} kg".format(name, num,
+                                                   weight_dict[name]))
         print()
     def showStats(self):
         print("Health: " + self.health) #more shall be added later
