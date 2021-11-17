@@ -92,8 +92,8 @@ class Command():
             else:
                 self.args_hr = ""
 
-    def func(self, p, u, orig_cli):
-        return self.func_ap(p, u, self.cmdparse(orig_cli))
+    def func(self, p, u, cmdstr):
+        return self.func_ap(p, u, self.cmdparse(cmdstr))
 
     def cmdparse(self, cmdstr):
         # Awful mutable data stuff ahead
@@ -175,8 +175,8 @@ class PickupCmd(Command):
     args = [None, Arg("item", False, False, True)]
     desc = "Picks up an item"
 
-    def func(self, player, _updater, orig_args):
-        arg_split = good_split_spc(orig_args, 1)
+    def func(self, player, _updater, cmdstr):
+        arg_split = good_split_spc(cmdstr, 1)
         targetName = arg_split[1]
         target = player.location.getItemByName(targetName)
         if target:
@@ -189,7 +189,7 @@ class Inventory(Command):
     args = []
     desc = "Prints the player's inventory"
 
-    def func(self, p, _u, _orig_args):
+    def func(self, p, _u, _cmdstr):
         return p.showInventory()
 
 class Help(Command):
@@ -199,7 +199,7 @@ class Help(Command):
     def __init__(self, commands):
         Command.__init__(self)
 
-    def func(self, _p, _u, _orig_args):
+    def func(self, _p, _u, _cmdstr):
         commands_full = {}
         commands_full.update(commands)
         commands_full.update({"help": self}) # Recursion has its limits
@@ -220,8 +220,8 @@ class Attack(Command):
     args = [None, Arg("monster", False, False, True)]
     desc = "Attacks a monster"
 
-    def func(self, player, _updater, orig_args):
-        arg_split = good_split_spc(orig_args, 1)
+    def func(self, player, _updater, cmdstr):
+        arg_split = good_split_spc(cmdstr, 1)
         targetName = arg_split[1]
         target = player.location.getMonsterByName(targetName)
         if target:
@@ -254,8 +254,8 @@ def main(seed=random.randint(0, 2^64-1), replay=[]):
     while player.playing and player.alive:
         printSituation()
         try:
-            cmd_raw = input("> ") # Does not have '\n' appended; I checked.
-            cmd_split = good_split_spc(cmd_raw)
+            cmdstr = input("> ") # Does not have '\n' appended; I checked.
+            cmd_split = good_split_spc(cmdstr)
             cmd_name = cmd_split[0].lower()
             cmd_obj = None
             if cmd_name in commands:
@@ -270,7 +270,7 @@ def main(seed=random.randint(0, 2^64-1), replay=[]):
             if cmd_obj is None:
                 raise CmdParseError("invalid command")
             else:
-                cmd_obj.func(player, updater, cmd_raw)
+                cmd_obj.func(player, updater, cmdstr)
         except CmdParseError as e: # Pass all other errors through, I guess.
             print("Error parsing command: " + e)
         except CmdRunError as e:
