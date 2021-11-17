@@ -22,6 +22,14 @@ class Player:
         self.items.append(item)
         item.loc = self
         self.location.removeItem(item)
+    def getItemByName(self, name):
+        for i in self.items:
+            if i.name.lower() == name.lower():
+                return i
+        return False
+    def removeItem(self, item):
+        if item in self.items:
+            self.items.remove(item)
     def showInventory(self):
         print("You are currently carrying:")
         for i in self.items:
