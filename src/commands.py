@@ -98,7 +98,7 @@ class Exit(Command):
     args = []
     desc = "Exits the game"
 
-    def func(self, p, _u, _orig_args):
+    def func(self, p, _u, _cmdstr):
         p.playing = False
 
 class Attack(Command):
@@ -116,21 +116,21 @@ class Attack(Command):
             raise CmdRunError("no such monster")
 
 class LookCmd(Command):
-    args = None
+    args = []
     desc = "Look around"
 
     def func(self, player, _updater, _cmdstr):
         printSituation(player)
 
 class ClearScreenCmd(Command):
-    args = None
+    args = []
     desc = "Clear the screen"
 
     def func(self, _player, _updater, _cmdstr):
         clear()
 
 class PauseCmd(Command):
-    args = None
+    args = []
     desc = "Pause for user input"
 
     def func_ap(self, p, _u, _args_parsed):
