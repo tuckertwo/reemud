@@ -2,6 +2,7 @@ from room import Room
 from player import Player
 from item import Item
 from monster import Monster
+import random
 import os
 import updater
 
@@ -53,6 +54,48 @@ def showHelp():
 
 def pause():
     input("Please press 'enter' to continue.")
+
+def good_split_spc(string):
+    return filter(lambda x: len(x)>0, string.split(' '))
+
+
+# This is really just a struct.
+class Arg():
+    def __init__(self, name, nonsense, optional, infinite):
+        self.name = name
+        self.nonsense = nonsense
+        self.optional = optional
+        self.infinite = infinite
+
+    def __repr__(self):
+        r = self.name
+        if self.nonsense:
+            r = "({})".format(r)
+        if self.optional:
+            r = "[{}]".format(r)
+        if self.infinite:
+            r = "{}+".format(r)
+        return r
+
+class CmdParseError(Exception):
+    def __init__(self, value):
+        self.value = value
+
+    def __str__(self):
+        return "Cannot parse command: " + repr(self.value)
+
+class Command():
+    def __init__(self):
+        if hasattr(self, "func"):
+            raise ValueError("missing required parameters")
+        if hasattr(self, "help"):
+            self.help = [str(x) for x in self.args].join(" ")
+
+    def cmdparse(self, cmdstr, args):
+        if len(args) < len(filter(lambda x: x.optional, self.args)):
+            raise CmdParseError("not enough arguments")
+        if len(args) > len(self.args) and not args[-1].infinite:
+            raise CmdParseError("too many arguments")
 
 def main(seed=random.randint(0, 2^64-1), replay=[]):
     createWorld()
