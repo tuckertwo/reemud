@@ -201,43 +201,28 @@ commands = {
 
 def main(seed=random.randint(0, 2^64-1), replay=[]):
     createWorld()
+    new_replay = []
     while player.playing and player.alive:
         printSituation()
-        commandSuccess = False
-        timePasses = False
-        while not commandSuccess:
-            commandSuccess = True
-            command = input("What now? ")
-            commandWords = command.split()
-            if commandWords[0].lower() == "go":       # cannot handle multi-word directions
-                player.goDirection(commandWords[1])
-                timePasses = True
-            elif commandWords[0].lower() == "pickup": # can handle multi-word objects
-                targetName = command[7:]
-                target = player.location.getItemByName(targetName)
-                if target != False:
-                    player.pickup(target)
-                else:
-                    print("No such item.")
-                    commandSuccess = False
-            elif commandWords[0].lower() == "inventory":
-                player.showInventory()
-            elif commandWords[0].lower() == "help":
-                showHelp()
-            elif commandWords[0].lower() == "exit":
-                player.playing = False
-            elif commandWords[0].lower() == "attack":
-                targetName = command[7:]
-                target = player.location.getMonsterByName(targetName)
-                if target != False:
-                    player.attackMonster(target)
-                else:
-                    print("No such monster.")
-                    commandSuccess = False
+        cmd_raw = input("> ") # Does not have '\n' appended; I checked.
+        try:
+            cmd_split = good_split_spc(cmd_raw)
+            cmd_name = cmd_split[0].lower()
+            cmd_obj = None
+            if cmd_name in commands:
+                cmd_obj = commands[cmd_name]
             else:
-                print("Not a valid command")
-                commandSuccess = False
-        if timePasses == True:
-            updater.updateAll()
+                for cmd_cand in commands.keys():
+                    if cmd_name == cmd_cand[0:len(cmd_name)]:
+                        if cmd_obj is not None:
+                            raise CmdParseError("ambiguous command")
+                        else:
+                            cmd_obj = commands[cmd_cand]
+            if cmd_obj is None:
+                raise CmdParseError("invalid command")
+            else:
+                cmd_obj.func(player, updater, cmd_raw)
+        except CmdParseError as e: # Pass all other errors through, I guess.
+            print(e)
 
 main()
