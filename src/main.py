@@ -45,14 +45,6 @@ def printSituation():
         print(e)
     print()
 
-def showHelp():
-    clear()
-    print("go <direction> -- moves you in the given direction")
-    print("inventory -- opens your inventory")
-    print("pickup <item> -- picks up the item")
-    print()
-    pause()
-
 def pause():
     input("Please press 'enter' to continue.")
 
