@@ -46,6 +46,9 @@ class Player:
         for name, num in items_dict.items():
             print("{:>10} ×{:02}".format(name, num))
         print()
+    def showStats(self):
+        print("Health: " + self.health) #more shall be added later
+        print()
     def attackMonster(self, mon):
         print("You are attacking " + mon.name)
         print("Your health is " + str(self.health) + ".")
