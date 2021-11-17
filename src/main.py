@@ -89,13 +89,105 @@ class Command():
         if hasattr(self, "func"):
             raise ValueError("missing required parameters")
         if hasattr(self, "help"):
-            self.help = [str(x) for x in self.args].join(" ")
+            if len(self.args) >= 2:
+                self.help = [str(x) for x in self.args[1:]].join(" ")
+            else:
+                self.help = ""
 
-    def cmdparse(self, cmdstr, args):
-        if len(args) < len(filter(lambda x: x.optional, self.args)):
-            raise CmdParseError("not enough arguments")
-        if len(args) > len(self.args) and not args[-1].infinite:
-            raise CmdParseError("too many arguments")
+    def func(self, p, u, orig_cli):
+        return self.func_ap(p, u, self.cmdparse(orig_cli, self.args))
+
+    def cmdparse(self, cmdstr, orig_cli):
+        # Awful mutable data stuff ahead
+        def parser(args_parsed, args_inp, args_to_fill):
+            tofill = args_to_fill[0]
+            toproc = args_inp[0]
+            if len(args_inp) == 0:
+                if len(args_to_fill) == 0 or tofill.optional or \
+                    (tofill.infinite and
+                     tofill.name in args_parsed):
+                    return args_parsed
+                else:
+                    raise CmdParseError("not enough arguments")
+            elif len(args_to_fill) == 0:
+                raise CmdParseError("too many arguments")
+            elif tofill is None:
+                return parser(args_parsed, args_inp, args_to_fill[1:])
+            elif tofill.nonsense:
+                if toproc == tofill.name:
+                    return parser(args_parsed, args_inp[1:], args_to_fill[1:])
+                else:
+                    return parser(args_parsed, args_inp, args_to_fill[1:])
+            elif tofill.infinite:
+                if tofill.name in args_parsed:
+                    args_parsed[tofill.name].append(toproc)
+                    return parser(args_parsed, args_inp[1:], args_to_fill[1:])
+                else:
+                    args_parsed[tofill.name] = [toproc]
+                    return parser(args_parsed, args_inp[1:], args_to_fill[1:])
+            else:
+                    args_parsed[tofill.name] = toproc
+                    return parser(args_parsed, args_inp[1:], args_to_fill[1:])
+        return parser({}, good_split_spc(orig_cli), self.args)
+
+class GoCmd(Command):
+    def __init__(self, direction=None):
+        if self.direction is not None:
+            self.args = []
+            self.direction = direction
+        else:
+            self.args = [None, Arg("direction", False, False, False)]
+            self.direction = None
+
+    def func_ap(self, player, updater, args_parsed):
+        if self.direction is not None:
+            direction = self.direction
+        else:
+            direction = args_parsed["direction"]
+
+        player.goDirection(direction)
+        updater.updateAll()
+
+class PickupCmd(Command):
+    args = [None, Arg("item", False, False, True)]
+
+    def func(self, player, _updater, orig_args):
+        arg_split = good_split_spc(orig_args, 1)
+        targetName = arg_split[1]
+        target = player.location.getItemByName(targetName)
+        if target != False:
+            player.pickup(target)
+            return True
+        else:
+            raise CmdParseError("no such item")
+
+class Inventory(Command):
+    args = []
+    def func(self, p, _u, _orig_args):
+        return p.showInventory()
+
+class Help(Command):
+    args = []
+    def func(self, _p, _u, _orig_args):
+        showHelp()
+
+class Exit(Command):
+    args = []
+    def func(self, p, _u, _orig_args):
+        p.playing = False
+
+class Attack(Command):
+    args = [None, Arg("item", False, False, True)]
+
+    def func(self, player, _updater, orig_args):
+        arg_split = good_split_spc(orig_args, 1)
+        targetName = arg_split[1]
+        target = player.location.getMonsterByName(targetName)
+        if target != False:
+            player.attackMonster(target)
+            return True
+        else:
+            raise CmdParseError("no such monster")
 
 def main(seed=random.randint(0, 2^64-1), replay=[]):
     createWorld()
