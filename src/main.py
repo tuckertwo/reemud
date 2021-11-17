@@ -26,24 +26,31 @@ def createWorld():
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
 
-def printSituation():
-    clear()
+def printSituation(player):
     print(player.location.desc)
-    print()
     if player.location.hasMonsters():
         print("This room contains the following monsters:")
         for m in player.location.monsters:
-            print(m.name)
-        print()
+            print("  - " + m.name)
     if player.location.hasItems():
         print("This room contains the following items:")
         for i in player.location.items:
-            print(i.name)
-        print()
-    print("You can go in the following directions:")
-    for e in player.location.exitNames():
-        print(e)
+            print("  - " + i.name)
+    print("You can go {}.".format(eng_list(player.location.exitNames())))
     print()
+
+def eng_list(xs, str_acc=""):
+    if len(xs) == 0:
+        return str
+    elif len(xs) == 1:
+        return xs[0]
+    elif len(xs) == 2:
+        return "{}{} and {}".format(str_acc, xs[0], xs[1])
+    elif len(xs) == 2:
+        return "{}{}, {}, and {}".format(str_acc, xs[0], xs[1], xs[2])
+    else:
+        return eng_list(xs[1:], "{}{}, ".format(str_acc, xs[0]))
+
 
 def pause():
     input("Please press 'enter' to continue.")
@@ -170,6 +177,7 @@ class GoCmd(Command):
 
         player.goDirection(direction)
         updater.updateAll()
+        printSituation(player)
 
 class PickupCmd(Command):
     args = [None, Arg("item", False, False, True)]
@@ -230,6 +238,13 @@ class Attack(Command):
         else:
             raise CmdRunError("no such monster")
 
+class LookCmd(Command):
+    args = None
+    desc = "Look around"
+
+    def func(self, player, _updater, _cmdstr):
+        printSituation(player)
+
 commands = {
     "go": GoCmd(None),
     "north": GoCmd("north"),
@@ -241,6 +256,7 @@ commands = {
     "west": GoCmd("west"),
     "w": GoCmd("west"),
 
+    "look": LookCmd(),
     "pickup": PickupCmd(),
     "inventory": Inventory(),
     "exit": Exit(),
@@ -250,9 +266,9 @@ commands["help"] = Help(commands) # Recursion!
 
 def main(seed=random.randint(0, 2^64-1), replay=[]):
     createWorld()
+    printSituation(player)
     new_replay = []
     while player.playing and player.alive:
-        printSituation()
         try:
             cmdstr = input("> ") # Does not have '\n' appended; I checked.
             cmd_split = good_split_spc(cmdstr)
