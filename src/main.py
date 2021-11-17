@@ -6,11 +6,9 @@ from monster import Monster
 import os
 import updater
 
-from commands import commands, printSituation
+from commands import commands, printSituation, pause
 from txt_parser import CmdParseError, CmdRunError, good_split_spc
-import random
-
-player = Player()
+import random, ast, sys
 
 def createWorld():
     a = Room("You are in room 1")
@@ -32,9 +30,14 @@ def main(replay=[]):
     while player.playing and player.alive:
         try:
             if replay:
-                cmdstr = replay[0]
-                replay = replay[1:]
+                cmdstr   = replay[0]
+                replay   = replay[1:]
+                rep_flag = True
             else:
+                if rep_flag:
+                    print("-------------------- Save loaded.")
+                    pause()
+                    rep_flag = False
                 cmdstr = input("> ") # Does not have '\n' appended; I checked.
 
             if cmdstr:
@@ -64,4 +67,10 @@ def main(replay=[]):
             print()
             commands["exit"].func(player, updater, "^D")
 
-main()
+if len(sys.argv) > 1:
+    seed, log = ast.literal_eval(open(sys.argv[1]).read())
+    player = Player(seed)
+    main(log)
+else:
+    player = Player()
+    main()
