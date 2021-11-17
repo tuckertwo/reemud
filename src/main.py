@@ -61,7 +61,7 @@ def good_split_spc(string, limit=-1):
 
 # This is really just a struct.
 class Arg():
-    def __init__(self, name, nonsense, optional, infinite):
+    def __init__(self, name, nonsense=False, optional=False, infinite=False):
         self.name = name
         self.nonsense = nonsense
         self.optional = optional
