@@ -71,7 +71,7 @@ def main(replay=[], rep_flag=False):
 
 
 if len(sys.argv) > 1:
-    seed, log = ast.literal_eval(open(sys.argv[1]).read())
+    seed, log = ast.literal_eval(open(sys.argv[1]).read(), True)
     player = Player(seed)
     main(log, True)
 else:
