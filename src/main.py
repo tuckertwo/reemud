@@ -87,9 +87,7 @@ class CmdParseError(Exception):
 
 class Command():
     def __init__(self):
-        if hasattr(self, "func"):
-            raise ValueError("missing required parameters")
-        if hasattr(self, "help"):
+        if not hasattr(self, "help"):
             if len(self.args) >= 2:
                 self.help = [str(x) for x in self.args[1:]].join(" ")
             else:
