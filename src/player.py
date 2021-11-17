@@ -1,10 +1,16 @@
-import os
+import os, random
 
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 class Player:
-    def __init__(self):
+    def __init__(self, seed=random.randint(0, 2^64-1)):
+        # Stuff will get screwy if there are multiple Player()s with different
+        # seeds, but that is an eventuality that seems unlikely to occur.
+        # (Famous last words.)
+        self.seed = seed
+        random.seed(seed)
+        self.log = []
         self.playing = True
         self.location = None
         self.items = []

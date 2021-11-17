@@ -26,13 +26,17 @@ def createWorld():
     player.location = a
     Monster("Bob the monster", 20, b)
 
-def main(seed=random.randint(0, 2^64-1), replay=[]):
+def main(replay=[]):
     createWorld()
     printSituation(player)
-    new_replay = []
     while player.playing and player.alive:
         try:
-            cmdstr = input("> ") # Does not have '\n' appended; I checked.
+            if replay:
+                cmdstr = replay[0]
+                replay = replay[1:]
+            else:
+                cmdstr = input("> ") # Does not have '\n' appended; I checked.
+
             if cmdstr:
                 cmd_split = good_split_spc(cmdstr)
                 cmd_name = cmd_split[0].lower()
@@ -50,6 +54,8 @@ def main(seed=random.randint(0, 2^64-1), replay=[]):
                     raise CmdParseError("invalid command")
                 else:
                     cmd_obj.func(player, updater, cmdstr)
+                    if cmd_obj.sideeffects:
+                        player.log.append(cmdstr)
         except CmdParseError as e: # Pass all other errors through, I guess.
             print("Error parsing command: " + str(e))
         except CmdRunError as e:

@@ -35,6 +35,8 @@ def pause():
     input("Please press 'enter' to continue.")
 
 class GoCmd(Command):
+    sideeffects = True
+
     def __init__(self, direction=None):
         if direction is not None:
             self.desc = "Moves {}".format(direction)
@@ -59,6 +61,7 @@ class GoCmd(Command):
 class PickupCmd(Command):
     args = [None, Arg("item", False, False, True)]
     desc = "Picks up an item"
+    sideeffects = True
 
     def func_ap(self, player, _updater, args_parsed):
         targetName = args_parsed["item"]
@@ -72,6 +75,7 @@ class PickupCmd(Command):
 class Inventory(Command):
     args = []
     desc = "Prints the player's inventory"
+    sideeffects = False
 
     def func(self, p, _u, _cmdstr):
         return p.showInventory()
@@ -79,6 +83,7 @@ class Inventory(Command):
 class Help(Command):
     args = []
     desc = "Prints a summary of all commands"
+    sideeffects = False
 
     def __init__(self, commands):
         Command.__init__(self)
@@ -96,6 +101,8 @@ class Help(Command):
 class Exit(Command):
     args = []
     desc = "Exits the game"
+    sideeffects = False # Well, really it does but we don't want it recorded in
+                        # the save nevertheless
 
     def func(self, p, _u, _cmdstr):
         p.playing = False
@@ -103,6 +110,7 @@ class Exit(Command):
 class Attack(Command):
     args = [None, Arg("monster", False, False, True)]
     desc = "Attacks a monster"
+    sideeffects = True
 
     def func_ap(self, player, _updater, args_parsed):
         targetName = args_parsed["monster"]
@@ -116,6 +124,7 @@ class Attack(Command):
 class LookCmd(Command):
     args = []
     desc = "Look around"
+    sideeffects = False
 
     def func(self, player, _updater, _cmdstr):
         printSituation(player)
@@ -123,6 +132,7 @@ class LookCmd(Command):
 class ClearScreenCmd(Command):
     args = []
     desc = "Clear the screen"
+    sideeffects = False
 
     def func(self, _player, _updater, _cmdstr):
         clear()
@@ -130,6 +140,7 @@ class ClearScreenCmd(Command):
 class PauseCmd(Command):
     args = []
     desc = "Pause for user input"
+    sideeffects = False
 
     def func_ap(self, p, _u, _args_parsed):
         pause()
@@ -137,6 +148,7 @@ class PauseCmd(Command):
 class EchoCmd(Command):
     args = [None, Arg("string", False, False, True)]
     desc = "Echo a string"
+    sideeffects = False
 
     # To-do: re-write the parser to make infinite args actually capture
     # strings instead of split strings
@@ -146,6 +158,7 @@ class EchoCmd(Command):
 class SleepCmd(Command):
     args = [None, Arg("time", False, False, False)]
     desc = "Wait for a specific time in seconds"
+    sideeffects = False
 
     def func_ap(self, _p, _u, args_parsed):
         time.sleep(float(args_parsed["time"]))
