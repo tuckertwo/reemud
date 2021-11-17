@@ -83,7 +83,7 @@ class CmdParseError(Exception):
         self.value = value
 
     def __str__(self):
-        return "Cannot parse command: " + repr(self.value)
+        return "Cannot parse command: " + self.value
 
 class Command():
     def __init__(self):
