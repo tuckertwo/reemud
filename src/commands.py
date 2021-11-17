@@ -76,7 +76,7 @@ class DropCmd(Command):
     args = [None, Arg("item", False, False, True)]
     desc = "Drops an item"
     sideeffects = True
-    
+
     def func_ap(self, player, _updater, args_parsed):
         targetName = args_parsed["item"]
         target = player.getItemByName(targetName)
@@ -86,7 +86,7 @@ class DropCmd(Command):
             return True
         else:
             raise CmdRunError("no sun item in inventory")
-            
+
 class Inventory(Command):
     args = []
     desc = "Prints the player's inventory"
@@ -192,6 +192,19 @@ class SaveCmd(Command):
             f.write(repr((p.seed, p.log)))
             f.write("\n")
 
+def WaitCmd(Command):
+    args = [None, Arg("for", True, True, False),
+            Arg("time", False, True, False), Arg("seconds", True, True, False)]
+    desc = "Waits for time to pass"
+
+    def func_ap(self, _p, u, args_parsed):
+        if "time" in args_parsed:
+            time = args_parsed["time"]
+        else:
+            time = 1
+        for i in range(time+1):
+            u.updateAll()
+
 commands = {
     "go": GoCmd(None),
     "north": GoCmd("north"),
@@ -216,6 +229,7 @@ commands = {
     "inventory": Inventory(),
     "exit": Exit(),
     "attack": Attack(),
+    "wait": WaitCmd(),
 
     "save": SaveCmd(),
 }
