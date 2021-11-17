@@ -24,7 +24,7 @@ def createWorld():
     player.location = a
     Monster("Bob the monster", 20, b)
 
-def main(replay=[]):
+def main(replay=[], rep_flag=False):
     createWorld()
     printSituation(player)
     while player.playing and player.alive:
@@ -68,7 +68,7 @@ def main(replay=[]):
             commands["exit"].func(player, updater, "^D")
 
 if len(sys.argv) > 1:
-    seed, log = ast.literal_eval(open(sys.argv[1]).read())
+    seed, log = ast.literal_eval(open(sys.argv[1]).read(), True)
     player = Player(seed)
     main(log)
 else:
