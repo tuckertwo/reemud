@@ -1,4 +1,5 @@
 import os, random
+from txt_parser import CmdRunError
 
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -17,15 +18,36 @@ class Player:
         self.health = 50
         self.alive = True
     def goDirection(self, direction):
-        self.location = self.location.getDestination(direction)
+        newloc = self.location.getDestination(direction)
+        if newloc is None:
+            raise CmdRunError("no such location")
+        else:
+            self.location = newloc
     def pickup(self, item):
         self.items.append(item)
         item.loc = self
         self.location.removeItem(item)
+    def getItemByName(self, name):
+        for i in self.items:
+            if i.name.lower() == name.lower():
+                return i
+        return False
+    def removeItem(self, item):
+        if item in self.items:
+            self.items.remove(item)
     def showInventory(self):
         print("You are currently carrying:")
+        items_dict = {}
         for i in self.items:
-            print(i.name)
+            if i.name in items_dict:
+                items_dict[i.name] += 1
+            else:
+                items_dict[i.name] = 1
+        for name, num in items_dict.items():
+            print("{:>10} ×{:02}".format(name, num))
+        print()
+    def showStats(self):
+        print("Health: " + self.health) #more shall be added later
         print()
     def getItemByName(self, name):
         for i in self.items:

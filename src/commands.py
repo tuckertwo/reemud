@@ -87,6 +87,21 @@ class DropCmd(Command):
         else:
             raise CmdRunError("no sun item in inventory")
 
+class DropCmd(Command):
+    args = [None, Arg("item", False, False, True)]
+    desc = "Drops an item"
+    sideeffects = True
+
+    def func_ap(self, player, _updater, args_parsed):
+        targetName = args_parsed["item"]
+        target = player.getItemByName(targetName)
+        if target:
+            player.location.addItem(target)
+            player.removeItem(target)
+            return True
+        else:
+            raise CmdRunError("no sun item in inventory")
+
 class Inventory(Command):
     args = []
     desc = "Prints the player's inventory"
@@ -95,6 +110,14 @@ class Inventory(Command):
     def func(self, p, _u, _cmdstr):
         return p.showInventory()
 
+class Me(Command)
+    args = []
+    desc = "gives a summary of your condition"
+    sideeffects = False
+    
+    def func(self, player, _updater, args_passed):
+        return player.showStats()
+    
 class Help(Command):
     args = []
     desc = "Prints a summary of all commands"
@@ -192,6 +215,19 @@ class SaveCmd(Command):
             f.write(repr((p.seed, p.log)))
             f.write("\n")
 
+def WaitCmd(Command):
+    args = [None, Arg("for", True, True, False),
+            Arg("time", False, True, False), Arg("seconds", True, True, False)]
+    desc = "Waits for time to pass"
+
+    def func_ap(self, _p, u, args_parsed):
+        if "time" in args_parsed:
+            time = args_parsed["time"]
+        else:
+            time = 1
+        for i in range(time+1):
+            u.updateAll()
+
 commands = {
     "go": GoCmd(None),
     "north": GoCmd("north"),
@@ -214,8 +250,10 @@ commands = {
     "pickup": PickupCmd(),
     "drop": DropCmd(),
     "inventory": Inventory(),
+    "me": Me(),
     "exit": Exit(),
     "attack": Attack(),
+    "wait": WaitCmd(),
 
     "save": SaveCmd(),
 }

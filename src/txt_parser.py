@@ -1,6 +1,22 @@
 def good_split_spc(string, limit=-1):
     return list(filter(lambda x: len(x) > 0, string.split(' ', limit)))
 
+def abbrev_cmd(cmds, inp, ambig, invalid):
+    cmd_name = None
+    if inp in cmds:
+        cmd_name = inp
+    else:
+        for cmd_cand in cmds:
+            if inp == cmd_cand[0:len(inp)]:
+                if cmd_name is not None:
+                    raise ambig
+                else:
+                    cmd_name = cmd_cand
+
+    if cmd_name is None:
+        raise invalid
+    else:
+        return cmd_name
 
 # This is really just a struct.
 class Arg():
