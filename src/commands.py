@@ -163,6 +163,20 @@ class SleepCmd(Command):
     def func_ap(self, _p, _u, args_parsed):
         time.sleep(float(args_parsed["time"]))
 
+class SaveCmd(Command):
+    # Attention: this saves a complete log of every salient action taken
+    # by the player.
+    # This means that a save file can be used for later analysis of games.
+    # This *also* means that save files aren't compatible between versions.
+    args = [None, Arg("file", False, False, False)]
+    desc = "Save the game to a file on disk."
+    sideeffects = False
+
+    def func_ap(self, p, _u, args_parsed):
+        with open(args_parsed["file"], "w") as f:
+            f.write(repr((p.seed, p.log)))
+            f.write("\n")
+
 commands = {
     "go": GoCmd(None),
     "north": GoCmd("north"),
@@ -186,5 +200,7 @@ commands = {
     "inventory": Inventory(),
     "exit": Exit(),
     "attack": Attack(),
+
+    "save": SaveCmd(),
 }
 commands["help"] = Help(commands) # Recursion!
