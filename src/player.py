@@ -32,8 +32,14 @@ class Player:
             self.items.remove(item)
     def showInventory(self):
         print("You are currently carrying:")
+        items_dict = {}
         for i in self.items:
-            print(i.name)
+            if i.name in items_dict:
+                items_dict[i.name] += 1
+            else:
+                items_dict[i.name] = 1
+        for name, num in items_dict.items():
+            print("{:>10} ×{:02}".format(name, num))
         print()
     def attackMonster(self, mon):
         print("You are attacking " + mon.name)

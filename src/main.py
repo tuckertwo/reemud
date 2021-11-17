@@ -21,6 +21,10 @@ def createWorld():
     Room.connectRooms(b, "north", d, "south")
     i = Item("Rock", "This is just a rock.")
     i.putInRoom(b)
+    i = Item("Rock", "This is just a rock.")
+    i.putInRoom(c)
+    i = Item("Clock", "This is not a rock.")
+    i.putInRoom(c)
     player.location = a
     Monster("Bob the monster", 20, b)
 
