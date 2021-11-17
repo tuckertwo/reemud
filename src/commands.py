@@ -63,12 +63,19 @@ class PickupCmd(Command):
     desc = "Picks up an item"
     sideeffects = True
 
-    def func_ap(self, player, _updater, args_parsed):
+    def func_ap(self, player, updater, args_parsed):
         targetName = args_parsed["item"]
         target = player.location.getItemByName(targetName)
         if target:
-            player.pickup(target)
-            return True
+            total_weight = sum([i.weight for i in player.items])
+            if total_weight+target.weight>player.weightlimit:
+                raise CmdRunError("item too heavy to put in inventory")
+            else:
+                if target.weight >= player.groan_threshold:
+                    for i in range(target.weight//player.groan_threshold+1):
+                        updater.updateAll()
+                        print("You strain yourself")
+                player.pickup(target)
         else:
             raise CmdRunError("no such item")
 

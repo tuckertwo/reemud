@@ -16,6 +16,8 @@ class Player:
         self.location = None
         self.items = []
         self.health = 50
+        self.weightlimit = 10
+        self.groan_threshold = 2
         self.alive = True
     def goDirection(self, direction):
         newloc = self.location.getDestination(direction)
