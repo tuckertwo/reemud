@@ -17,13 +17,11 @@ class Player:
         item.loc = self
         self.location.removeItem(item)
     def showInventory(self):
-        clear()
         print("You are currently carrying:")
         for i in self.items:
             print(i.name)
         print()
     def attackMonster(self, mon):
-        clear()
         print("You are attacking " + mon.name)
         print("Your health is " + str(self.health) + ".")
         print(mon.name + "'s health is " + str(mon.health) + ".")
