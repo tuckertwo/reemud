@@ -7,7 +7,7 @@ import os
 import updater
 
 from commands import commands, printSituation, pause
-from txt_parser import CmdParseError, CmdRunError, good_split_spc
+from txt_parser import CmdParseError, CmdRunError, good_split_spc, abbrev_cmd
 import random, ast, sys
 
 def createWorld():
@@ -46,23 +46,13 @@ def main(replay=[], rep_flag=False):
 
             if cmdstr:
                 cmd_split = good_split_spc(cmdstr)
-                cmd_name = cmd_split[0].lower()
-                cmd_obj = None
-                if cmd_name in commands:
-                    cmd_obj = commands[cmd_name]
-                else:
-                    for cmd_cand in commands.keys():
-                        if cmd_name == cmd_cand[0:len(cmd_name)]:
-                            if cmd_obj is not None:
-                                raise CmdParseError("ambiguous command")
-                            else:
-                                cmd_obj = commands[cmd_cand]
-                if cmd_obj is None:
-                    raise CmdParseError("invalid command")
-                else:
-                    cmd_obj.func(player, updater, cmdstr)
-                    if cmd_obj.sideeffects:
-                        player.log.append(cmdstr)
+                cmd_obj   = commands[abbrev_cmd(commands.keys(),
+                                        cmd_split[0],
+                                        CmdParseError("ambiguous command"),
+                                        CmdParseError("invalid command"))]
+                cmd_obj.func(player, updater, cmdstr)
+                if cmd_obj.sideeffects:
+                    player.log.append(cmdstr)
         except CmdParseError as e: # Pass all other errors through, I guess.
             print("Error parsing command: " + str(e))
         except CmdRunError as e:
