@@ -59,7 +59,7 @@ class GoCmd(Command):
         printSituation(player)
 
 class PickupCmd(Command):
-    args = [None, Arg("item", False, False, True)]
+    args = [None, Arg("up", True, False, False), Arg("item", False, False, True)]
     desc = "Picks up an item"
     sideeffects = True
 
