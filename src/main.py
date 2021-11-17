@@ -89,9 +89,9 @@ class Command():
     def __init__(self):
         if not hasattr(self, "help"):
             if len(self.args) >= 2:
-                self.help = [str(x) for x in self.args[1:]].join(" ")
+                self.args_hr = " ".join([str(x) for x in self.args[1:]])
             else:
-                self.help = ""
+                self.args_hr = ""
 
     def func(self, p, u, orig_cli):
         return self.func_ap(p, u, self.cmdparse(orig_cli))
@@ -141,11 +141,14 @@ class Command():
 class GoCmd(Command):
     def __init__(self, direction=None):
         if direction is not None:
+            self.desc = "Moves {}".format(direction)
             self.args = []
             self.direction = direction
         else:
+            self.desc = "Moves in the given direction"
             self.args = [None, Arg("direction", False, False, False)]
             self.direction = None
+        Command.__init__(self)
 
     def func_ap(self, player, updater, args_parsed):
         if self.direction is not None:
@@ -158,6 +161,7 @@ class GoCmd(Command):
 
 class PickupCmd(Command):
     args = [None, Arg("item", False, False, True)]
+    desc = "Picks up an item"
 
     def func(self, player, _updater, orig_args):
         arg_split = good_split_spc(orig_args, 1)
@@ -171,21 +175,38 @@ class PickupCmd(Command):
 
 class Inventory(Command):
     args = []
+    desc = "Prints the player's inventory"
+
     def func(self, p, _u, _orig_args):
         return p.showInventory()
 
 class Help(Command):
     args = []
+    desc = "Prints a summary of all commands"
+
+    def __init__(self, commands):
+        Command.__init__(self)
+
     def func(self, _p, _u, _orig_args):
-        showHelp()
+        commands_full = {}
+        commands_full.update(commands)
+        commands_full.update({"help": self}) # Recursion has its limits
+        helptext = "{:>10}   {:15}       {}\n".format("Command",
+                                                     "Arguments", "Description")
+        for k, v in commands_full.items():
+            helptext += "{:>10}:  {:15}       {}\n".format(k, v.args_hr, v.desc)
+        print(helptext)
 
 class Exit(Command):
     args = []
+    desc = "Exits the game"
+
     def func(self, p, _u, _orig_args):
         p.playing = False
 
 class Attack(Command):
-    args = [None, Arg("item", False, False, True)]
+    args = [None, Arg("monster", False, False, True)]
+    desc = "Attacks a monster"
 
     def func(self, player, _updater, orig_args):
         arg_split = good_split_spc(orig_args, 1)
@@ -210,10 +231,10 @@ commands = {
 
     "pickup": PickupCmd(),
     "inventory": Inventory(),
-    "help": Help(),
     "exit": Exit(),
     "attack": Attack(),
 }
+commands["help"] = Help(commands) # Recursion!
 
 def main(seed=random.randint(0, 2^64-1), replay=[]):
     createWorld()
