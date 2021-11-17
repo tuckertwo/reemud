@@ -60,9 +60,8 @@ class PickupCmd(Command):
     args = [None, Arg("item", False, False, True)]
     desc = "Picks up an item"
 
-    def func(self, player, _updater, cmdstr):
-        arg_split = good_split_spc(cmdstr, 1)
-        targetName = arg_split[1]
+    def func_ap(self, player, _updater, args_parsed):
+        targetName = args_parsed["item"]
         target = player.location.getItemByName(targetName)
         if target:
             player.pickup(target)
@@ -105,9 +104,8 @@ class Attack(Command):
     args = [None, Arg("monster", False, False, True)]
     desc = "Attacks a monster"
 
-    def func(self, player, _updater, cmdstr):
-        arg_split = good_split_spc(cmdstr, 1)
-        targetName = arg_split[1]
+    def func_ap(self, player, _updater, args_parsed):
+        targetName = args_parsed["monster"]
         target = player.location.getMonsterByName(targetName)
         if target:
             player.attackMonster(target)
