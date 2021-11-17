@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from room import Room
 from player import Player
 from item import Item
@@ -56,7 +57,7 @@ def pause():
     input("Please press 'enter' to continue.")
 
 def good_split_spc(string, limit=-1):
-    return filter(lambda x: len(x)>0, string.split(' '))
+    return list(filter(lambda x: len(x) > 0, string.split(' ', limit)))
 
 
 # This is really just a struct.
