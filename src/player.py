@@ -27,6 +27,14 @@ class Player:
         for i in self.items:
             print(i.name)
         print()
+    def getItemByName(self, name):
+        for i in self.items:
+            if i.name.lower() == name.lower():
+                return i
+        return False
+    def removeItem(self, item):
+        if item in self.items:
+            self.items.remove(item)
     def attackMonster(self, mon):
         print("You are attacking " + mon.name)
         print("Your health is " + str(self.health) + ".")

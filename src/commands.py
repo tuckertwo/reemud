@@ -71,6 +71,21 @@ class PickupCmd(Command):
             return True
         else:
             raise CmdRunError("no such item")
+            
+class DropCmd(Command):
+    args = [None, Arg("item", False, False, True)]
+    desc = "Drops an item"
+    sideeffects = True
+    
+    def func_ap(self, player, _updater, args_parsed):
+        targetName = args_parsed["item"]
+        target = player.getItemByName(targetName)
+        if target:
+            player.location.addItem(target)
+            player.removeItem(target)
+            return True
+        else:
+            raise CmdRunError("no sun item in inventory")
 
 class Inventory(Command):
     args = []
@@ -197,6 +212,7 @@ commands = {
 
     "look": LookCmd(),
     "pickup": PickupCmd(),
+    "drop": DropCmd(),
     "inventory": Inventory(),
     "exit": Exit(),
     "attack": Attack(),
