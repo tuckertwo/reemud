@@ -86,7 +86,7 @@ class CmdParseError(Exception):
 
 class Command():
     def __init__(self):
-        if not hasattr(self, "help"):
+        if not hasattr(self, "args_hr"):
             if len(self.args) >= 2:
                 self.args_hr = " ".join([str(x) for x in self.args[1:]])
             else:
