@@ -3,9 +3,11 @@ from room import Room
 from player import Player
 from item import Item
 from monster import Monster
-import random
 import os
 import updater
+
+import time
+import random
 
 player = Player()
 
@@ -245,6 +247,36 @@ class LookCmd(Command):
     def func(self, player, _updater, _cmdstr):
         printSituation(player)
 
+class ClearScreenCmd(Command):
+    args = None
+    desc = "Clear the screen"
+
+    def func(self, _player, _updater, _cmdstr):
+        clear()
+
+class PauseCmd(Command):
+    args = None
+    desc = "Pause for user input"
+
+    def func_ap(self, p, _u, _args_parsed):
+        pause()
+
+class EchoCmd(Command):
+    args = [None, Arg("string", False, False, True)]
+    desc = "Echo a string"
+
+    # To-do: re-write the parser to make infinite args actually capture
+    # strings instead of split strings
+    def func_ap(self, _p, _u, args_parsed):
+        print(" ".join(args_parsed["string"]))
+
+class SleepCmd(Command):
+    args = [None, Arg("time", False, False, False)]
+    desc = "Wait for a specific time in seconds"
+
+    def func_ap(self, _p, _u, args_parsed):
+        time.sleep(float(args_parsed["time"]))
+
 commands = {
     "go": GoCmd(None),
     "north": GoCmd("north"),
@@ -255,6 +287,13 @@ commands = {
     "e": GoCmd("east"),
     "west": GoCmd("west"),
     "w": GoCmd("west"),
+
+    # Commands useful for demos
+    "cls": ClearScreenCmd(),
+    "clear": ClearScreenCmd(),
+    "pause": PauseCmd(),
+    "echo": EchoCmd(),
+    "sleep": SleepCmd(),
 
     "look": LookCmd(),
     "pickup": PickupCmd(),
