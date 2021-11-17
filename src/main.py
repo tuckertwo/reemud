@@ -55,7 +55,7 @@ def showHelp():
 def pause():
     input("Please press 'enter' to continue.")
 
-def good_split_spc(string):
+def good_split_spc(string, limit=-1):
     return filter(lambda x: len(x)>0, string.split(' '))
 
 
