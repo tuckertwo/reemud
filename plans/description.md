@@ -1,5 +1,5 @@
-# _Hyperboria_
-Kavi Wilson and Tucker R. Twomey are collaborating to produce _Hyperboria_,
+# _Ademia_
+Kavi Wilson and Tucker R. Twomey are collaborating to produce _Ademia_,
 a multi-player text adventure game that combines the exploration- and puzzle-
 based aspects of games like Colossal Cave Adventure and Zork with the
 multi-player interaction, skills development, procedural generation,
