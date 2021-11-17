@@ -163,7 +163,7 @@ class PickupCmd(Command):
         arg_split = good_split_spc(orig_args, 1)
         targetName = arg_split[1]
         target = player.location.getItemByName(targetName)
-        if target != False:
+        if target:
             player.pickup(target)
             return True
         else:
@@ -191,7 +191,7 @@ class Attack(Command):
         arg_split = good_split_spc(orig_args, 1)
         targetName = arg_split[1]
         target = player.location.getMonsterByName(targetName)
-        if target != False:
+        if target:
             player.attackMonster(target)
             return True
         else:
