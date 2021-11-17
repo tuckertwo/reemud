@@ -49,51 +49,51 @@ def showHelp():
     print("inventory -- opens your inventory")
     print("pickup <item> -- picks up the item")
     print()
-    input("Press enter to continue...")
+    pause()
 
+def pause():
+    input("Please press 'enter' to continue.")
 
-
-createWorld()
-playing = True
-while playing and player.alive:
-    printSituation()
-    commandSuccess = False
-    timePasses = False
-    while not commandSuccess:
-        commandSuccess = True
-        command = input("What now? ")
-        commandWords = command.split()
-        if commandWords[0].lower() == "go":   #cannot handle multi-word directions
-            player.goDirection(commandWords[1]) 
-            timePasses = True
-        elif commandWords[0].lower() == "pickup":  #can handle multi-word objects
-            targetName = command[7:]
-            target = player.location.getItemByName(targetName)
-            if target != False:
-                player.pickup(target)
+def main(seed=random.randint(0, 2^64-1), replay=[]):
+    createWorld()
+    playing = True
+    while playing and player.alive:
+        printSituation()
+        commandSuccess = False
+        timePasses = False
+        while not commandSuccess:
+            commandSuccess = True
+            command = input("What now? ")
+            commandWords = command.split()
+            if commandWords[0].lower() == "go":       # cannot handle multi-word directions
+                player.goDirection(commandWords[1])
+                timePasses = True
+            elif commandWords[0].lower() == "pickup": # can handle multi-word objects
+                targetName = command[7:]
+                target = player.location.getItemByName(targetName)
+                if target != False:
+                    player.pickup(target)
+                else:
+                    print("No such item.")
+                    commandSuccess = False
+            elif commandWords[0].lower() == "inventory":
+                player.showInventory()
+            elif commandWords[0].lower() == "help":
+                showHelp()
+            elif commandWords[0].lower() == "exit":
+                playing = False
+            elif commandWords[0].lower() == "attack":
+                targetName = command[7:]
+                target = player.location.getMonsterByName(targetName)
+                if target != False:
+                    player.attackMonster(target)
+                else:
+                    print("No such monster.")
+                    commandSuccess = False
             else:
-                print("No such item.")
+                print("Not a valid command")
                 commandSuccess = False
-        elif commandWords[0].lower() == "inventory":
-            player.showInventory()        
-        elif commandWords[0].lower() == "help":
-            showHelp()
-        elif commandWords[0].lower() == "exit":
-            playing = False
-        elif commandWords[0].lower() == "attack":
-            targetName = command[7:]
-            target = player.location.getMonsterByName(targetName)
-            if target != False:
-                player.attackMonster(target)
-            else:
-                print("No such monster.")
-                commandSuccess = False
-        else:
-            print("Not a valid command")
-            commandSuccess = False
-    if timePasses == True:
-        updater.updateAll()
+        if timePasses == True:
+            updater.updateAll()
 
-    
-
-
+main()
