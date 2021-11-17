@@ -140,7 +140,7 @@ class Command():
 
 class GoCmd(Command):
     def __init__(self, direction=None):
-        if self.direction is not None:
+        if direction is not None:
             self.args = []
             self.direction = direction
         else:
