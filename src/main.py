@@ -99,8 +99,7 @@ class Command():
 
 def main(seed=random.randint(0, 2^64-1), replay=[]):
     createWorld()
-    playing = True
-    while playing and player.alive:
+    while player.playing and player.alive:
         printSituation()
         commandSuccess = False
         timePasses = False
@@ -124,7 +123,7 @@ def main(seed=random.randint(0, 2^64-1), replay=[]):
             elif commandWords[0].lower() == "help":
                 showHelp()
             elif commandWords[0].lower() == "exit":
-                playing = False
+                player.playing = False
             elif commandWords[0].lower() == "attack":
                 targetName = command[7:]
                 target = player.location.getMonsterByName(targetName)

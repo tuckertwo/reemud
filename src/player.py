@@ -5,6 +5,7 @@ def clear():
 
 class Player:
     def __init__(self):
+        self.playing = True
         self.location = None
         self.items = []
         self.health = 50
