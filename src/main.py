@@ -62,7 +62,7 @@ def main(replay=[], rep_flag=False):
             commands["exit"].func(player, updater, "^D")
 
 if len(sys.argv) > 1:
-    seed, log = ast.literal_eval(open(sys.argv[1]).read(), True)
+    seed, log = ast.literal_eval(open(sys.argv[1]).read())
     player = Player(seed)
     main(log)
 else:
