@@ -189,6 +189,16 @@ class Attack(Command):
         else:
             raise CmdParseError("no such monster")
 
+commands = {
+    "go": GoCmd(None),
+
+    "pickup": PickupCmd(),
+    "inventory": Inventory(),
+    "help": Help(),
+    "exit": Exit(),
+    "attack": Attack(),
+}
+
 def main(seed=random.randint(0, 2^64-1), replay=[]):
     createWorld()
     while player.playing and player.alive:
