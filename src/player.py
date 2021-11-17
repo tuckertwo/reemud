@@ -1,4 +1,5 @@
 import os, random
+from txt_parser import CmdRunError
 
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -17,7 +18,11 @@ class Player:
         self.health = 50
         self.alive = True
     def goDirection(self, direction):
-        self.location = self.location.getDestination(direction)
+        newloc = self.location.getDestination(direction)
+        if newloc is None:
+            raise CmdRunError("no such location")
+        else:
+            self.location = newloc
     def pickup(self, item):
         self.items.append(item)
         item.loc = self
