@@ -1,7 +1,7 @@
 import os, random
 from commands import commands, printSituation, pause
 from txt_parser import CmdParseError, CmdRunError, good_split_spc, abbrev_cmd, Arg, Command
-
+import updater
 
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -105,29 +105,28 @@ class Player:
 
     def attackMonster(self, mon):
         mon.agg = True
-
-
-        if len(self.location.getAggro()) > 1:
-            print(str(len(self.location.getAggro())) + " monsters confront you")
-        else:
-            print("A monster confronts you")
-        n = 1
-        for i in self.location.getMonsters():
-            print(str(n) + ". " + i.name + " with " + str(i.health) + " hp")
-            n += 1
-        print("What will you do?")
-        cmdstr = input("> ") #I'll integrate this into the command system as a whole in the future. Placeholder for now
-        if cmdstr:
-            cmd_split = good_split_spc(cmdstr)
-            cmd_obj   = attackcommands[abbrev_cmd(commands.keys(),
-                                    cmd_split[0],
-                                    CmdParseError("ambiguous command"),
-                                    CmdParseError("invalid command"))]
-            cmd_obj.func(self, updater, cmdstr)
-            if cmd_obj.sideeffects:
-                player.log.append(cmdstr)
-        else:
-            print("Well I guess you're doing nothing")
+        while len(self.location.getAggro()) > 0:
+            if len(self.location.getAggro()) > 1:
+                print(str(len(self.location.getAggro())) + " monsters confront you")
+            else:
+                print("A monster confronts you")
+            n = 1
+            for i in self.location.getMonsters():
+                print(str(n) + ". " + i.name + " with " + str(i.health) + " hp")
+                n += 1
+            print("What will you do?")
+            cmdstr = input("> ") #I'll integrate this into the command system as a whole in the future. Placeholder for now
+            if cmdstr:
+                cmd_split = good_split_spc(cmdstr)
+                cmd_obj   = attackcommands[abbrev_cmd(attackcommands.keys(),
+                                        cmd_split[0],
+                                        CmdParseError("ambiguous command"),
+                                        CmdParseError("invalid command"))]
+                cmd_obj.func(self, updater, cmdstr)
+                if cmd_obj.sideeffects:
+                    self.log.append(cmdstr)
+            else:
+                print("Well I guess you're doing nothing")
 
 
 
@@ -145,22 +144,16 @@ class Player:
       #      self.alive = False
       #  print()
 
-#attackcommands = {
-#    "attack": HitEnemy(),
-#    "flee": Flee(),
-#    "equip": Equip()
-#}
-
 class Flee(Command):
     sideeffects = True
 
     def __init__(self, direction=None):
         if direction is not None:
-            self.desc = "Moves {}".format(direction)
+            self.desc = "Flees {}".format(direction)
             self.args = []
             self.direction = direction
         else:
-            self.desc = "Moves in the given direction"
+            self.desc = "Flees in the given direction"
             self.args = [None, Arg("direction", False, False, False)]
             self.direction = None
         Command.__init__(self)
@@ -174,3 +167,18 @@ class Flee(Command):
         player.goDirection(direction)
         updater.updateAll()
         printSituation(player)
+
+class Equip(Command):
+    args = [None, Arg("item", False, False, True)]
+    desc = "Equips a Weapon or Armour Suit"
+    sideeffects = True
+
+    def func_ap(self, player, _updater, args_parsed):
+        targetName = args_parsed["item"]
+        player.equip(targetName)
+
+attackcommands = {
+    "flee": Flee(),
+    "eluip": Equip()
+}
+
