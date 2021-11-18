@@ -21,9 +21,11 @@ class Player:
         self.maxhealth = 50
         self.weapon = None
         self.armor = None
+        self.weightlimit = 10
+        self.groan_threshold = 2
         self.alive = True
         self.level = 1
-        self.skill = [0, 0, 0, 0] #base scores for dexterity, strength, constitution, and magical skill 
+        self.skill = [0, 0, 0, 0] #base scores for dexterity, strength, constitution, and magical skill
     def goDirection(self, direction):
         newloc = self.location.getDestination(direction)
         if newloc is None:
@@ -71,16 +73,21 @@ class Player:
     def showInventory(self):
         print("You are currently carrying:")
         items_dict = {}
+        weight_dict = {}
         for i in self.items:
             if i.name in items_dict:
                 items_dict[i.name] += 1
+                weight_dict[i.name] += i.weight
             else:
                 items_dict[i.name] = 1
+                weight_dict[i.name] = i.weight
         for name, num in items_dict.items():
-            print("{:>10} ×{:02}".format(name, num))
+            # Weight is a mess
+            print("{:>10} ×{:02}, {:02} kg".format(name, num,
+                                                   weight_dict[name]))
         print()
     def showStats(self):
-        print("Current Health: " + str(self.health) + " out of " + str(self.maxhealth)) 
+        print("Current Health: " + str(self.health) + " out of " + str(self.maxhealth))
         print("Dexterity: +" + str(self.skill[0]))
         print("Strength: +" + str(self.skill[1]))
         print("Constitution: +" + str(self.skill[2]))
@@ -94,12 +101,12 @@ class Player:
     def removeItem(self, item):
         if item in self.items:
             self.items.remove(item)
-            
-            
+
+
     def attackMonster(self, mon):
         mon.agg = True
-        
-        
+
+
         if len(self.location.getAggro()) > 1:
             print(str(len(self.location.getAggro())) + " monsters confront you")
         else:
@@ -118,14 +125,14 @@ class Player:
                                     CmdParseError("invalid command"))]
             cmd_obj.func(self, updater, cmdstr)
             if cmd_obj.sideeffects:
-                player.log.append(cmdstr)     
+                player.log.append(cmdstr)
         else:
             print("Well I guess you're doing nothing")
-        
-        
-        
-        
-            
+
+
+
+
+
       #  print("You are attacking " + mon.name)
       #  print("Your health is " + str(self.health) + ".")
       #  print(mon.name + "'s health is " + str(mon.health) + ".")
@@ -137,13 +144,13 @@ class Player:
       #      print("You lose.")
       #      self.alive = False
       #  print()
-        
+
 #attackcommands = {
 #    "attack": HitEnemy(),
 #    "flee": Flee(),
 #    "equip": Equip()
 #}
-    
+
 class Flee(Command):
     sideeffects = True
 

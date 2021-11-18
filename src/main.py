@@ -18,9 +18,9 @@ def createWorld():
     Room.connectRooms(c, "east", d, "west")
     Room.connectRooms(a, "north", c, "south")
     Room.connectRooms(b, "north", d, "south")
-    i = Item("Rock", "This is just a rock.")
+    i = Item("Rock", "This is just a rock.", 5)
     i.putInRoom(b)
-    i = Item("Rock", "This is just a rock.")
+    i = Item("Rock", "This is just a rock.", 5)
     i.putInRoom(c)
     i = Item("Orange Clock", "This is not a rock.")
     i.putInRoom(c)
@@ -64,7 +64,7 @@ def main(replay=[], rep_flag=False):
 
 
 if len(sys.argv) > 1:
-    seed, log = ast.literal_eval(open(sys.argv[1]).read(), True)
+    seed, log = ast.literal_eval(open(sys.argv[1]).read())
     player = Player(seed)
     main(log, True)
 else:
