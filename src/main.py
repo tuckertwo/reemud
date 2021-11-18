@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from room import Room
 from player import Player
-from item import Item
+from item import Item, Weapon, Armor
 import monster
 import updater
 
@@ -21,11 +21,14 @@ def createWorld():
     i = Item("Rock", "This is just a rock.", 5)
     i.putInRoom(b)
     i = Item("Rock", "This is just a rock.", 5)
+    j = Weapon("Rock", "A sharp rock that might hurt somebody.", 5, 5)
     i.putInRoom(c)
+    j.putInRoom(c)
     i = Item("Orange Clock", "This is not a rock.")
     i.putInRoom(c)
     player.location = a
-    monster.Skeleton(b)
+    for x in range(10):
+        monster.Skeleton(b)
 
 def main(replay=[], rep_flag=False):
     createWorld()

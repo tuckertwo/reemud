@@ -92,22 +92,8 @@ class DropCmd(Command):
             player.removeItem(target)
             return True
         else:
-            raise CmdRunError("no sun item in inventory")
+            raise CmdRunError("no such item in inventory")
 
-class DropCmd(Command):
-    args = [None, Arg("item", False, False, True)]
-    desc = "Drops an item"
-    sideeffects = True
-
-    def func_ap(self, player, _updater, args_parsed):
-        targetName = args_parsed["item"]
-        target = player.getItemByName(targetName)
-        if target:
-            player.location.addItem(target)
-            player.removeItem(target)
-            return True
-        else:
-            raise CmdRunError("no sun item in inventory")
             
 class Equip(Command):
     args = [None, Arg("item", False, False, True)]
@@ -117,6 +103,15 @@ class Equip(Command):
     def func_ap(self, player, _updater, args_parsed):
         targetName = args_parsed["item"]
         player.equip(targetName)
+        
+class UnEquip(Command):
+    args = [None, Arg("item", False, False, True)]
+    desc = "Unequips a Weapon or Armour Suit"
+    sideeffects = True
+    
+    def func_ap(self, player, _updater, args_parsed):
+        targetName = args_parsed["item"]
+        player.unequip(targetName)
 
 class Inventory(Command):
     args = []
@@ -267,6 +262,7 @@ commands = {
     "drop": DropCmd(),
     "inventory": Inventory(),
     "equip": Equip(),
+    "unequip": UnEquip(),
     "me": Me(),
     "exit": Exit(),
     "attack": Attack(),

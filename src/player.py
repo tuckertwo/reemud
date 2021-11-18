@@ -55,6 +55,20 @@ class Player:
                 print("That is not a weapon or armor!")
         else:
             print("Item Not In Inventory")
+    def unequip(self, name):
+        if not (self.weapon == None):
+            if self.weapon.name.lower() == name.lower():
+                self.items.append(self.weapon)
+                self.weapon = None
+                print(name + " unequipped!")
+                return True
+        if not (self.armor == None):
+            if self.armor.name.lower() == name.lower():
+                self.items.append(self.armor)
+                self.armor = None
+                print(name + " unequipped!")
+                return True
+        print ("You are already not wearing or weilding " + name)
     def getItemByName(self, name):
         for i in self.items: #note- to be improved later so exact names aren't needed
             if i.name.lower() == name.lower():
@@ -86,6 +100,10 @@ class Player:
             print("{:>10} ×{:02}, {:02} kg".format(name, num,
                                                    weight_dict[name]))
         print()
+        if not self.weapon == None:
+            print("Equipped Weapon: " + self.weapon.name) #Note: currently weapons and armor don't factor into weight
+        if not self.armor == None:
+            print("Equipped Armor: " + self.armor.name)
     def showStats(self):
         print("Current Health: " + str(self.health) + " out of " + str(self.maxhealth))
         print("Dexterity: +" + str(self.skill[0]))
@@ -111,24 +129,52 @@ class Player:
             else:
                 print("A monster confronts you")
             n = 1
-            for i in self.location.getMonsters():
+            for i in self.location.getAggro():
                 print(str(n) + ". " + i.name + " with " + str(i.health) + " hp")
                 n += 1
-            print("What will you do?")
-            cmdstr = input("> ") #I'll integrate this into the command system as a whole in the future. Placeholder for now
-            if cmdstr:
-                cmd_split = good_split_spc(cmdstr)
-                cmd_obj   = attackcommands[abbrev_cmd(attackcommands.keys(),
-                                        cmd_split[0],
-                                        CmdParseError("ambiguous command"),
-                                        CmdParseError("invalid command"))]
-                cmd_obj.func(self, updater, cmdstr)
-                if cmd_obj.sideeffects:
-                    self.log.append(cmdstr)
-            else:
-                print("Well I guess you're doing nothing")
+            print("Your health is at " + str(self.health) + " points")
+            print()
+            cmdstr = input("> ")
+            try: #TODO: Implement reply capability
+                if cmdstr:
+                    cmd_split = good_split_spc(cmdstr)
+                    cmd_obj   = attackcommands[abbrev_cmd(attackcommands.keys(),
+                                            cmd_split[0],
+                                            CmdParseError("ambiguous command"),
+                                            CmdParseError("invalid commandx"))]
+                    cmd_obj.func(self, updater, cmdstr)
+                    if cmd_obj.sideeffects:
+                        self.log.append(cmdstr)
+                        for k in self.location.getAggro():
+                            if k.health < 0:
+                                k.die()
+                        for j in self.location.getAggro():
+                            attk = j.findAttack()
+                            if random.random() < attk[3]:
+                                    dam = int(random.random() * attk[2]) + 1
+                                    if not self.armor == None:
+                                        dam = int(dam / self.armor.stren)
+                                    self.health -= dam
+                                    print(j.name + attk[0] + " for " + str(dam) + " damage!") #TODO: add effects
+                            else:
+                                print(j.name + attk[1])
+                                
+                        if self.health < 0: #everything here is to be eventually elaborated on
+                            print("You have died.")
+                            self.alive = False
+                    
+                else:
+                    print("Well I guess you're doing nothing (type Help for battle-commands)")
+                        
+            except CmdParseError as e: # Pass all other errors through, I guess.
+                print("Error parsing command: " + str(e))
+            except CmdRunError as e:
+                print("Error running command: " + str(e))
+            except EOFError:
+                print("End-Of_File Error")
+                
 
-
+                
 
 
 
@@ -165,7 +211,6 @@ class Flee(Command):
             direction = args_parsed["direction"]
 
         player.goDirection(direction)
-        updater.updateAll()
         printSituation(player)
 
 class Equip(Command):
@@ -176,9 +221,19 @@ class Equip(Command):
     def func_ap(self, player, _updater, args_parsed):
         targetName = args_parsed["item"]
         player.equip(targetName)
+        
+class UnEquip(Command):
+    args = [None, Arg("item", False, False, True)]
+    desc = "Unequips a Weapon or Armour Suit"
+    sideeffects = True
+    
+    def func_ap(self, player, _updater, args_parsed):
+        targetName = args_parsed["item"]
+        player.unequip(targetName)
 
 attackcommands = {
-    "flee": Flee(),
-    "eluip": Equip()
+    "flee": Flee(None),
+    "equip": Equip(),
+    "unequip": UnEquip()
 }
 
