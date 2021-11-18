@@ -26,6 +26,14 @@ class Room:
         self.monsters.append(monster)
     def removeMonster(self, monster):
         self.monsters.remove(monster)
+    def getMonsters(self):
+        return self.monsters
+    def getAggro(self): #specifically for the fight function
+        mons = []
+        for i in self.monsters:
+            if i.agg:
+                mons.append(i)
+        return mons
     def hasItems(self):
         return self.items != []
     def getItemByName(self, name):

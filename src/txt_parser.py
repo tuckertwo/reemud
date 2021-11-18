@@ -19,7 +19,7 @@ def abbrev_cmd(cmds, inp, ambig, invalid):
         return cmd_name
 
 # This is really just a struct.
-class Arg():
+class Arg(): #Association of Reed Gamers!
     def __init__(self, name, nonsense=False, optional=False, infinite=False):
         self.name = name
         self.nonsense = nonsense

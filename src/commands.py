@@ -78,7 +78,7 @@ class DropCmd(Command):
     sideeffects = True
     
     def func_ap(self, player, _updater, args_parsed):
-        targetName = args_parsed["item"]
+        targetName = args_parsed["item"] 
         target = player.getItemByName(targetName)
         if target:
             player.location.addItem(target)
@@ -101,6 +101,15 @@ class DropCmd(Command):
             return True
         else:
             raise CmdRunError("no sun item in inventory")
+            
+class Equip(Command):
+    args = [None, Arg("item", False, False, True)]
+    desc = "Equips a Weapon or Armour Suit"
+    sideeffects = True
+
+    def func_ap(self, player, _updater, args_parsed):
+        targetName = args_parsed["item"]
+        player.equip(targetName)
 
 class Inventory(Command):
     args = []
@@ -110,7 +119,7 @@ class Inventory(Command):
     def func(self, p, _u, _cmdstr):
         return p.showInventory()
 
-class Me(Command)
+class Me(Command):
     args = []
     desc = "gives a summary of your condition"
     sideeffects = False
@@ -215,7 +224,7 @@ class SaveCmd(Command):
             f.write(repr((p.seed, p.log)))
             f.write("\n")
 
-def WaitCmd(Command):
+class WaitCmd(Command):
     args = [None, Arg("for", True, True, False),
             Arg("time", False, True, False), Arg("seconds", True, True, False)]
     desc = "Waits for time to pass"
@@ -250,6 +259,7 @@ commands = {
     "pickup": PickupCmd(),
     "drop": DropCmd(),
     "inventory": Inventory(),
+    "equip": Equip(),
     "me": Me(),
     "exit": Exit(),
     "attack": Attack(),

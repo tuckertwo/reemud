@@ -2,13 +2,12 @@
 from room import Room
 from player import Player
 from item import Item
-from monster import Monster
-import os
+import monster
 import updater
 
 from commands import commands, printSituation, pause
 from txt_parser import CmdParseError, CmdRunError, good_split_spc, abbrev_cmd
-import random, ast, sys
+import random, ast, sys, os
 
 def createWorld():
     a = Room("You are in room 1")
@@ -23,10 +22,10 @@ def createWorld():
     i.putInRoom(b)
     i = Item("Rock", "This is just a rock.")
     i.putInRoom(c)
-    i = Item("Clock", "This is not a rock.")
+    i = Item("Orange Clock", "This is not a rock.")
     i.putInRoom(c)
     player.location = a
-    Monster("Bob the monster", 20, b)
+    monster.Skeleton(b)
 
 def main(replay=[], rep_flag=False):
     createWorld()

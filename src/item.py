@@ -4,6 +4,8 @@ def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 class Item:
+    weapon = False
+    armor = False
     def __init__(self, name, desc):
         self.name = name
         self.desc = desc
@@ -16,3 +18,9 @@ class Item:
     def putInRoom(self, room):
         self.loc = room
         room.addItem(self)
+
+class Weapon(Item):
+    isweapon = True
+    
+class Armor(Item):
+    armor = True
