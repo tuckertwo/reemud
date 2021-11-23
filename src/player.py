@@ -119,7 +119,12 @@ class Player:
     def removeItem(self, item):
         if item in self.items:
             self.items.remove(item)
-
+    def takeDamage(self, amt):
+        dam = int(random.random() * amt) + 1
+        if not self.armor == None:
+            dam = int(dam / self.armor.stren)
+        self.health -= dam
+        return dam
 
     def attackMonster(self, mon):
         mon.agg = True
@@ -135,7 +140,7 @@ class Player:
             print("Your health is at " + str(self.health) + " points")
             print()
             cmdstr = input("> ")
-            try: #TODO: Implement reply capability
+            try: #TODO: Implement replay capability
                 if cmdstr:
                     cmd_split = good_split_spc(cmdstr)
                     cmd_obj   = attackcommands[abbrev_cmd(attackcommands.keys(),
@@ -151,15 +156,11 @@ class Player:
                         for j in self.location.getAggro():
                             attk = j.findAttack()
                             if random.random() < attk[3]:
-                                    dam = int(random.random() * attk[2]) + 1
-                                    if not self.armor == None:
-                                        dam = int(dam / self.armor.stren)
-                                    self.health -= dam
-                                    print(j.name + attk[0] + " for " + str(dam) + " damage!") #TODO: add effects
+                                    print(j.name + attk[0] + " for " + str(self.takeDamage(attk[2])) + " damage!") #TODO: add effects
                             else:
                                 print(j.name + attk[1])
                                 
-                        if self.health < 0: #everything here is to be eventually elaborated on
+                        if self.health <= 0: #everything here is to be eventually elaborated on
                             print("You have died.")
                             self.alive = False
                     
@@ -230,10 +231,28 @@ class UnEquip(Command):
     def func_ap(self, player, _updater, args_parsed):
         targetName = args_parsed["item"]
         player.unequip(targetName)
+        
+class Hit(Command):
+    args = [None, Arg("monster", False, False, True)]
+    desc = "Hit the monster."
+    sideeffects = True
+
+    def func_ap(self, player, _updater, args_parsed):
+        targetName = args_parsed["monster"]
+        target = player.location.getMonsterByName(targetName)
+        if target:
+            if player.weapon == None:
+                print("You punch " + targetName + " with your fists for " + str(target.takeDamage(1 + player.skill[1])) + " damage")
+            else:
+                print("You hit " + targetName + " with " + player.weapon.name + " for " + str(target.takeDamage(player.weapon.damage + player.skill[1])) + " damage")
+            return True
+        else:
+            raise CmdRunError("no such monster")
 
 attackcommands = {
     "flee": Flee(None),
     "equip": Equip(),
-    "unequip": UnEquip()
+    "unequip": UnEquip(),
+    "hit": Hit()
 }
 

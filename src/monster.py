@@ -1,5 +1,6 @@
 import random
 import updater
+from item import Weapon, Armor, Item
 
 adjectives = ["venerable ", "youthful ", "sublime ", "dolorous ", "somber ", "jubilant ", "purple "] #flavor!
 
@@ -12,6 +13,7 @@ class Monster:
         self.health = health
         self.maxhealth = health
         self.skills = [dex, stren, con, mag]
+        self.inventory = []
         self.armor = armor
         self.room = room
         room.addMonster(self)
@@ -21,6 +23,7 @@ class Monster:
     def giveSword(self): #specific but common attack
         self.attacks.append([" hits you with a sword", " tries to hit you with a sword, but misses", 6 + self.skills[1], .25 + (self.skills[0] / 15), None, None])
         self.attacks.append([" punches you", " punches you, harmlessly", 2 + self.skills[1], .25 + (self.skills[0] / 15), None, None])
+        self.inventory.append(Weapon("Sword", "A nondescript metal sword.", 6, 3))
     def update(self):
         if random.random() < .5:
             self.moveTo(self.room.randomNeighbor())
@@ -28,8 +31,19 @@ class Monster:
         self.room.removeMonster(self)
         self.room = room
         room.addMonster(self)
+    def takeDamage(self, amt):
+        dam = int(random.random() * amt) + 1
+        if not self.armor == None:
+            dam = int(dam / self.armor.stren)
+        self.health -= dam
+        return dam  
     def die(self):
         print(self.name + " dies!")
+        if len(self.inventory) > 0:
+            print("It drops:")
+            for x in self.inventory:
+                self.room.addItem(x)
+                print(x.name)
         self.room.removeMonster(self)
         updater.deregister(self)
     def findAttack(self): #this function should never be used, but including it just in case

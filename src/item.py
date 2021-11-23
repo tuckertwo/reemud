@@ -22,7 +22,7 @@ class Item:
 
 class Weapon(Item):
     weapon = True
-    def __init__(self, name, desc, damage, weight=1, effects=None):
+    def __init__(self, name, desc, damage=1, weight=1, effects=None):
         self.damage = damage
         self.effects = effects
         Item.__init__(self, name, desc, weight)
