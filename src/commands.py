@@ -159,7 +159,7 @@ class Exit(Command):
 class Attack(Command):
     args = [None, Arg("monster", False, False, True)]
     desc = "Attacks a monster"
-    sideeffects = True
+    sideeffects = False
 
     def func_ap(self, player, _updater, args_parsed):
         targetName = args_parsed["monster"]

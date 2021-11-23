@@ -7,12 +7,13 @@ def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 class Player:
-    def __init__(self, seed=random.randint(0, 2^64-1)):
+    def __init__(self, game, seed=random.randint(0, 2^64-1)):
         # Stuff will get screwy if there are multiple Player()s with different
         # seeds, but that is an eventuality that seems unlikely to occur.
         # (Famous last words.)
         self.seed = seed
         random.seed(seed)
+        self.game = game
         self.log = []
         self.playing = True
         self.location = None
@@ -128,6 +129,7 @@ class Player:
 
     def attackMonster(self, mon):
         mon.agg = True
+        self.log.append("attack " + mon.name)
         while len(self.location.getAggro()) > 0:
             if len(self.location.getAggro()) > 1:
                 print(str(len(self.location.getAggro())) + " monsters confront you")
@@ -139,8 +141,18 @@ class Player:
                 n += 1
             print("Your health is at " + str(self.health) + " points")
             print()
-            cmdstr = input("> ")
             try: #TODO: Implement replay capability
+                if self.game.replay:
+                    cmdstr   = self.game.replay[0]
+                    self.game.replay   = self.game.replay[1:]
+                    self.game.rep_flag = True
+                else:
+                    if self.game.rep_flag:
+                        print("-------------------- Save loaded.")
+                        pause()
+                        self.game.rep_flag = False
+                    cmdstr = input("> ")
+
                 if cmdstr:
                     cmd_split = good_split_spc(cmdstr)
                     cmd_obj   = attackcommands[abbrev_cmd(attackcommands.keys(),

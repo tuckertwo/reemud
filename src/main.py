@@ -29,47 +29,55 @@ def createWorld():
     player.location = a
     for x in range(10):
         monster.Skeleton(b)
+        
+class Game:
+    def __init__(self, replay=[], rep_flag=False):
+        self.replay = replay
+        self.rep_flag = rep_flag
+    
+    def main(self):
+        createWorld()
+        printSituation(player)
+        while player.playing and player.alive:
+            try:
+                if self.replay:
+                    cmdstr   = self.replay[0]
+                    print(cmdstr)
+                    self.replay   = self.replay[1:]
+                    self.rep_flag = True
+                else:
+                    if self.rep_flag:
+                        print("-------------------- Save loaded.")
+                        pause()
+                        self.rep_flag = False
+                    cmdstr = input("> ") # Does not have '\n' appended; I checked.
 
-def main(replay=[], rep_flag=False):
-    createWorld()
-    printSituation(player)
-    while player.playing and player.alive:
-        try:
-            if replay:
-                cmdstr   = replay[0]
-                replay   = replay[1:]
-                rep_flag = True
-            else:
-                if rep_flag:
-                    print("-------------------- Save loaded.")
-                    pause()
-                    rep_flag = False
-                cmdstr = input("> ") # Does not have '\n' appended; I checked.
-
-            if cmdstr:
-                cmd_split = good_split_spc(cmdstr)
-                cmd_obj   = commands[abbrev_cmd(commands.keys(),
-                                        cmd_split[0],
-                                        CmdParseError("ambiguous command"),
-                                        CmdParseError("invalid command"))]
-                cmd_obj.func(player, updater, cmdstr)
-                if cmd_obj.sideeffects:
-                    player.log.append(cmdstr)
-        except CmdParseError as e: # Pass all other errors through, I guess.
-            print("Error parsing command: " + str(e))
-        except CmdRunError as e:
-            print("Error running command: " + str(e))
-        except EOFError:
-            print()
-            commands["exit"].func(player, updater, "^D")
+                if cmdstr:
+                    cmd_split = good_split_spc(cmdstr)
+                    cmd_obj   = commands[abbrev_cmd(commands.keys(),
+                                            cmd_split[0],
+                                            CmdParseError("ambiguous command"),
+                                            CmdParseError("invalid command"))]
+                    cmd_obj.func(player, updater, cmdstr)
+                    if cmd_obj.sideeffects:
+                        player.log.append(cmdstr)
+            except CmdParseError as e: # Pass all other errors through, I guess.
+                print("Error parsing command: " + str(e))
+            except CmdRunError as e:
+                print("Error running command: " + str(e))
+            except EOFError:
+                print()
+                commands["exit"].func(player, updater, "^D")
 
 
 
 
 if len(sys.argv) > 1:
     seed, log = ast.literal_eval(open(sys.argv[1]).read())
-    player = Player(seed)
-    main(log, True)
+    game = Game(log, True)
+    player = Player(game, seed)
+    game.main()
 else:
-    player = Player()
-    main()
+    game = Game()
+    player = Player(game)
+    game.main()
