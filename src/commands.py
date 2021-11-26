@@ -230,6 +230,7 @@ class WaitCmd(Command):
     args = [None, Arg("for", True, True, False),
             Arg("time", False, True, False), Arg("seconds", True, True, False)]
     desc = "Waits for time to pass"
+    sideeffects = True
 
     def func_ap(self, _p, u, args_parsed):
         if "time" in args_parsed:

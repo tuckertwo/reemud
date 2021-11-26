@@ -1,5 +1,5 @@
 import os, random
-from commands import commands, printSituation, pause
+import commands
 from txt_parser import CmdParseError, CmdRunError, good_split_spc, abbrev_cmd, Arg, Command
 import updater
 
@@ -130,7 +130,7 @@ class Player:
     def attackMonster(self, mon):
         mon.agg = True
         self.log.append("attack " + mon.name)
-        while len(self.location.getAggro()) > 0:
+        while (len(self.location.getAggro()) > 0) and self.alive and self.playing:
             if len(self.location.getAggro()) > 1:
                 print(str(len(self.location.getAggro())) + " monsters confront you")
             else:
@@ -224,25 +224,39 @@ class Flee(Command):
             direction = args_parsed["direction"]
 
         player.goDirection(direction)
-        printSituation(player)
+        commands.printSituation(player)
 
-class Equip(Command):
-    args = [None, Arg("item", False, False, True)]
-    desc = "Equips a Weapon or Armour Suit"
+
+class Flee(Command):
     sideeffects = True
 
-    def func_ap(self, player, _updater, args_parsed):
-        targetName = args_parsed["item"]
-        player.equip(targetName)
+    def __init__(self, direction=None):
+        if direction is not None:
+            self.desc = "Flees {}".format(direction)
+            self.args = []
+            self.direction = direction
+        else:
+            self.desc = "Flees in the given direction"
+            self.args = [None, Arg("direction", False, False, False)]
+            self.direction = None
+        Command.__init__(self)
+
+    def func_ap(self, player, updater, args_parsed):
+        if self.direction is not None:
+            direction = self.direction
+        else:
+            direction = args_parsed["direction"]
+
+        player.goDirection(direction)
+        commands.printSituation(player)
         
-class UnEquip(Command):
-    args = [None, Arg("item", False, False, True)]
-    desc = "Unequips a Weapon or Armour Suit"
+class WaitCmd(Command):
+    args = [None]
+    desc = "Waits for time to pass"
     sideeffects = True
-    
-    def func_ap(self, player, _updater, args_parsed):
-        targetName = args_parsed["item"]
-        player.unequip(targetName)
+
+    def func_ap(self, _p, u, useless):
+        print("You do nothing in battle")
         
 class Hit(Command):
     args = [None, Arg("monster", False, False, True)]
@@ -262,9 +276,30 @@ class Hit(Command):
             raise CmdRunError("no such monster")
 
 attackcommands = {
-    "flee": Flee(None),
-    "equip": Equip(),
-    "unequip": UnEquip(),
-    "hit": Hit()
+    #Commands imported from commands.py
+    "look": commands.LookCmd(),
+    "pickup": commands.PickupCmd(),
+    "drop": commands.DropCmd(),
+    "inventory": commands.Inventory(),
+    "equip": commands.Equip(),
+    "unequip": commands.UnEquip(),
+    "me": commands.Me(),
+    "exit": commands.Exit(),
+    "save": commands.SaveCmd(),
+    
+    "flee": Flee(None), #flee differs from  go in that flee doesn't update monster positions
+    "north": Flee("north"),
+    "n": Flee("north"),
+    "south": Flee("south"),
+    "s": Flee("south"),
+    "east": Flee("east"),
+    "e": Flee("east"),
+    "west": Flee("west"),
+    "w": Flee("west"),
+    
+    "wait": WaitCmd(),
+    "hit": Hit(),
+    
 }
+attackcommands["help"] = commands.Help(attackcommands) 
 
