@@ -75,9 +75,6 @@ class Player:
             if i.name.lower() == name.lower():
                 return i
         return False
-    def removeItem(self, item):
-        if item in self.items:
-            self.items.remove(item)
     def heal(self, amount):
         self.health += amount
         if self.health > self.maxhealth:
@@ -125,6 +122,9 @@ class Player:
         if not self.armor == None:
             dam = int(dam / self.armor.stren)
         self.health -= dam
+        if self.health <= 0:
+            print("You have died.")
+            self.alive = False
         return dam
 
     def attackMonster(self, mon):
@@ -163,7 +163,7 @@ class Player:
                     if cmd_obj.sideeffects:
                         self.log.append(cmdstr)
                         for k in self.location.getAggro():
-                            if k.health < 0:
+                            if k.health <= 0:
                                 k.die()
                         for j in self.location.getAggro():
                             attk = j.findAttack()
@@ -172,9 +172,6 @@ class Player:
                             else:
                                 print(j.name + attk[1])
                                 
-                        if self.health <= 0: #everything here is to be eventually elaborated on
-                            print("You have died.")
-                            self.alive = False
                     
                 else:
                     print("Well I guess you're doing nothing (type Help for battle-commands)")
@@ -188,20 +185,6 @@ class Player:
                 
 
                 
-
-
-
-      #  print("You are attacking " + mon.name)
-      #  print("Your health is " + str(self.health) + ".")
-      #  print(mon.name + "'s health is " + str(mon.health) + ".")
-      #  if self.health > mon.health:
-      #      self.health -= mon.health
-      #      print("You win. Your health is now " + str(self.health) + ".")
-      #      mon.die()
-      #  else:
-      #      print("You lose.")
-      #      self.alive = False
-      #  print()
 
 class Flee(Command):
     sideeffects = True
@@ -267,11 +250,13 @@ class Hit(Command):
         targetName = args_parsed["monster"]
         target = player.location.getMonsterByName(targetName)
         if target:
-            if player.weapon == None:
-                print("You punch " + targetName + " with your fists for " + str(target.takeDamage(1 + player.skill[1])) + " damage")
+            if random.random() < (.3 + (self.skills[0] / 15)):
+                if player.weapon == None:
+                    print("You punch " + targetName + " with your fists for " + str(target.takeDamage(1 + player.skill[1])) + " damage")
+                else:
+                    print("You hit " + targetName + " with " + player.weapon.name + " for " + str(target.takeDamage(player.weapon.damage + player.skill[1])) + " damage")
             else:
-                print("You hit " + targetName + " with " + player.weapon.name + " for " + str(target.takeDamage(player.weapon.damage + player.skill[1])) + " damage")
-            return True
+                print("You try to hit " + targetName + " but miss")
         else:
             raise CmdRunError("no such monster")
 

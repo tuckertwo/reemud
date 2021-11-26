@@ -136,10 +136,11 @@ class Help(Command):
 
     def __init__(self, commands):
         Command.__init__(self)
+        self.commands = commands
 
     def func(self, _p, _u, _cmdstr):
         commands_full = {}
-        commands_full.update(commands)
+        commands_full.update(self.commands)
         commands_full.update({"help": self}) # Recursion has its limits
         helptext = "{:>10}   {:15}       {}\n".format("Command",
                                                      "Arguments", "Description")
