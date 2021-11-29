@@ -100,12 +100,14 @@ class Player:
             if item.weapon:
                 if self.weapon == None:
                     self.weapon = item
+                    self.items.remove(item)
                     print(item.name + " equipped!")
                 else:
                     print("You have a weapon already equipped! What are you, ambidexterous?")
             elif item.armor:
                 if self.armor == None:
                     self.armor = item
+                    self.items.remove(item)
                     print(item.name + " equipped!")
                 else:
                     print("You can't wear two suits of armor at once!")
