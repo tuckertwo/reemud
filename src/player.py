@@ -133,6 +133,7 @@ class Player:
             if item.potion:
                 print("You drink the " + name)
                 item.drink(self)
+                self.items.remove(item)
             else:
                 print("You can't drink your " + name + "!")
         else:
