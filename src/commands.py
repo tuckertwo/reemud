@@ -75,15 +75,7 @@ class PickupCmd(Command):
         targetName = args_parsed["item"]
         target = player.location.getItemByName(targetName)
         if target:
-            total_weight = sum([i.weight for i in player.items])
-            if total_weight+target.weight>player.weightlimit:
-                raise CmdRunError("item too heavy to put in inventory")
-            else:
-                if target.weight >= player.groan_threshold:
-                    for i in range(target.weight//player.groan_threshold+1):
-                        updater.updateAll()
-                        print("You strain yourself")
-                player.pickup(target)
+            player.pickup(target, updater)
         else:
             raise CmdRunError("no such item")
             
