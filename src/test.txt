@@ -1,1 +1,0 @@
-(53, ['n', 'pi rock', 'pi rock', 'dr rock', 'eq rock', 's', 'attack purple skeleton', 'hit youthful skeleton', 'hit youthful skeleton', 'hit somber skeleton', 'hit somber skeleton', 'hit somber skeleton', 'hit purple skeleton', 'hit purple skeleton'])
