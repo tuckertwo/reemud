@@ -5,13 +5,14 @@ from item import Weapon, Armor, Item
 adjectives = ["venerable ", "youthful ", "sublime ", "dolorous ", "somber ", "jubilant ", "purple "] #flavor!
 
 class Monster:
-    def __init__(self, agg, name, health, room, armor=None, dex=0, stren=0, con=0, mag=0): #aggressiveness, name, health, room, armor, stats
+    def __init__(self, agg, name, health, room, xp=0, armor=None, dex=0, stren=0, con=0, mag=0): #aggressiveness, name, health, room, armor, stats
         self.name = name
         self.agg = agg #aggressiveness
         self.description = None #placeholder
         self.attacks = []
         self.health = health
         self.maxhealth = health
+        self.xp = xp
         self.skills = [dex, stren, con, mag]
         self.inventory = []
         self.armor = armor
@@ -37,6 +38,8 @@ class Monster:
             dam = int(dam / self.armor.stren)
         self.health -= dam
         return dam  
+    def isDead(self):
+        return True
     def die(self):
         print(self.name + " dies!")
         if len(self.inventory) > 0:
@@ -46,7 +49,7 @@ class Monster:
                 print(x.name)
         self.room.removeMonster(self)
         updater.deregister(self)
-    def findAttack(self): #this function should never be used, but including it just in case
+    def findAttack(self): #only should be used in the case of nonviolent monsters
         return(["", " cannot attack you", 0, 0, None, None])
     def triesToFlee(self):
         if self.health < int(self.maxhealth / 10):
@@ -61,14 +64,15 @@ class Dumb(Monster):
             return(["", " cannot attack you", 0, 0, None, None])
 
 class Undead(Dumb):
-    def die(self): #Undead fortitude
+    def isDead(self): #Undead fortitude
         if random.random() < .3:
             print("You think " + self.name + " is dead... but then it is revived by necromantic magic!")
             self.health = 1
+            return False
         else:
-            Monster.die(self)
+            return True
             
 class Skeleton(Undead):
     def __init__(self, room, armor=None):
-        Undead.__init__(self, True, random.choice(adjectives) + "skeleton", 3, room, armor)
+        Undead.__init__(self, True, random.choice(adjectives) + "skeleton", 3, room, 100, armor)
         self.giveSword()

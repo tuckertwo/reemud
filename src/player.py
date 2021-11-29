@@ -20,6 +20,8 @@ class Player:
         self.items = []
         self.health = 50
         self.maxhealth = 50
+        self.xp = 0
+        self.condition = []
         self.weapon = None
         self.armor = None
         self.weightlimit = 10
@@ -27,6 +29,52 @@ class Player:
         self.alive = True
         self.level = 1
         self.skill = [0, 0, 0, 0] #base scores for dexterity, strength, constitution, and magical skill
+        updater.register(self)
+    def update(self):
+        if self.xp >= 100:
+            self.levelUp()
+            self.xp -= 100
+            self.update()
+    def levelUp(self):
+        self.level += 1
+        print("You have enough xp to level up!")
+        self.showStats()
+        print("What stat would you like to improve?")
+        notdone = True
+        while notdone:
+            if self.game.replay:
+                        cmdstr   = self.game.replay[0]
+                        self.game.replay   = self.game.replay[1:]
+                        self.game.rep_flag = True
+            else:
+                if self.game.rep_flag:
+                    print("-------------------- Save loaded.")
+                    pause()
+                    self.game.rep_flag = False
+                cmdstr = input("> ")
+            d = "dexterity"
+            s = "strength"
+            c = "constitution"
+            m = "magic skill"
+            notdone = False
+            if cmdstr.lower() == d[0:len(cmdstr)]: #primitive version of the command parser
+                print("Dexterity increased!")
+                self.skill[0] += 1
+            elif cmdstr.lower() == s[0:len(cmdstr)]:
+                print("Strength increased!")
+                self.skill[1] += 1
+            elif cmdstr.lower() == c[0:len(cmdstr)]:
+                print("Constitution increased!")
+                self.skill[2] += 1
+                self.maxhealth += 10
+            elif cmdstr.lower() == m[0:len(cmdstr)]:
+                print("Magic skill increased!")
+                self.skill[3] += 1
+            else:
+                print("Error: Stat not found")
+                notdone = True
+        self.log.append(cmdstr)
+            
     def goDirection(self, direction):
         newloc = self.location.getDestination(direction)
         if newloc is None:
@@ -103,6 +151,8 @@ class Player:
         if not self.armor == None:
             print("Equipped Armor: " + self.armor.name)
     def showStats(self):
+        print("Level: " + str(self.level))
+        print("Experience to next level: " + str(100 - self.xp))
         print("Current Health: " + str(self.health) + " out of " + str(self.maxhealth))
         print("Dexterity: +" + str(self.skill[0]))
         print("Strength: +" + str(self.skill[1]))
@@ -141,7 +191,7 @@ class Player:
                 n += 1
             print("Your health is at " + str(self.health) + " points")
             print()
-            try: #TODO: Implement replay capability
+            try: 
                 if self.game.replay:
                     cmdstr   = self.game.replay[0]
                     self.game.replay   = self.game.replay[1:]
@@ -164,7 +214,12 @@ class Player:
                         self.log.append(cmdstr)
                         for k in self.location.getAggro():
                             if k.health <= 0:
-                                k.die()
+                                if k.isDead():
+                                    xp0 = int(k.xp / self.level)
+                                    k.die()
+                                    if xp0 > 0:
+                                        print("You gain " + str(xp0) + " xp")
+                                        self.xp += xp0
                         for j in self.location.getAggro():
                             attk = j.findAttack()
                             if random.random() < attk[3]:
@@ -250,7 +305,7 @@ class Hit(Command):
         targetName = args_parsed["monster"]
         target = player.location.getMonsterByName(targetName)
         if target:
-            if random.random() < (.3 + (self.skills[0] / 15)):
+            if random.random() < (.3 + (player.skill[0] / 15)):
                 if player.weapon == None:
                     print("You punch " + targetName + " with your fists for " + str(target.takeDamage(1 + player.skill[1])) + " damage")
                 else:
