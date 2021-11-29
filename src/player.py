@@ -21,7 +21,7 @@ class Player:
         self.health = 50
         self.maxhealth = 50
         self.xp = 0
-        self.condition = []
+        self.condition = {}
         self.weapon = None
         self.armor = None
         self.weightlimit = 10
@@ -125,6 +125,16 @@ class Player:
                 print(name + " unequipped!")
                 return True
         print ("You are already not wearing or weilding " + name)
+    def drink(self, name):
+        item = self.getItemByName(name)
+        if item:
+            if item.potion:
+                print("You drink the " + name)
+                item.drink()
+            else:
+                print("You can't drink your " + name + "!")
+        else:
+            print("Item Not In Inventory")
     def getItemByName(self, name):
         for i in self.items: #note- to be improved later so exact names aren't needed
             if i.name.lower() == name.lower():
@@ -183,7 +193,23 @@ class Player:
             print("You have died.")
             self.alive = False
         return dam
-
+    def applyEffects(self, effex):
+        for x in effex:
+            self.applyEffect(x[0], x[1])
+    def applyEffect(self, effect, amount=0):
+        if effect == "poison":
+            if "poison" in self.condition:
+                self.condition["poison"] = self.condition["poison"] + amount
+                print("You are poisoned (even more than before)")
+            else:
+                self.condition["poison"] = amount
+                print("You are poisoned!")
+        elif effect == "antidote":
+            print("All poison has been removed from your bloodstream")
+            if "poison" in self.condition:
+                self.conditions.pop("poison")
+            else:
+                print("(If any was there in the first place)")
     def attackMonster(self, mon):
         mon.agg = True
         self.log.append("attack " + mon.name)
@@ -231,6 +257,8 @@ class Player:
                             attk = j.findAttack()
                             if random.random() < attk[3]:
                                     print(j.name + attk[0] + " for " + str(self.takeDamage(attk[2])) + " damage!") #TODO: add effects
+                                    if not (attk[6] == None):
+                                        self.applyEffects(attk[6])
                             else:
                                 print(j.name + attk[1])
                                 

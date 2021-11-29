@@ -120,6 +120,15 @@ class UnEquip(Command):
     def func_ap(self, player, _updater, args_parsed):
         targetName = args_parsed["item"]
         player.unequip(targetName)
+        
+class Drink(Command):
+    args = [None, Arg("item", False, False, True)]
+    desc = "Drinks a potion"
+    sideeffects = True
+    
+    def func_ap(self, player, _updater, args_parsed):
+        targetName = args_parsed["item"]
+        player.drink(targetName)
 
 class Inventory(Command):
     args = []

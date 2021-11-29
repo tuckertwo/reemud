@@ -7,6 +7,7 @@ class Item:
     weapon = False
     armor = False
     book = False
+    potion = False
     def __init__(self, name, desc, weight=1):
         self.name = name
         self.desc = desc
@@ -41,4 +42,38 @@ class Book(Item):
         self.text = text
         Item.__init__(self, name, desc, weight)
         
+class Potion(Item):
+    potion = True
+    
+class HealingPotion(Potion):
+    def __init__(self, amt, name="Healing Potion", desc="A red-colored vial of healing potion", weight=1):
+        self.amount = amt
+        Item.__init__(self, name, desc, weight)
+        
+    def drink(self, _player):
+        _player.heal(self.amount)
+        
+class Poison(Potion):
+    def __init__(self, amt, name="Poison", desc="A green-colored vial of poison", weight=1):
+        self.amount = amt
+        Item.__init__(self, name, desc, weight)
+        
+    def drink(self, _player):
+        _player.applyEffect("poison", self.amount)
+        
+    def applyTo(self, weapon):
+        if weapon.effects == None:
+            weapon.effects = {"poison": self.amount}
+        elif "poison" in weapon.effects:
+            weapon.effects["poison"] = weapon.effects["poison"] + self.amount
+        else:
+            weapon.effects["poison"] = self.amount
+        print("The " + self.name + " has been applied to the " + weapon.name)
+    
+class Antidote(Potion):
+    def __init__(self, name="Antidotes", desc="A blue-colored vial of antidote", weight=1):
+        Item.__init__(self, name, desc, weight)
+
+    def drink(self, _player):
+        _player.applyEffect("antidote")
     
