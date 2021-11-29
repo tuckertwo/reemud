@@ -28,7 +28,8 @@ class Player:
         self.groan_threshold = 2
         self.alive = True
         self.level = 1
-        self.skill = [0, 0, 0, 0] #base scores for dexterity, strength, constitution, and magical skill
+        self.skill = [0, 0, 0, 0] #base scores for dexterity, strength, constitution, and intelligence
+        self.sneak = False
         updater.register(self)
     def update(self):
         if self.xp >= 100:
@@ -55,7 +56,7 @@ class Player:
             d = "dexterity"
             s = "strength"
             c = "constitution"
-            m = "magic skill"
+            m = "intelligence"
             notdone = False
             if cmdstr.lower() == d[0:len(cmdstr)]: #primitive version of the command parser
                 print("Dexterity increased!")
@@ -68,7 +69,7 @@ class Player:
                 self.skill[2] += 1
                 self.maxhealth += 10
             elif cmdstr.lower() == m[0:len(cmdstr)]:
-                print("Magic skill increased!")
+                print("Intelligence increased!")
                 self.skill[3] += 1
             else:
                 print("Error: Stat not found")
@@ -81,6 +82,12 @@ class Player:
             raise CmdRunError("no such location")
         else:
             self.location = newloc
+    def isDetected(self):
+        for x in self.location.getAggro():
+            if random.random() < (x.perception * (.3 - (self.skill[0] / 15))):
+                print("You have been detected by " + x.name + "!")
+                self.sneak = False
+                self.attackMonster(x)
     def pickup(self, item):
         self.items.append(item)
         item.loc = self
@@ -157,7 +164,7 @@ class Player:
         print("Dexterity: +" + str(self.skill[0]))
         print("Strength: +" + str(self.skill[1]))
         print("Constitution: +" + str(self.skill[2]))
-        print("Magical Skill: +" + str(self.skill[3]))
+        print("Intelligence: +" + str(self.skill[3]))
         print()
     def getItemByName(self, name):
         for i in self.items:

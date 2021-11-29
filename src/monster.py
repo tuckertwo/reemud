@@ -5,7 +5,7 @@ from item import Weapon, Armor, Item
 adjectives = ["venerable ", "youthful ", "sublime ", "dolorous ", "somber ", "jubilant ", "purple "] #flavor!
 
 class Monster:
-    def __init__(self, agg, name, health, room, xp=0, armor=None, dex=0, stren=0, con=0, mag=0): #aggressiveness, name, health, room, armor, stats
+    def __init__(self, agg, name, health, room, xp=0, perception=1, armor=None, dex=0, stren=0, con=0, mag=0): #aggressiveness, name, health, room, armor, stats
         self.name = name
         self.agg = agg #aggressiveness
         self.description = None #placeholder
@@ -13,17 +13,18 @@ class Monster:
         self.health = health
         self.maxhealth = health
         self.xp = xp
+        self.perception = perception
         self.skills = [dex, stren, con, mag]
         self.inventory = []
         self.armor = armor
         self.room = room
         room.addMonster(self)
         updater.register(self)
-    def addAttack(sverb, fverb, damage, prob, limit=None, effects=None):
-        self.attacks.append([sverb, fverb, damage, prob, limit, effects])
+    def addAttack(sverb, fverb, damage, prob, disarmable=False, limit=None, effects=None):
+        self.attacks.append([sverb, fverb, damage, prob, disarmable, limit, effects])
     def giveSword(self): #specific but common attack
-        self.attacks.append([" hits you with a sword", " tries to hit you with a sword, but misses", 6 + self.skills[1], .25 + (self.skills[0] / 15), None, None])
-        self.attacks.append([" punches you", " punches you, harmlessly", 2 + self.skills[1], .25 + (self.skills[0] / 15), None, None])
+        self.attacks.append([" hits you with a sword", " tries to hit you with a sword, but misses", 6 + self.skills[1], self.perception * (.25 + (self.skills[0] / 15)), True, None, None])
+        self.attacks.append([" punches you", " punches you, harmlessly", 2 + self.skills[1], self.perception * (.25 + (self.skills[0] / 15)), False, None, None])
         self.inventory.append(Weapon("Sword", "A nondescript metal sword.", 6, 3))
     def update(self):
         if random.random() < .5:
@@ -74,5 +75,5 @@ class Undead(Dumb):
             
 class Skeleton(Undead):
     def __init__(self, room, armor=None):
-        Undead.__init__(self, True, random.choice(adjectives) + "skeleton", 3, room, 25, armor)
+        Undead.__init__(self, True, random.choice(adjectives) + "skeleton", 3, room, 25, 1, armor)
         self.giveSword()

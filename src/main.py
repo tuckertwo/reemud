@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from room import Room
 from player import Player
-from item import Item, Weapon, Armor
+from item import Item, Weapon, Armor, Book
 import monster
 import updater
 
@@ -21,7 +21,7 @@ def createWorld():
     i = Item("Rock", "This is just a rock.", 5)
     i.putInRoom(b)
     i = Item("Rock", "This is just a rock.", 5)
-    j = Weapon("Rock", "A sharp rock that might hurt somebody.", 5, 5)
+    j = Weapon("Sharp Rock", "A sharp rock that might hurt somebody.", 5, 5)
     i.putInRoom(c)
     j.putInRoom(c)
     i = Item("Orange Clock", "This is not a rock.")
@@ -61,6 +61,10 @@ class Game:
                     cmd_obj.func(player, updater, cmdstr)
                     if cmd_obj.sideeffects:
                         player.log.append(cmdstr)
+                    if player.sneak: #That is right, I have sulled the main loop
+                        player.isDetected()
+                    elif len(player.location.getAggro()) > 0:
+                        player.attackMonster(player.location.getAggro()[0]) #If the player isn't sneaking, angry monsters will attack them
             except CmdParseError as e: # Pass all other errors through, I guess.
                 print("Error parsing command: " + str(e))
             except CmdRunError as e:

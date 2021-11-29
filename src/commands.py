@@ -58,6 +58,14 @@ class GoCmd(Command):
         updater.updateAll()
         printSituation(player)
 
+class SneakCmd(Command):
+    args = []
+    desc = "Begin sneaking"
+    sideeffects = False
+
+    def func(self, _player, _updater, _cmdstr):
+        _player.sneak = True
+
 class PickupCmd(Command):
     args = [None, Arg("up", True, False, False), Arg("item", False, False, True)]
     desc = "Picks up an item"
@@ -260,6 +268,7 @@ commands = {
     "sleep": SleepCmd(),
 
     "look": LookCmd(),
+    "sneak": SneakCmd(),
     "pickup": PickupCmd(),
     "drop": DropCmd(),
     "inventory": Inventory(),
