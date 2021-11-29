@@ -21,7 +21,7 @@ def allocateLoot():
     while len(loot) > 0:
         x = random.randrange(len(loot))
         y = random.choice(updates)
-        if not y.name == "player":
+        if not y.name == "Player":
             y.giveItem(loot[x])
             loot.pop(x)
     

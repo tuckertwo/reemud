@@ -52,7 +52,7 @@ class Player:
             else:
                 if self.game.rep_flag:
                     print("-------------------- Save loaded.")
-                    pause()
+                    commands.pause()
                     self.game.rep_flag = False
                 cmdstr = input("> ")
             d = "dexterity"
@@ -244,7 +244,7 @@ class Player:
                 else:
                     if self.game.rep_flag:
                         print("-------------------- Save loaded.")
-                        pause()
+                        commands.pause()
                         self.game.rep_flag = False
                     cmdstr = input("> ")
 
