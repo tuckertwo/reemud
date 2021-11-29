@@ -412,6 +412,7 @@ commands = {
     "look": LookCmd(),
     "sneak": SneakCmd(),
     "pickup": PickupCmd(),
+    "take": PickupCmd(),
     "drop": DropCmd(),
     "put": PutinCmd(),
     "drink": DrinkCmd(),
