@@ -6,6 +6,7 @@ def clear():
 class Item:
     weapon = False
     armor = False
+    book = False
     def __init__(self, name, desc, weight=1):
         self.name = name
         self.desc = desc
@@ -33,3 +34,11 @@ class Armor(Item):
         self.stren = stren
         self.effects = effects
         Item.__init__(self, name, desc, weight)
+
+class Book(Item):
+    book = True
+    def __init__(self, name, text, desc="A book", weight=1):
+        self.text = text
+        Item.__init__(self, name, desc, weight)
+        
+    

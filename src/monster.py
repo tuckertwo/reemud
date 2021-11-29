@@ -74,5 +74,5 @@ class Undead(Dumb):
             
 class Skeleton(Undead):
     def __init__(self, room, armor=None):
-        Undead.__init__(self, True, random.choice(adjectives) + "skeleton", 3, room, 100, armor)
+        Undead.__init__(self, True, random.choice(adjectives) + "skeleton", 3, room, 25, armor)
         self.giveSword()
