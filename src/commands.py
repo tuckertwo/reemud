@@ -283,11 +283,15 @@ class PickupCmd(Command):
     def func_ap(self, player, updater, args_parsed):
         targetName = args_parsed["item"]
         target = player.location.getItemByName(targetName)
-        if target:
-            player.pickup(target, updater)
+        if targetName == "all":
+            while len(player.location.items) > 0:
+                player.pickup(player.location.items[0], updater)
         else:
-            raise CmdRunError("no such item")
-          
+            target = player.location.getItemByName(targetName)
+            if target:
+                player.pickup(target, updater)
+            else:
+                raise CmdRunError("no such item")
 
 class PutinCmd(Command):
     args = [None, Arg("x in y", False, False, True)]
