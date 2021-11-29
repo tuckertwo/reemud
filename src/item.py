@@ -28,6 +28,10 @@ class Weapon(Item):
         self.damage = damage
         self.effects = effects
         Item.__init__(self, name, desc, weight)
+        
+    def describe(self):
+        print(self.desc)
+        print("Power: " + str(self.damage))
 
 class Armor(Item):
     armor = True
@@ -35,6 +39,10 @@ class Armor(Item):
         self.stren = stren
         self.effects = effects
         Item.__init__(self, name, desc, weight)
+        
+    def describe(self):
+        print(self.desc)
+        print("Strength: " + str(self.stren))
 
 class Book(Item):
     book = True

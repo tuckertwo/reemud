@@ -12,8 +12,17 @@ class Room:
         for e in self.exits:
             if e[0] == direction:
                 return e[1]
-    def connectRooms(room1, dir1, room2, dir2):
+    def connectRooms(room1, dir1, room2, dir2=None):
         #creates "dir1" exit from room1 to room2 and vice versa
+        if dir2 == None:
+            if dir1 == "north":
+                dir2 = "south"
+            elif dir1 == "south":
+                dir2 = "north"
+            elif dir1 == "west":
+                dir2 = "east"
+            elif dir1 == "east":
+                dir2 = "west"
         room1.addExit(dir1, room2)
         room2.addExit(dir2, room1)
     def exitNames(self):

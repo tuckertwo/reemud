@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from room import Room
 from player import Player
-from item import Item, Weapon, Armor, Book
+import item
 import monster
 import updater
 
@@ -18,17 +18,24 @@ def createWorld():
     Room.connectRooms(c, "east", d, "west")
     Room.connectRooms(a, "north", c, "south")
     Room.connectRooms(b, "north", d, "south")
-    i = Item("Rock", "This is just a rock.", 5)
+    i = item.Item("Rock", "This is just a rock.", 5)
     i.putInRoom(b)
-    i = Item("Rock", "This is just a rock.", 5)
-    j = Weapon("Sharp Rock", "A sharp rock that might hurt somebody.", 5, 5)
+    i = item.Item("Rock", "This is just a rock.", 5)
+    j = item.Weapon("Sharp Rock", "A sharp rock that might hurt somebody.", 5, 5)
     i.putInRoom(c)
     j.putInRoom(c)
-    i = Item("Orange Clock", "This is not a rock.")
+    i = item.Item("Orange Clock", "This is not a rock.")
     i.putInRoom(c)
+    i = item.HealingPotion(30)
+    i.putInRoom(a)
+    i = item.Poison(15)
+    i.putInRoom(a)
+    i = item.Antidote()
+    i.putInRoom(a)
     player.location = a
     for x in range(10):
         monster.Skeleton(b)
+    updater.allocateLoot()
         
 class Game:
     def __init__(self, replay=[], rep_flag=False):

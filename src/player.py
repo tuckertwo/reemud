@@ -17,6 +17,7 @@ class Player:
         self.log = []
         self.playing = True
         self.location = None
+        self.name = "Player"
         self.items = []
         self.health = 50
         self.maxhealth = 50
@@ -36,6 +37,7 @@ class Player:
             self.levelUp()
             self.xp -= 100
             self.update()
+        self.effectsOccur()
     def levelUp(self):
         self.level += 1
         print("You have enough xp to level up!")
@@ -130,7 +132,7 @@ class Player:
         if item:
             if item.potion:
                 print("You drink the " + name)
-                item.drink()
+                item.drink(self)
             else:
                 print("You can't drink your " + name + "!")
         else:
@@ -144,9 +146,9 @@ class Player:
         self.health += amount
         if self.health > self.maxhealth:
             self.health = self.maxhealth
-            print("Healed to full health (" + self.maxhealth + " hp)")
+            print("Healed to full health (" + str(self.maxhealth) + " hp)")
         else:
-            print("Healed by " + amount + " hp")
+            print("Healed by " + str(amount) + " hp")
     def showInventory(self):
         print("You are currently carrying:")
         items_dict = {}
@@ -184,9 +186,9 @@ class Player:
     def removeItem(self, item):
         if item in self.items:
             self.items.remove(item)
-    def takeDamage(self, amt):
+    def takeDamage(self, amt, ignorearmor=False):
         dam = int(random.random() * amt) + 1
-        if not self.armor == None:
+        if not ((self.armor == None) or ignorearmor):
             dam = int(dam / self.armor.stren)
         self.health -= dam
         if self.health <= 0:
@@ -207,9 +209,16 @@ class Player:
         elif effect == "antidote":
             print("All poison has been removed from your bloodstream")
             if "poison" in self.condition:
-                self.conditions.pop("poison")
+                self.condition.pop("poison")
             else:
                 print("(If any was there in the first place)")
+        elif effect == "heal":
+            self.heal(amount)
+    def effectsOccur(self):
+        if "poison" in self.condition:
+            dam = int(random.random() * self.condition["poison"])
+            print("You take " + str(dam) + " points of poison damage")
+            self.takeDamage(dam, True)    
     def attackMonster(self, mon):
         mon.agg = True
         self.log.append("attack " + mon.name)
@@ -245,7 +254,9 @@ class Player:
                     cmd_obj.func(self, updater, cmdstr)
                     if cmd_obj.sideeffects:
                         self.log.append(cmdstr)
+                        self.effectsOccur()
                         for k in self.location.getAggro():
+                            k.effectsOccur()
                             if k.health <= 0:
                                 if k.isDead():
                                     xp0 = int(k.xp / self.level)
@@ -351,17 +362,6 @@ class Hit(Command):
             raise CmdRunError("no such monster")
 
 attackcommands = {
-    #Commands imported from commands.py
-    "look": commands.LookCmd(),
-    "pickup": commands.PickupCmd(),
-    "drop": commands.DropCmd(),
-    "inventory": commands.Inventory(),
-    "equip": commands.Equip(),
-    "unequip": commands.UnEquip(),
-    "me": commands.Me(),
-    "exit": commands.Exit(),
-    "save": commands.SaveCmd(),
-    
     "flee": Flee(None), #flee differs from  go in that flee doesn't update monster positions
     "north": Flee("north"),
     "n": Flee("north"),
@@ -371,6 +371,20 @@ attackcommands = {
     "e": Flee("east"),
     "west": Flee("west"),
     "w": Flee("west"),
+
+
+    #Commands imported from commands.py
+    "look": commands.LookCmd(),
+    "pickup": commands.PickupCmd(),
+    "drop": commands.DropCmd(),
+    "drink": commands.DrinkCmd(),
+    "inventory": commands.Inventory(),
+    "equip": commands.Equip(),
+    "unequip": commands.UnEquip(),
+    "me": commands.Me(),
+    "exit": commands.Exit(),
+    "save": commands.SaveCmd(),
+    
     
     "wait": WaitCmd(),
     "hit": Hit(),

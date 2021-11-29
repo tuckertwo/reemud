@@ -121,7 +121,7 @@ class UnEquip(Command):
         targetName = args_parsed["item"]
         player.unequip(targetName)
         
-class Drink(Command):
+class DrinkCmd(Command):
     args = [None, Arg("item", False, False, True)]
     desc = "Drinks a potion"
     sideeffects = True
@@ -280,6 +280,7 @@ commands = {
     "sneak": SneakCmd(),
     "pickup": PickupCmd(),
     "drop": DropCmd(),
+    "drink": DrinkCmd(),
     "inventory": Inventory(),
     "equip": Equip(),
     "unequip": UnEquip(),
