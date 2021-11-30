@@ -30,7 +30,7 @@ class Monster:
         if item.weapon:
             self.giveWeapon(item)
     def giveWeapon(self, weapon):
-        self.addAttack(" hits you with " + weapon.name, "tries to hit you with " + weapon.name + ", but misses", weapon.damage + self.skills[1], self.perception * (.25 + (self.skills[0] / 15)), True, None, weapon.effects)
+        self.addAttack(" hits you with " + weapon.name, " tries to hit you with " + weapon.name + ", but misses", weapon.damage + self.skills[1], self.perception * (.25 + (self.skills[0] / 15)), True, None, weapon.effects)
     def update(self):
         self.effectsOccur()
         if random.random() < .5:
