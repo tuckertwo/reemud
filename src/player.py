@@ -90,10 +90,18 @@ class Player:
                 print("You have been detected by " + x.name + "!")
                 self.sneak = False
                 self.attackMonster(x)
-    def pickup(self, item):
-        self.items.append(item)
-        item.loc = self
-        self.location.removeItem(item)
+    def pickup(self, item, updater):
+        total_weight = sum([i.weight for i in self.items])
+        if total_weight+item.weight>self.weightlimit:
+            raise CmdRunError("item too heavy to put in inventory")
+        else:
+            if item.weight >= self.groan_threshold:
+                for i in range(item.weight//self.groan_threshold+1):
+                    updater.updateAll()
+                    print("You strain yourself")
+            self.items.append(item)
+            item.loc = self
+            self.location.removeItem(item)
     def equip(self, name):
         item = self.getItemByName(name)
         if item:
