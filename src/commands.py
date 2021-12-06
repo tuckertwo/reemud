@@ -34,6 +34,81 @@ def eng_list(xs, str_acc=""):
 def pause():
     input("Please press 'enter' to continue.")
 
+class Attack(Command):
+    args = [None, Arg("monster", False, False, True)]
+    desc = "Attacks a monster"
+    sideeffects = False
+
+    def func_ap(self, player, _updater, args_parsed):
+        targetName = args_parsed["monster"]
+        target = player.location.getMonsterByName(targetName)
+        if target:
+            player.attackMonster(target)
+            return True
+        else:
+            raise CmdRunError("no such monster")
+
+class ClearScreenCmd(Command):
+    args = []
+    desc = "Clear the screen"
+    sideeffects = False
+
+    def func(self, _player, _updater, _cmdstr):
+        clear()
+
+class DrinkCmd(Command):
+    args = [None, Arg("item", False, False, True)]
+    desc = "Drinks a potion"
+    sideeffects = True
+    
+    def func_ap(self, player, _updater, args_parsed):
+        targetName = args_parsed["item"]
+        player.drink(targetName)
+
+class DropCmd(Command):
+    args = [None, Arg("item", False, False, True)]
+    desc = "Drops an item"
+    sideeffects = True
+    
+    def func_ap(self, player, _updater, args_parsed):
+        targetName = args_parsed["item"] 
+        target = player.getItemByName(targetName)
+        if target:
+            player.location.addItem(target)
+            player.removeItem(target)
+            return True
+        else:
+            raise CmdRunError("no such item in inventory")
+
+class EchoCmd(Command):
+    args = [None, Arg("string", False, False, True)]
+    desc = "Echo a string"
+    sideeffects = False
+
+    # To-do: re-write the parser to make infinite args actually capture
+    # strings instead of split strings
+    def func_ap(self, _p, _u, args_parsed):
+        print(" ".join(args_parsed["string"]))
+
+class Equip(Command):
+    args = [None, Arg("item", False, False, True)]
+    desc = "Equips a Weapon or Armour Suit"
+    sideeffects = True
+
+    def func_ap(self, player, _updater, args_parsed):
+        targetName = args_parsed["item"]
+        player.equip(targetName)
+     
+
+class Exit(Command):
+    args = []
+    desc = "Exits the game"
+    sideeffects = False # Well, really it does but we don't want it recorded in
+                        # the save nevertheless
+
+    def func(self, p, _u, _cmdstr):
+        p.playing = False
+
 class GoCmd(Command):
     sideeffects = True
 
@@ -58,95 +133,6 @@ class GoCmd(Command):
         updater.updateAll()
         printSituation(player)
 
-class SneakCmd(Command):
-    args = []
-    desc = "Begin sneaking"
-    sideeffects = True
-
-    def func(self, _player, _updater, _cmdstr):
-        _player.sneak = True
-
-class InspectCmd(Command):
-    args = [None, Arg("item", False, False, True)]
-    desc = "Inspects an item"
-    sideeffects = False
-
-    def func_ap(self, player, updater, args_parsed):
-        targetName = args_parsed["item"]
-        player.inspect(targetName)
-
-class PickupCmd(Command):
-    args = [None, Arg("up", True, False, False), Arg("item", False, False, True)]
-    desc = "Picks up an item"
-    sideeffects = True
-
-    def func_ap(self, player, updater, args_parsed):
-        targetName = args_parsed["item"]
-        target = player.location.getItemByName(targetName)
-        if target:
-            player.pickup(target, updater)
-        else:
-            raise CmdRunError("no such item")
-            
-class DropCmd(Command):
-    args = [None, Arg("item", False, False, True)]
-    desc = "Drops an item"
-    sideeffects = True
-    
-    def func_ap(self, player, _updater, args_parsed):
-        targetName = args_parsed["item"] 
-        target = player.getItemByName(targetName)
-        if target:
-            player.location.addItem(target)
-            player.removeItem(target)
-            return True
-        else:
-            raise CmdRunError("no such item in inventory")
-
-            
-class Equip(Command):
-    args = [None, Arg("item", False, False, True)]
-    desc = "Equips a Weapon or Armour Suit"
-    sideeffects = True
-
-    def func_ap(self, player, _updater, args_parsed):
-        targetName = args_parsed["item"]
-        player.equip(targetName)
-        
-class UnEquip(Command):
-    args = [None, Arg("item", False, False, True)]
-    desc = "Unequips a Weapon or Armour Suit"
-    sideeffects = True
-    
-    def func_ap(self, player, _updater, args_parsed):
-        targetName = args_parsed["item"]
-        player.unequip(targetName)
-        
-class DrinkCmd(Command):
-    args = [None, Arg("item", False, False, True)]
-    desc = "Drinks a potion"
-    sideeffects = True
-    
-    def func_ap(self, player, _updater, args_parsed):
-        targetName = args_parsed["item"]
-        player.drink(targetName)
-
-class Inventory(Command):
-    args = []
-    desc = "Prints the player's inventory"
-    sideeffects = False
-
-    def func(self, p, _u, _cmdstr):
-        return p.showInventory()
-
-class Me(Command):
-    args = []
-    desc = "gives a summary of your condition"
-    sideeffects = False
-    
-    def func(self, player, _updater, args_passed):
-        return player.showStats()
-    
 class Help(Command):
     args = []
     desc = "Prints a summary of all commands"
@@ -166,28 +152,23 @@ class Help(Command):
             helptext += "{:>10}:  {:15}       {}\n".format(k, v.args_hr, v.desc)
         print(helptext)
 
-class Exit(Command):
-    args = []
-    desc = "Exits the game"
-    sideeffects = False # Well, really it does but we don't want it recorded in
-                        # the save nevertheless
 
-    def func(self, p, _u, _cmdstr):
-        p.playing = False
-
-class Attack(Command):
-    args = [None, Arg("monster", False, False, True)]
-    desc = "Attacks a monster"
+class InspectCmd(Command):
+    args = [None, Arg("item", False, False, True)]
+    desc = "Inspects an item"
     sideeffects = False
 
-    def func_ap(self, player, _updater, args_parsed):
-        targetName = args_parsed["monster"]
-        target = player.location.getMonsterByName(targetName)
-        if target:
-            player.attackMonster(target)
-            return True
-        else:
-            raise CmdRunError("no such monster")
+    def func_ap(self, player, updater, args_parsed):
+        targetName = args_parsed["item"]
+        player.inspect(targetName)
+
+class Inventory(Command):
+    args = []
+    desc = "Prints the player's inventory"
+    sideeffects = False
+
+    def func(self, p, _u, _cmdstr):
+        return p.showInventory()
 
 class LookCmd(Command):
     args = []
@@ -197,13 +178,13 @@ class LookCmd(Command):
     def func(self, player, _updater, _cmdstr):
         printSituation(player)
 
-class ClearScreenCmd(Command):
+class Me(Command):
     args = []
-    desc = "Clear the screen"
+    desc = "gives a summary of your condition"
     sideeffects = False
-
-    def func(self, _player, _updater, _cmdstr):
-        clear()
+    
+    def func(self, player, _updater, args_passed):
+        return player.showStats()
 
 class PauseCmd(Command):
     args = []
@@ -213,23 +194,19 @@ class PauseCmd(Command):
     def func_ap(self, p, _u, _args_parsed):
         pause()
 
-class EchoCmd(Command):
-    args = [None, Arg("string", False, False, True)]
-    desc = "Echo a string"
-    sideeffects = False
+class PickupCmd(Command):
+    args = [None, Arg("up", True, False, False), Arg("item", False, False, True)]
+    desc = "Picks up an item"
+    sideeffects = True
 
-    # To-do: re-write the parser to make infinite args actually capture
-    # strings instead of split strings
-    def func_ap(self, _p, _u, args_parsed):
-        print(" ".join(args_parsed["string"]))
-
-class SleepCmd(Command):
-    args = [None, Arg("time", False, False, False)]
-    desc = "Wait for a specific time in seconds"
-    sideeffects = False
-
-    def func_ap(self, _p, _u, args_parsed):
-        time.sleep(float(args_parsed["time"]))
+    def func_ap(self, player, updater, args_parsed):
+        targetName = args_parsed["item"]
+        target = player.location.getItemByName(targetName)
+        if target:
+            player.pickup(target, updater)
+        else:
+            raise CmdRunError("no such item")
+          
 
 class SaveCmd(Command):
     # Attention: this saves a complete log of every salient action taken
@@ -244,6 +221,32 @@ class SaveCmd(Command):
         with open(args_parsed["file"], "w") as f:
             f.write(repr((p.seed, p.log)))
             f.write("\n")
+
+class SleepCmd(Command):
+    args = [None, Arg("time", False, False, False)]
+    desc = "Wait for a specific time in seconds"
+    sideeffects = False
+
+    def func_ap(self, _p, _u, args_parsed):
+        time.sleep(float(args_parsed["time"]))
+
+class SneakCmd(Command):
+    args = []
+    desc = "Begin sneaking"
+    sideeffects = True
+
+    def func(self, _player, _updater, _cmdstr):
+        _player.sneak = True
+
+class UnEquip(Command):
+    args = [None, Arg("item", False, False, True)]
+    desc = "Unequips a Weapon or Armour Suit"
+    sideeffects = True
+    
+    def func_ap(self, player, _updater, args_parsed):
+        targetName = args_parsed["item"]
+        player.unequip(targetName)
+      
 
 class WaitCmd(Command):
     args = [None, Arg("for", True, True, False),
