@@ -14,10 +14,8 @@ class Item:
         self.weight = weight
         self.loc = None
     def describe(self):
-        clear()
         print(self.desc)
         print()
-        input("Press enter to continue...")
     def putInRoom(self, room):
         self.loc = room
         room.addItem(self)
@@ -32,6 +30,7 @@ class Weapon(Item):
     def describe(self):
         print(self.desc)
         print("Power: " + str(self.damage))
+        print()
 
 class Armor(Item):
     armor = True
@@ -43,6 +42,7 @@ class Armor(Item):
     def describe(self):
         print(self.desc)
         print("Strength: " + str(self.stren))
+        print()
 
 class Book(Item):
     book = True
@@ -61,6 +61,11 @@ class HealingPotion(Potion):
     def drink(self, _player):
         _player.heal(self.amount)
         
+    def describe(self):
+        print(self.desc)
+        print("Power: " + str(self.amount) + " hp")
+        print()
+        
 class Poison(Potion):
     def __init__(self, amt, name="Poison", desc="A green-colored vial of poison", weight=1):
         self.amount = amt
@@ -68,7 +73,12 @@ class Poison(Potion):
         
     def drink(self, _player):
         _player.applyEffect("poison", self.amount)
-        
+    
+    def describe(self):
+        print(self.desc)
+        print("Power: " + str(self.amount))        
+        print()
+    
     def applyTo(self, weapon):
         if weapon.effects == None:
             weapon.effects = {"poison": self.amount}

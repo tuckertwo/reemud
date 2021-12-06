@@ -61,10 +61,19 @@ class GoCmd(Command):
 class SneakCmd(Command):
     args = []
     desc = "Begin sneaking"
-    sideeffects = False
+    sideeffects = True
 
     def func(self, _player, _updater, _cmdstr):
         _player.sneak = True
+
+class InspectCmd(Command):
+    args = [None, Arg("item", False, False, True)]
+    desc = "Inspects an item"
+    sideeffects = False
+
+    def func_ap(self, player, updater, args_parsed):
+        targetName = args_parsed["item"]
+        player.inspect(targetName)
 
 class PickupCmd(Command):
     args = [None, Arg("up", True, False, False), Arg("item", False, False, True)]
@@ -274,6 +283,7 @@ commands = {
     "drop": DropCmd(),
     "drink": DrinkCmd(),
     "inventory": Inventory(),
+    "inspect": InspectCmd(),
     "equip": Equip(),
     "unequip": UnEquip(),
     "me": Me(),

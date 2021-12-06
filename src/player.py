@@ -123,6 +123,15 @@ class Player:
                 print("That is not a weapon or armor!")
         else:
             print("Item Not In Inventory")
+    def inspect(self, name):
+        item = self.location.getItemByName(name)
+        if not item:
+            item = self.getItemByName(name) #checks room before inventory
+        
+        if item:
+            item.describe()
+        else:
+            print("Error: Item not found!")
     def unequip(self, name):
         if not (self.weapon == None):
             if self.weapon.name.lower() == name.lower():
