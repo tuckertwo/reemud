@@ -231,18 +231,51 @@ class Player:
                 self.condition["poison"] = amount
                 print("You are poisoned!")
         elif effect == "antidote":
-            print("All poison has been removed from your bloodstream")
             if "poison" in self.condition:
+                print("All poison has been removed from your bloodstream")
                 self.condition.pop("poison")
             else:
-                print("(If any was there in the first place)")
+                print("There wasn't any poison in your bloodstream to remove")
         elif effect == "heal":
             self.heal(amount)
+        elif effect == "fire":
+            if "fire" in self.condition:
+                self.condition["fire"] = self.condition["fire"] + amount
+                print("You are inflamed with more fire!")
+            else:
+                self.condition["fire"] = amount
+                print("You are set on fire!")
+        elif effect == "regeneration":
+            if "regeneration" in self.condition:
+                self.condition["regeneration"] = self.condition["regeneration"] + amount
+                print("The magical regeneration is boosted")
+            else:
+                self.condition["regeneration"] = amount
+                print("Magical regeneration heals your body")
+        elif effect == "water":
+            if "fire" in self.condition:
+                print("The fire was extinguished")
+            self.condition.pop("fire")
     def effectsOccur(self):
         if "poison" in self.condition:
             dam = int(random.random() * self.condition["poison"])
             print("You take " + str(dam) + " points of poison damage")
             self.takeDamage(dam, True)    
+        if "fire" in self.condition:
+            dam = int(random.random() * self.condition["fire"])
+            print("You take " + str(dam) + " damage from the fire")
+            self.takeDamage(dam, True)
+            self.condition["fire"] -= 2
+            if self.condition["fire"] < 0:
+                print("The fire is extinguished")
+                self.condition.pop("fire")
+        if "regeneration" in self.condition:
+            hal = int(random.random() * self.condition["regeneration"])
+            print("You regenerate " + str(hal) " hp")
+            self.heal(hal)
+            self.condition["regenerate"] -= 2
+            if self.condition["regenerate"] < 0:
+                print("The regeneration wears off")
     def attackMonster(self, mon, attacked=False):
         mon.agg = True
         if not attacked:

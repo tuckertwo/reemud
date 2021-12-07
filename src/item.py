@@ -94,29 +94,42 @@ class Poison(Potion):
     
 class Antidote(Potion):
     antidote = True
-    def __init__(self, name="Antidotes", desc="A blue-colored vial of antidote", weight=1):
+    def __init__(self, name="Antidote", desc="A blue-colored vial of antidote", weight=1):
         Item.__init__(self, name, desc, weight)
 
     def drink(self, _player):
         _player.applyEffect("antidote")
+        
+class Water(Potion):
+    def __init__(self, name="Fire Extinguisher", desc="A fire extinguisher for you to drink", weight=1):
+        Item.__init__(self, name, desc, weight)
+        
+    def drink(self, _player):
+        _player.applyEffect("water")
+        
+class Regeneration(Potion):
+    def __init__(self, amt, name="Regeneration Potion", desc="An orange-colored vial of regeneration potion", weight=1):
+        self.amount = amt
+        Item.__init__(self, name, desc, weight)
+        
+    def drink(self, _player):
+        _player.applyEffect("regeneration", self.amount)
+        
+    def describe(self):
+        print(self.desc)
+        print("Power: " + str(int(self.amount / 2)) + " rounds")
+        print()
     
 class Container(Item):
     container = True
-    def __init__(self, name, desc, room, contents=[], weight=100, maxcapacity=999):
+    def __init__(self, name, desc, room, contents=[], weight=100):
         self.room = room
-        self.currentcap = 0
-        self.maxcapacity = maxcapacity
         self.contents = contents
         item.__init__(self, name, desc, weight)
     
     def putInside(self, item):
-        if not ((self.currentcap + item.weight) > self.maxcapacity):
-            self.contents.append(item)
-            self.currentcap += item.weight
-            return True
-        else:
-            print("The " + self.name + " is full")
-            return False
+        self.contents.append(item)
+        self.weight += item.weight
     
     def getItemByName(self, targetName):
         for i in self.contents:
@@ -129,7 +142,7 @@ class Container(Item):
         
     def removeItem(self, item):
         if item in self.contents:
-            self.currentcap -= i.weight
+            self.weight -= i.weight
             self.contents.remove(i)
             return True
         return False

@@ -52,19 +52,36 @@ class Monster:
     def applyEffect(self, effect, amount=0):
         if effect == "poison":
             self.poison(amount)
+        if effect == "fire":
+            self.fire(amount)
     def poison(self, amount):
         if "poison" in self.condition:
             self.condition["poison"] = self.condition["poison"] + amount
         else:
             self.condition["poison"] = amount
             print(self.name + " is poisoned!")
-            
+    def fire(self, amount):
+        if "fire" in self.condition:
+            self.condition["fire"] = self.condition["fire"] + amount
+        else:
+            self.condition["fire"] = amount
+            print(self.name + "is set on fire!")
     def effectsOccur(self, inBattle=False):
         if "poison" in self.condition:
             dam = int(random.random() * self.condition["poison"])
             if inBattle:
                 print(self.name + " takes " + str(dam) + " points of poison damage")
             self.takeDamage(dam, True)
+        if "fire" in self.condition:
+            dam = int(random.random() * self.condition["fire"])
+            if inBattle:
+                print("You take " + str(dam) + " damage from the fire")
+            self.takeDamage(dam, True)
+            self.condition["fire"] -= 2
+            if self.condition["fire"] < 0:
+                if InBattle:
+                    print("The fire burning " + self.name + "is extinguished")
+                self.condition.pop("fire")
     def die(self, inBattle=True):
         if inBattle:
             print(self.name + " dies!")
@@ -93,13 +110,21 @@ class Monster:
                     print("You try to disarm " + self.name + " but fail")
         else:
             print("You try to disarm " + self.name + " but fail")
+            
+    def cullAttacks(self):
+        for x in attacks:
+            if x[5] < 1:
+                attacks.remove(x)
 
 class Dumb(Monster):
     def findAttack(self): #Dumb monsters randomly choose between their powerful and ineffective attacks
+        self.cullAttacks()
         if len(self.attacks) > 0:
-            return random.choice(self.attacks)
+            x = random.randrange(len(self.attacks))
+            self.attacks[x][4] -= 1
+            return self.attacks[x]
         else:
-            return(["", " cannot attack you", 0, 0, False, None, None])
+            return(["", " cannot attack you", 0, 0, False, 9999, None])
 
 class Smart(Monster):
     def effectsOccur(self, inBattle=False):
@@ -137,6 +162,7 @@ class Smart(Monster):
                         self.inventory.pop(m)
         Monster.update(self)
     def findAttack(self):
+        self.cullAttacks()
         if self.health < int(self.maxhealth / 10):
             found = False
             for m in self.inventory:
@@ -148,6 +174,21 @@ class Smart(Monster):
                         found = True
             if not found:
                 self.triesToFlee()
+        elif len(attacks) == 0:
+            self.triesToFlee()
+        else:
+            return findAttackHelper()
+    
+    def findAttackHelper(self): #made a different class so easily replacable
+        x = random.randrange(len(self.attacks))
+        y = random.randrange(len(self.attacks))
+        if self.attacks[x][2] > self.attacks[x][2]:
+            self.attacks[x][4] -= 1
+            return self.attacks[x]
+        else:
+            self.attacks[y][4] -= 1
+            return self.attacks[y]
+        
         
 
 class Undead(Dumb):
