@@ -71,7 +71,7 @@ class Game:
                     if player.sneak: #That is right, I have sulled the main loop
                         player.isDetected()
                     elif len(player.location.getAggro()) > 0:
-                        player.attackMonster(player.location.getAggro()[0]) #If the player isn't sneaking, angry monsters will attack them
+                        player.attackMonster(player.location.getAggro()[0], True) #If the player isn't sneaking, angry monsters will attack them
             except CmdParseError as e: # Pass all other errors through, I guess.
                 print("Error parsing command: " + str(e))
             except CmdRunError as e:

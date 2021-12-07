@@ -37,7 +37,7 @@ def pause():
 class Attack(Command):
     args = [None, Arg("monster", False, False, True)]
     desc = "Attacks a monster"
-    sideeffects = False
+    sideeffects = False #appended in a different way
 
     def func_ap(self, player, _updater, args_parsed):
         targetName = args_parsed["monster"]
@@ -170,6 +170,14 @@ class Inventory(Command):
     def func(self, p, _u, _cmdstr):
         return p.showInventory()
 
+class LevelUpCmd(Command):
+    args = [None, Arg("up", True, True, True)]
+    desc = "Levels up, if you have enough xp"
+    sideeffects = False #appended in a different way
+
+    def func(self, player, _updater, _cmdstr):
+        player.levelUpHelper()
+
 class LookCmd(Command):
     args = []
     desc = "Look around"
@@ -290,6 +298,7 @@ commands = {
     "equip": Equip(),
     "unequip": UnEquip(),
     "me": Me(),
+    "level up": LevelUpCmd(),
     "exit": Exit(),
     "attack": Attack(),
     "wait": WaitCmd(),

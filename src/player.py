@@ -33,11 +33,15 @@ class Player:
         self.sneak = False
         updater.register(self)
     def update(self):
-        if self.xp >= 100:
-            self.levelUp()
-            self.xp -= 100
-            self.update()
         self.effectsOccur()
+    def levelUpHelper(self):
+        self.log.append("level")
+        if self.xp < 100:
+            print("You are " + str(100 - self.xp) + " xp away from levelling up")
+        while self.xp >= 100:
+            self.xp -= 100
+            self.levelUp()
+            
     def levelUp(self):
         self.level += 1
         print("You have enough xp to level up!")
@@ -239,9 +243,10 @@ class Player:
             dam = int(random.random() * self.condition["poison"])
             print("You take " + str(dam) + " points of poison damage")
             self.takeDamage(dam, True)    
-    def attackMonster(self, mon):
+    def attackMonster(self, mon, attacked=False):
         mon.agg = True
-        self.log.append("attack " + mon.name)
+        if not attacked:
+            self.log.append("attack " + mon.name)
         while (len(self.location.getAggro()) > 0) and self.alive and self.playing:
             if len(self.location.getAggro()) > 1:
                 print(str(len(self.location.getAggro())) + " monsters confront you")
@@ -399,6 +404,7 @@ attackcommands = {
     "drop": commands.DropCmd(),
     "drink": commands.DrinkCmd(),
     "inventory": commands.Inventory(),
+    "inspect": commands.InspectCmd(),
     "equip": commands.Equip(),
     "unequip": commands.UnEquip(),
     "me": commands.Me(),
