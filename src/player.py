@@ -291,12 +291,13 @@ class Player:
                                         self.xp += xp0
                         for j in self.location.getAggro():
                             attk = j.findAttack()
-                            if random.random() < attk[3]:
-                                    print(j.name + attk[0] + " for " + str(self.takeDamage(attk[2])) + " damage!") #TODO: add effects
-                                    if not (attk[6] == None):
-                                        self.applyEffects(attk[6])
-                            else:
-                                print(j.name + attk[1])
+                            if not (attk == None):
+                                if random.random() < attk[3]:
+                                        print(j.name + attk[0] + " for " + str(self.takeDamage(attk[2])) + " damage!") #TODO: add effects
+                                        if not (attk[6] == None):
+                                            self.applyEffects(attk[6])
+                                else:
+                                    print(j.name + attk[1])
                                 
                     
                 else:
@@ -313,6 +314,7 @@ class Player:
                 
 
 class Flee(Command):
+    desc = "Flees the battle"
     sideeffects = True
 
     def __init__(self, direction=None):
@@ -336,28 +338,7 @@ class Flee(Command):
         commands.printSituation(player)
 
 
-class Flee(Command):
-    sideeffects = True
 
-    def __init__(self, direction=None):
-        if direction is not None:
-            self.desc = "Flees {}".format(direction)
-            self.args = []
-            self.direction = direction
-        else:
-            self.desc = "Flees in the given direction"
-            self.args = [None, Arg("direction", False, False, False)]
-            self.direction = None
-        Command.__init__(self)
-
-    def func_ap(self, player, updater, args_parsed):
-        if self.direction is not None:
-            direction = self.direction
-        else:
-            direction = args_parsed["direction"]
-
-        player.goDirection(direction)
-        commands.printSituation(player)
         
 class WaitCmd(Command):
     args = [None]
@@ -367,6 +348,19 @@ class WaitCmd(Command):
     def func_ap(self, _p, u, useless):
         print("You do nothing in battle")
         
+class Disarm(Command):
+    args = [None, Arg("monster", False, False, True)]
+    desc = "Attempt to disarm a monster's weapons"
+    sideeffects = True       
+    
+    def func_ap(self, player, _updater, args_parsed):
+        targetName = args_parsed["monster"]
+        target = player.location.getMonsterByName(targetName)
+        if target:
+            target.disarm(player.skill[1])
+        else:
+            raise CmdRunError("no such monster")
+
 class Hit(Command):
     args = [None, Arg("monster", False, False, True)]
     desc = "Hit the monster."
@@ -414,6 +408,7 @@ attackcommands = {
     
     "wait": WaitCmd(),
     "hit": Hit(),
+    "disarm": Disarm(),
     
 }
 attackcommands["help"] = commands.Help(attackcommands) 

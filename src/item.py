@@ -8,6 +8,7 @@ class Item:
     armor = False
     book = False
     potion = False
+    container = False
     def __init__(self, name, desc, weight=1):
         self.name = name
         self.desc = desc
@@ -52,8 +53,11 @@ class Book(Item):
         
 class Potion(Item):
     potion = True
+    heal = False
+    antidote = False
     
 class HealingPotion(Potion):
+    heal = True
     def __init__(self, amt, name="Healing Potion", desc="A red-colored vial of healing potion", weight=1):
         self.amount = amt
         Item.__init__(self, name, desc, weight)
@@ -89,9 +93,51 @@ class Poison(Potion):
         print("The " + self.name + " has been applied to the " + weapon.name)
     
 class Antidote(Potion):
+    antidote = True
     def __init__(self, name="Antidotes", desc="A blue-colored vial of antidote", weight=1):
         Item.__init__(self, name, desc, weight)
 
     def drink(self, _player):
         _player.applyEffect("antidote")
     
+class Container(Item):
+    container = True
+    def __init__(self, name, desc, room, contents=[], weight=100, maxcapacity=999):
+        self.room = room
+        self.currentcap = 0
+        self.maxcapacity = maxcapacity
+        self.contents = contents
+        item.__init__(self, name, desc, weight)
+    
+    def putInside(self, item):
+        if not ((self.currentcap + item.weight) > self.maxcapacity):
+            self.contents.append(item)
+            self.currentcap += item.weight
+            return True
+        else:
+            print("The " + self.name + " is full")
+            return False
+    
+    def getItemByName(self, targetName):
+        for i in self.contents:
+            if i.name.lower() == name.lower():
+                return v
+            elif i.container:
+                k = i.getItemByName(name)
+                return k
+        return False
+        
+    def removeItem(self, item):
+        if item in self.contents:
+            self.currentcap -= i.weight
+            self.contents.remove(i)
+            return True
+        return False
+
+    
+    def describe(self):
+        print(self.desc)
+        print("Inside is: ")
+        for x in self.contents:
+            print("  - " + x.name)
+        print()

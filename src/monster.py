@@ -21,7 +21,7 @@ class Monster:
         self.room = room
         room.addMonster(self)
         updater.register(self)
-    def addAttack(self, sverb, fverb, damage, prob, disarmable=False, limit=None, effects=None):
+    def addAttack(self, sverb, fverb, damage, prob, disarmable=False, limit=9999, effects=None):
         self.attacks.append([sverb, fverb, damage, prob, disarmable, limit, effects])
     def Punch(self):
         self.addAttack(" punches you", " punches you, harmlessly", 2 + self.skills[1], self.perception * (.25 + (self.skills[0] / 15)), False)
@@ -78,11 +78,21 @@ class Monster:
         self.room.removeMonster(self)
         updater.deregister(self)
     def findAttack(self): #only should be used in the case of nonviolent monsters
-        return(["", " cannot attack you", 0, 0, False, None, None])
+        return(["", " cannot attack you", 0, 0, False, 99999, None])
     def triesToFlee(self):
-        if self.health < int(self.maxhealth / 10):
-            print(self.name + " flees!")
-            self.moveTo(self.room.randomNeighbor())
+        print(self.name + " flees!")
+        self.moveTo(self.room.randomNeighbor())
+    def disarm(self, pstren):
+        if (random.random() + pstren) > (random.random() + self.skills[1]):
+            if len(self.attacks) > 0:
+                y = random.choice(self.attacks)
+                if y[4]:
+                    print(self.name + y[1] + ", and you disarm them of that attack!")
+                    self.attacks.remove(y)
+                else:
+                    print("You try to disarm " + self.name + " but fail")
+        else:
+            print("You try to disarm " + self.name + " but fail")
 
 class Dumb(Monster):
     def findAttack(self): #Dumb monsters randomly choose between their powerful and ineffective attacks
@@ -90,6 +100,55 @@ class Dumb(Monster):
             return random.choice(self.attacks)
         else:
             return(["", " cannot attack you", 0, 0, False, None, None])
+
+class Smart(Monster):
+    def effectsOccur(self, inBattle=False):
+        if (not inBattle) and ("poison" in self.condition):
+            for m in self.inventory:
+                if m.potion:
+                    if m.antidote:
+                        self.condition.remove("poison")
+                        self.inventory.remove(m)
+        Monster.effectsOccur(self)
+            
+    def update():
+        if len(self.room.items) > 0:
+            x = random.choice(self.room.items)
+            if x.potion:
+                self.inventory.append(x)
+                self.room.removeItem(x)
+            elif x.weapon:
+                self.giveWeapon(x)
+                self.room.removeItem(x)
+            elif x.armor:
+                if self.armor == None:
+                    self.armor = x
+                    self.room.removeItem(x)
+                elif x.stren > self.armor.stren:
+                    self.room.addItem(self.armor)
+                    self.armor = x
+                    self.room.removeItem(x)
+        if self.health < int(self.maxhealth / 10):
+            for m in self.inventory:
+                if m.potion:
+                    if m.heal:
+                        print(self.name + " drinks a healing potion!")
+                        self.health += m.amount
+                        self.inventory.pop(m)
+        Monster.update(self)
+    def findAttack(self):
+        if self.health < int(self.maxhealth / 10):
+            found = False
+            for m in self.inventory:
+                if m.potion:
+                    if m.heal:
+                        print(self.name + " drinks a healing potion!")
+                        self.health += m.amount
+                        self.inventory.remove(m)
+                        found = True
+            if not found:
+                self.triesToFlee()
+        
 
 class Undead(Dumb):
     def poison(self, amount): #Undead cannot be poisoned

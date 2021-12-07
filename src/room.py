@@ -30,7 +30,13 @@ class Room:
     def addItem(self, item):
         self.items.append(item)
     def removeItem(self, item):
-        self.items.remove(item)
+        if item in self.items:
+            self.items.remove(item)
+        else:
+            for x in self.items:
+                if x.container:
+                    if x.removeItem(item):
+                        return True
     def addMonster(self, monster):
         self.monsters.append(monster)
     def removeMonster(self, monster):
@@ -49,6 +55,9 @@ class Room:
         for i in self.items:
             if i.name.lower() == name.lower():
                 return i
+            elif i.container:
+                k = i.getItemByName(name)
+                return k
         return False
     def hasMonsters(self):
         return self.monsters != []
