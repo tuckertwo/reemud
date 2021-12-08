@@ -223,7 +223,31 @@ class Undead(Dumb):
             return False
         else:
             return True
-            
+ 
+ 
+class Cultist(Smart):
+    def __init__(self, room, armor=None):
+        Smart.__init__(self, True, random.choice(adjectives) + "cultist", 5, room, 50, 1, armor)
+        self.Punch()
+        self.addAttack(" hits you with a magical Fire Bolt ", " tries to hit you with a spell but misses ", 1, .4, limit=1, effects=[fire, 5])
+        self.addAttack(" hits you with a magical Witch Bolt ", " tries to hit you with a spell but misses ", 8, .4, limit=3)
+ 
+class Ork(Dumb):
+    def __init__(self, room, armor=None):
+        Dumb.__init__(self, True, random.choice(adjectives) + "ork", 7, room, 50, 1, armor, 0, 8)
+        self.Punch()
+
+class Rat(Animal):
+    def __init__(self, room, name="Rat"):
+        Monster.__init__(self, False, name, 3, room, 10)
+        self.addAttack(" bites you ", " tries to bite you, but only gnaws on your shoe", 4, .3)
+        
+    def update(self):
+        self.effectsOccur()
+        if self.health <= 0:
+            self.die(False)
+
+ 
 class Skeleton(Undead):
     def __init__(self, room, armor=None):
         Undead.__init__(self, True, random.choice(adjectives) + "skeleton", 3, room, 25, 1, armor)
@@ -239,13 +263,5 @@ class Sheep(Passive):
         if self.health <= 0:
             self.die(False)
         
-class Rat(Animal):
-    def __init__(self, room, name="Rat"):
-        Monster.__init__(self, False, name, 3, room, 10)
-        self.addAttack(" bites you ", " tries to bite you, but only gnaws on your shoe", 4, .3)
-        
-    def update(self):
-        self.effectsOccur()
-        if self.health <= 0:
-            self.die(False)
+
         #self, sverb, fverb, damage, prob, disarmable=False, limit=9999, effects=None)
