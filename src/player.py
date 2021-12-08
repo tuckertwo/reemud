@@ -2,6 +2,7 @@ import os, random
 import commands
 from txt_parser import CmdParseError, CmdRunError, good_split_spc, abbrev_cmd, Arg, Command
 import updater
+import monster
 
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -439,24 +440,26 @@ class Cast(Command):
                     player.heal(9999999)
                 elif sscroll.effect[0] == "dam":
                     print("You let loose destruction on all your opponents!")
-                    for x in self.location.getAggro():
+                    for x in player.location.getAggro():
                         print(x.name + " takes " + x.takeDamage(sscroll.amt) + " damage!")
                 elif sscroll.effect[0] == "polymorph":
-                    for x in self.location.getAggro():
+                    for x in player.location.getAggro():
                         if not (x.name == "Lich King"):
                             m = random.randrange(3)
                             if m == 0: #sadly, there's no efficient way to do this
                                 print(x.name + " is turned into a sheep!")
-                                Sheep(player.location)
+                                monster.Sheep(player.location)
                             if m == 1:
                                 print(x.name + " is turned into a rat!")
+                                monster.Rat(player.location)
                             if m == 2:
                                 print(x.name + " is turned into a skeleton!")
+                                monster.Skeleton(player.location)
                             
                             x.die(False)    
                 else:
                     print(sscroll.bdes)
-                    for x in self.location.getAggro():
+                    for x in player.location.getAggro():
                         x.applyEffects(sscroll.effect)
                 player.removeItem(sscroll)
             else:
