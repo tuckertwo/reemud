@@ -10,7 +10,7 @@ from txt_parser import CmdParseError, CmdRunError, good_split_spc, abbrev_cmd
 import random, ast, sys, os
 
 def createWorld():
-    a = Room("You are in room 1")
+    a = Room("You are in room 1\ntest")
     b = Room("You are in room 2")
     c = Room("You are in room 3")
     d = Room("You are in room 4")
@@ -37,7 +37,12 @@ def createWorld():
     j = item.Door(k, "north", c)
     j.putInRoom(a)
     k.putInRoom(a)
-    i.putInRoom(c)
+    i = item.HealingScroll()
+    i.putInRoom(a)
+    i = item.DamageScroll(10)
+    i.putInRoom(a)
+    i = item.Fireball(10)
+    i.putInRoom(a)
     
     player.location = a
     for x in range(10):

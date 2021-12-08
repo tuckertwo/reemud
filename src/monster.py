@@ -49,6 +49,9 @@ class Monster:
         return dam  
     def isDead(self):
         return True
+    def applyEffects(self, effex):
+        for x in effex:
+            self.applyEffect(x[0], x[1])
     def applyEffect(self, effect, amount=0):
         if effect == "poison":
             self.poison(amount)
@@ -121,7 +124,7 @@ class Dumb(Monster):
         self.cullAttacks()
         if len(self.attacks) > 0:
             x = random.randrange(len(self.attacks))
-            self.attacks[x][4] -= 1
+            self.attacks[x][5] -= 1
             return self.attacks[x]
         else:
             return(["", " cannot attack you", 0, 0, False, 9999, None])

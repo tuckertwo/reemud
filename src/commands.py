@@ -48,6 +48,57 @@ class Attack(Command):
         else:
             raise CmdRunError("no such monster")
 
+class ApplyTo(Command):
+    args = [None, Arg("x to y", False, False, True)]
+    desc = "applies a potion or spell scroll to a weapon"
+    sideeffects = True
+    
+    def func_ap(self, player, _updater, args_parsed):
+        targetName = args_parsed["x to y"] 
+        objex = targetName.lower().split(" to ")
+        if len(objex) == 2:
+            target = player.getItemByName(objex[0])
+            if target:
+                if target.potion or target.scroll:
+                    weapon = player.getItemByName(objex[1])
+                    if weapon:
+                        if weapon.weapon:
+                            target.applyTo(weapon)
+                        else:
+                            raise CmdRunError(objex[1] + " is not a weapon")
+                    else:
+                        raise CmdRunError("you don't have " + objex[1] + " in inventory")
+                else:
+                    raise CmdRunError(objex[0] + " is not a potion or spell scroll")
+            else:
+                raise CmdRunError("you don't have " + objex[0] + " in inventory")
+        else:
+            raise CmdRunError("Incorrect number of arguments")
+
+class Cast(Command):
+    args = [None, Arg("spell scroll", False, False, True)]
+    desc = "Cast a spell scroll"
+    sideeffects = True
+    
+    def func_ap(self, player, _updater, args_parsed):
+        ssname = args_parsed["spell scroll"]
+        sscroll = player.getItemByName(ssname)
+        if sscroll:
+            if sscroll.effect[0] == "heal":
+                player.heal(9999999)
+                player.removeItem(sscroll)
+            elif sscroll.effect[0] == "fire":
+                print("You scorch the ground with a huge (but useless) fireball!")
+                player.location.desc = player.location.desc + " The ground is scorched and blackened."
+                player.removeItem(sscroll)
+            else:
+                print("You have no opponents to use this spell scroll against")
+
+        else:
+            raise CmdRunError("you don't have any such spell scroll")
+        
+
+
 class ClearScreenCmd(Command):
     args = []
     desc = "Clear the screen"
@@ -363,13 +414,16 @@ commands = {
     "drop": DropCmd(),
     "put": PutinCmd(),
     "drink": DrinkCmd(),
+    "cast": Cast(),
     "inventory": Inventory(),
     "inspect": InspectCmd(),
     "unlock": Unlock(),
+    "lock": Lock(),
+    "apply": ApplyTo(),
     "equip": Equip(),
     "unequip": UnEquip(),
     "me": Me(),
-    "level up": LevelUpCmd(),
+    "level": LevelUpCmd(),
     "exit": Exit(),
     "attack": Attack(),
     "wait": WaitCmd(),

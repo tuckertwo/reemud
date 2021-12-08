@@ -51,14 +51,16 @@ class Armor(Item):
 
 class Book(Item):
     book = True
-    def __init__(self, name, text, desc="A book", weight=1):
-        self.text = text
+    def __init__(self, name, desc, weight=1):
         Item.__init__(self, name, desc, weight)
         
 class Potion(Item):
     potion = True
     heal = False
     antidote = False
+    
+    def applyTo(self, weapon):
+        print("Why would you want to apply " + self.name + " to a weapon?")
     
 class HealingPotion(Potion):
     heal = True
@@ -73,6 +75,10 @@ class HealingPotion(Potion):
         print(self.desc)
         print("Power: " + str(self.amount) + " hp")
         print()
+        
+    def applyTo(self, weapon):
+        print("Why would you want to apply " + self.name + " to a weapon? What, do you want to heal your enemies?")
+        
         
 class Poison(Potion):
     def __init__(self, amt, name="Poison", desc="A green-colored vial of poison", weight=1):
@@ -89,11 +95,8 @@ class Poison(Potion):
     
     def applyTo(self, weapon):
         if weapon.effects == None:
-            weapon.effects = {"poison": self.amount}
-        elif "poison" in weapon.effects:
-            weapon.effects["poison"] = weapon.effects["poison"] + self.amount
-        else:
-            weapon.effects["poison"] = self.amount
+            weapon.effects = []
+        weapon.effects.append(["poison", self.amount])
         print("The " + self.name + " has been applied to the " + weapon.name)
     
 class Antidote(Potion):
@@ -231,3 +234,41 @@ class Door(Item):
         
 class MagicScroll(Item):
     scroll = True
+    
+    def applyTo(self, weapon):
+        if weapon.effects == None:
+            weapon.effects = []
+        weapon.effects.append(self.effect)
+        print("The " + self.name + " has been applied to the " + weapon.name)
+    
+class HealingScroll(MagicScroll):
+    def __init__(self, name="Scroll of Healing", desc="A powerful magic scroll of healing"):
+        Item.__init__(self, name, desc, .1)
+        self.effect = ["heal"]
+        
+    def applyTo(self, weapon):
+        print("Why would you ever want to apply a scroll of healing to a weapon? What, do you want to heal your enemies?")
+        
+class DamageScroll(MagicScroll):
+    
+    def __init__(self, amt, name="Scroll of Destruction", desc="A powerful magic scroll of destruction"):
+        self.effect = ["dam"]
+        self.amt = amt
+        Item.__init__(self, name, desc, .1)
+        
+    def applyTo(self, weapon):
+        weapon.damage += int(self.amt / 2)
+        print("The " + self.name + " has been applied to the " + weapon.name)
+        print("The " + weapon.name + " now does more damage")
+
+class PoisonScroll(MagicScroll):
+    def __init__(self, amt, name="Scroll of Poison Cloud", desc="A powerful magic scroll of poison gas"):
+        self.effect = ["poison", amt]
+        self.bdes = "A clowd of poison fog smothers your opponents!"
+        Item.__init__(self, name, desc, .1)
+        
+class Fireball(MagicScroll):
+    def __init__(self, amt, name="Scroll of Fireball", desc="A powerful magic scroll of FIREBALL!!!"):
+        self.effect = ["fire", amt]
+        self.bdes = "A huge fireball engulfs the room!"
+        Item.__init__(self, name, desc, .1)

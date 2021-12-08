@@ -418,10 +418,44 @@ class Hit(Command):
                     print("You punch " + targetName + " with your fists for " + str(target.takeDamage(1 + player.skill[1])) + " damage")
                 else:
                     print("You hit " + targetName + " with " + player.weapon.name + " for " + str(target.takeDamage(player.weapon.damage + player.skill[1])) + " damage")
+                    if not player.weapon.effects == None:
+                        target.applyEffects(player.weapon.effects)
             else:
                 print("You try to hit " + targetName + " but miss")
         else:
             raise CmdRunError("no such monster")
+            
+class Cast(Command):
+    args = [None, Arg("spell scroll", False, False, True)]
+    desc = "Cast a spell scroll"
+    sideeffects = True
+    
+    def func_ap(self, player, _updater, args_parsed):
+        ssname = args_parsed["spell scroll"]
+        sscroll = player.getItemByName(ssname)
+        if sscroll:
+            if random.random() < (.3 + (player.skill[3] / 4)):
+                if sscroll.effect[0] == "heal":
+                    player.heal(9999999)
+                elif sscroll.effect[0] == "dam":
+                    print("You let loose destruction on all your opponents!")
+                    for x in self.location.getAggro():
+                        print(x.name + " takes " + x.takeDamage(sscroll.amt) + " damage!")
+                else:
+                    print(sscroll.bdes)
+                    for x in self.location.getAggro():
+                        x.applyEffects(sscroll.effect)
+                player.removeItem(sscroll)
+            else:
+                print("You make a mistake in the casting!")
+                if random.random() < .5:
+                    print("You inadvertantly destroy the spell scroll anyway")
+                    player.removeItem(sscroll)
+        else:
+            raise CmdRunError("you don't have any such spell scroll")
+        
+      
+
 
 attackcommands = {
     "flee": Flee(None), #flee differs from  go in that flee doesn't update monster positions
@@ -439,19 +473,23 @@ attackcommands = {
     "look": commands.LookCmd(),
     "pickup": commands.PickupCmd(),
     "drop": commands.DropCmd(),
+    "put": commands.PutinCmd(),
     "drink": commands.DrinkCmd(),
     "inventory": commands.Inventory(),
     "inspect": commands.InspectCmd(),
+    "unlock": commands.Unlock(),
+    "lock": commands.Lock(),
+    "apply": commands.ApplyTo(),
     "equip": commands.Equip(),
     "unequip": commands.UnEquip(),
     "me": commands.Me(),
     "exit": commands.Exit(),
     "save": commands.SaveCmd(),
     
-    
     "wait": WaitCmd(),
     "hit": Hit(),
     "disarm": Disarm(),
+    "cast": Cast(),
     
 }
 attackcommands["help"] = commands.Help(attackcommands) 
