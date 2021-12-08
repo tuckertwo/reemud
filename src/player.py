@@ -336,7 +336,7 @@ class Player:
                             attk = j.findAttack()
                             if not (attk == None):
                                 if random.random() < attk[3]:
-                                        print(j.name + attk[0] + " for " + str(self.takeDamage(attk[2])) + " damage!") #TODO: add effects
+                                        print(j.name + attk[0] + " for " + str(self.takeDamage(attk[2])) + " damage!") 
                                         if not (attk[6] == None):
                                             self.applyEffects(attk[6])
                                 else:

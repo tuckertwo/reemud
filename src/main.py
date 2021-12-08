@@ -12,14 +12,31 @@ import random, ast, sys, os
 def createWorld():
 
     #starting room
-    a = Room("A grassy field. Several animals graze placidly. Flowers poke out from the green grass. The sun shines, the sky is blue, but ahead of you, the dark gate of a crumbling structure yawns\nTip: Try the command 'inspect instruction manual'")
-    itm = item.Book("Instruction Manual", "Every year, according to Sacred Tradition, our village sends one human sacrifice to the Evil Necromancer Cultists. This year, you have been unwillingly elected to fill that role! But if you somehow manage to defeat the Necromancer, you can come back home I guess.\n(Type Help for a list of actions)")
-    itm.putInRoom(a)
+    a = Room("A grassy field. Several animals graze placidly. Flowers poke out from the green grass. The sun shines, the sky is blue, but ahead of you, to the north, the dark gate of a crumbling ruin yawns\nTip: Try the command 'inspect instruction manual'")
+    itm1 = item.Book("Instruction Manual", "Every year, according to Sacred Tradition, our village sends one human sacrifice to the Evil Necromancer Cultists. This year, you have been unwillingly elected to fill that role! But if you somehow manage to defeat the Necromancer, you can come back home I guess.\n(Type Help for a list of actions)")
+    itm1.putInRoom(a)
     for x in range(5):
         monster.Sheep(a)
+        
+    #dungeon enterance
+    b = Room("The entry-hall of the ruin is dark and reeks of mildew. Rubble from the high ceiling litters the ground.")
+    Room.connectRooms(a, "north", b)
+    itm3 = item.Book("Water-soiled Journal", "Death closes in on me.... if only I knew how to use the equip and unequip commands to don or doff weapons and armor... or if I knew how to use the unlock command to open a locked door... or if I knew how to use the attack command to attack a monster... or to type 'look' to repeat a room's description... alas, I am doomed")
+    itm4 = item.Weapon("Blunt rock", "Be careful with that thing! You could bash someone's head in.", 3, 5)
+    itm5 = item.Key("Rusted Key")
+    itm3.putInRoom(b)
+    itm4.putInRoom(b)
+    x = monster.Rat(b, "rat with a key in its mouth")
+    x.giveItem(itm5)
 
-
-
+    #dungeon corridor
+    c = Room("A long and gloomy corridor stretches down into the ruin. It is bisected by a river of slowly-flowing blood!")
+    itm6 = item.Door(itm5, "north", c)
+    itm6.putInRoom(b)
+    
+    
+    
+    
     player.location = a
     updater.allocateLoot()
         

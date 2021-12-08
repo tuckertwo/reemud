@@ -2,7 +2,7 @@ import random
 import updater
 from item import Weapon, Armor, Item
 
-adjectives = ["venerable ", "youthful ", "sublime ", "dolorous ", "somber ", "jubilant ", "purple "] #flavor!
+adjectives = ["venerable ", "youthful ", "sublime ", "dolorous ", "somber ", "jubilant ", "purple ", "adamant ", "adroit ", "arcadian ", "baleful ", "bellicose ", "bilious ", "calamitous ", "boorish ", "comely ", "contumacious ", "corpulent ", "dowdy ", "efficacious ", "effulgent ", "equanimous ", "execrable ", "fastidious ", "feckless ", "fulsome ", "garrulous ", "gustatory ", "histrionic ", "hubristic ", "insolent ", "intransigent ", "inveterate ", "invidious ", "irksome ", "jocular ", "lachrymose ", "loquacious ", "mendacious ", "meretricious ", "mordant ", "munificent ", "parsimonious ", "pendulous ", "pernicious ", "platitudinous ", "querulous ", "puckish ", "recalcitrant ", "redolent ", "rhadamanthine ", "ruminative ", "sagacious ", "salubrious ", "sartorial ", "taciturn ", "tenacious ", "tremulous ", "verdant ", "trenchant ", "uxorious ", "voluble ", "wheedling ", "zealous ", "adorable ", "aggressive ", "alert ", "angry ", "annoyed ", "anxious ", "arrogant ", "ashamed ", "attractive ", "awful ", "beautiful ", "bewildered ", "brave ", "breakable ", "condemned ", "delightful ", "CRAAZY ", "depressed ", "cruel ", "creepy ", "expensive ", "grotesque ", "grieving ", "grumpy ", "frail ", "foolish ", "fragile ", "fantastic ", "famous ", "exuberant ", "evil ", "handsome ", "happy ", "graceful ", "glorious ", "magnificent ", "lovely ", "lonely"] #flavor!
 
 class Monster:
     def __init__(self, agg, name, health, room, xp=0, perception=1, armor=None, dex=0, stren=0, con=0, mag=0): #aggressiveness, name, health, room, armor, stats
@@ -33,7 +33,7 @@ class Monster:
         self.addAttack(" hits you with " + weapon.name, " tries to hit you with " + weapon.name + ", but misses", weapon.damage + self.skills[1], self.perception * (.25 + (self.skills[0] / 15)), True, 9999, weapon.effects)
     def update(self):
         self.effectsOccur()
-        if random.random() < .5:
+        if random.random() < .3:
             self.moveTo(self.room.randomNeighbor())
         if self.health <= 0:
             self.die(False)
@@ -209,6 +209,10 @@ class Murderous(Smart):
         y[4] -= 1
         return y
 
+class Animal(Dumb):
+    def giveWeapon(self, weapon):
+        return None #animals can't hold weapons
+
 class Undead(Dumb):
     def poison(self, amount): #Undead cannot be poisoned
         return None
@@ -227,4 +231,21 @@ class Skeleton(Undead):
         
 class Sheep(Passive):
     def __init__(self, room):
-        Monster.__init__(self, False, "Sheep", 3, room, 2, 1)
+        Monster.__init__(self, False, "Sheep", 3, room, 2, 0)
+    def update(self):
+        self.effectsOccur()
+        if random.random() < .9:
+            self.moveTo(self.room.randomNeighbor())
+        if self.health <= 0:
+            self.die(False)
+        
+class Rat(Animal):
+    def __init__(self, room, name="Rat"):
+        Monster.__init__(self, False, name, 3, room, 10)
+        self.addAttack(" bites you ", " tries to bite you, but only gnaws on your shoe", 4, .3)
+        
+    def update(self):
+        self.effectsOccur()
+        if self.health <= 0:
+            self.die(False)
+        #self, sverb, fverb, damage, prob, disarmable=False, limit=9999, effects=None)

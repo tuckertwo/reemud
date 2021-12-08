@@ -35,7 +35,7 @@ class Weapon(Item):
     def describe(self):
         print(self.desc)
         print("Power: " + str(self.damage))
-        if not self.effects = None:
+        if not self.effects == None:
             poison = False
             fire = False
             for x in self.effects:
@@ -248,6 +248,8 @@ class Door(Item):
                 print("You unlock the " + self.name + " and it swings open")
                 room.Room.connectRooms(player.location, self.direction, self.connecting)
                 player.location.removeItem(self)
+                return True
+        print("You don't have the right key")
             
         
 class MagicScroll(Item):
