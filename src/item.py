@@ -292,3 +292,8 @@ class Fireball(MagicScroll):
         self.effect = ["fire", amt]
         self.bdes = "A huge fireball engulfs the room!"
         Item.__init__(self, name, desc, .1)
+        
+class Polymorph(MagicScroll):
+    def __init__(self, name="Scroll of Polymorph", desc="A powerful magic scroll of polymorph"):
+        self.effect = ["polymorph"]
+        Item.__init__(self, name, desc, .1)

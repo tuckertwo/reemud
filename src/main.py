@@ -11,6 +11,7 @@ import random, ast, sys, os
 
 def createWorld():
 
+
     #starting room
     a = Room("A grassy field. Several animals graze placidly. Flowers poke out from the green grass. The sun shines, the sky is blue, but ahead of you, to the north, the dark gate of a crumbling ruin yawns\nTip: Try the command 'inspect instruction manual'")
     itm1 = item.Book("Instruction Manual", "Every year, according to Sacred Tradition, our village sends one human sacrifice to the Evil Necromancer Cultists. This year, you have been unwillingly elected to fill that role! But if you somehow manage to defeat the Necromancer, you can come back home I guess.\n(Type Help for a list of actions)")

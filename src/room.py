@@ -39,6 +39,9 @@ class Room:
                         return True
     def addMonster(self, monster):
         self.monsters.append(monster)
+    def killAll(self):
+        for x in self.monsters:
+            x.die(True)
     def removeMonster(self, monster):
         self.monsters.remove(monster)
     def getMonsters(self):

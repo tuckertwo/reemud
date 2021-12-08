@@ -441,6 +441,19 @@ class Cast(Command):
                     print("You let loose destruction on all your opponents!")
                     for x in self.location.getAggro():
                         print(x.name + " takes " + x.takeDamage(sscroll.amt) + " damage!")
+                elif sscroll.effect[0] == "polymorph":
+                    for x in self.location.getAggro():
+                        if not (x.name == "Lich King"):
+                            m = random.randrange(3)
+                            if m == 0: #sadly, there's no efficient way to do this
+                                print(x.name + " is turned into a sheep!")
+                                Sheep(player.location)
+                            if m == 1:
+                                print(x.name + " is turned into a rat!")
+                            if m == 2:
+                                print(x.name + " is turned into a skeleton!")
+                            
+                            x.die(False)    
                 else:
                     print(sscroll.bdes)
                     for x in self.location.getAggro():
