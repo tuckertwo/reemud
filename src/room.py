@@ -57,7 +57,8 @@ class Room:
                 return i
             elif i.container:
                 k = i.getItemByName(name)
-                return k
+                if k:
+                    return k
         return False
     def hasMonsters(self):
         return self.monsters != []

@@ -70,6 +70,7 @@ class Player:
             elif cmdstr.lower() == s[0:len(cmdstr)]:
                 print("Strength increased!")
                 self.skill[1] += 1
+                self.weightlimit += 4
             elif cmdstr.lower() == c[0:len(cmdstr)]:
                 print("Constitution increased!")
                 self.skill[2] += 1
@@ -326,7 +327,7 @@ class Player:
                             k.effectsOccur()
                             if k.health <= 0:
                                 if k.isDead():
-                                    xp0 = int(k.xp / (1 + int(self.level/4))
+                                    xp0 = int(k.xp / (1 + int(self.level/3)))
                                     k.die()
                                     if xp0 > 0:
                                         print("You gain " + str(xp0) + " xp")

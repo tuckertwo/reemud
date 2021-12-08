@@ -1,4 +1,5 @@
 import os
+import room
 
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -10,6 +11,8 @@ class Item:
     potion = False
     container = False
     key = False
+    door = False
+    scroll = False
     def __init__(self, name, desc, weight=1):
         self.name = name
         self.desc = desc
@@ -136,9 +139,6 @@ class Container(Item):
         for i in self.contents:
             if i.name.lower() == targetName.lower():
                 return v
-            elif i.container:
-                k = i.getItemByName(name)
-                return k
         return False
         
     def removeItem(self, item):
@@ -156,7 +156,7 @@ class Container(Item):
             print("  - " + x.name)
         print()
         
-    def unlock(self, keys):
+    def unlock(self, keys, player):
         print("The " + self.name + " isn't locked")
     
     def lock(self, keys):
@@ -165,7 +165,7 @@ class Container(Item):
 class Key(Item):
     key = True
     def __init__(self, name):
-        item.__init__(self, name, "A " + name, .05)
+        Item.__init__(self, name, "A " + name, .05)
  
 class LockedChest(Container):
     
@@ -185,7 +185,7 @@ class LockedChest(Container):
             print(self.desc)
             print("The " + self.name + " is locked")
             print()
-        else"
+        else:
             Container.describe(self)
             
     def unlock(self, keys):
@@ -199,7 +199,7 @@ class LockedChest(Container):
         else: 
             print("The " + self.name + " isn't locked")    
             
-    def lock(self, keys): #some wandering monsters take items from unlocked chests
+    def lock(self, keys, player): #some wandering monsters take items from unlocked chests
         if not locked:
             for k in keys:
                 if k.name == self.key.name:
@@ -208,4 +208,26 @@ class LockedChest(Container):
                     return True
                 print("You do not have the key to lock the " + self.name)
         else: 
-            print("The " + self.name + " is already locked") 
+            print("The " + self.name + " is already locked")
+        
+class Door(Item):
+    door = True
+    def __init__(self, key, direction, connectingroom, name="x", desc="x"):
+        if name == "x":
+            name = "Locked Door " + direction
+            desc = "Locked Door " + " facing " + direction
+        self.key = key
+        self.direction = direction
+        self.connecting = connectingroom
+        Item.__init__(self, name, desc, 99999)
+        
+    def unlock(self, keys, player):
+        for k in keys:
+            if k.name == self.key.name:
+                print("You unlock the " + self.name + " and it swings open")
+                room.Room.connectRooms(player.location, self.direction, self.connecting)
+                player.location.removeItem(self)
+            
+        
+class MagicScroll(Item):
+    scroll = True

@@ -178,6 +178,27 @@ class LevelUpCmd(Command):
     def func(self, player, _updater, _cmdstr):
         player.levelUpHelper()
 
+class Lock(Command):
+    args = [None, Arg("object", False, False, True)]
+    desc = "Lock a container"
+    sideeffects = True
+    
+    def func_ap(self, player, _updater, args_parsed):
+        targetName = args_parsed["object"] 
+        target = player.location.getItemByName(targetName)
+        if target:
+            if target.container:
+                keys = []
+                for x in player.items:
+                    if x.key:
+                        keys.append(x)
+                target.lock(keys, player)
+            else:
+                raise CmdRunError("This is not a container!")
+        else:
+            raise CmdRunError("no such thing in room")
+
+
 class LookCmd(Command):
     args = []
     desc = "Look around"
@@ -282,6 +303,26 @@ class UnEquip(Command):
         targetName = args_parsed["item"]
         player.unequip(targetName)
       
+class Unlock(Command):
+    args = [None, Arg("object", False, False, True)]
+    desc = "Unlock a container or door"
+    sideeffects = True
+    
+    def func_ap(self, player, _updater, args_parsed):
+        targetName = args_parsed["object"] 
+        target = player.location.getItemByName(targetName)
+        if target:
+            if target.door or target.container:
+                keys = []
+                for x in player.items:
+                    if x.key:
+                        keys.append(x)
+                target.unlock(keys, player)
+            else:
+                raise CmdRunError("This is not a container or a door!")
+        else:
+            raise CmdRunError("no such thing in room")
+
 
 class WaitCmd(Command):
     args = [None, Arg("for", True, True, False),
@@ -324,6 +365,7 @@ commands = {
     "drink": DrinkCmd(),
     "inventory": Inventory(),
     "inspect": InspectCmd(),
+    "unlock": Unlock(),
     "equip": Equip(),
     "unequip": UnEquip(),
     "me": Me(),

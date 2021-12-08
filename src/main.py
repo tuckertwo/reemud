@@ -16,7 +16,6 @@ def createWorld():
     d = Room("You are in room 4")
     Room.connectRooms(a, "east", b, "west")
     Room.connectRooms(c, "east", d, "west")
-    Room.connectRooms(a, "north", c, "south")
     Room.connectRooms(b, "north", d, "south")
     i = item.Item("Rock", "This is just a rock.", 5)
     i.putInRoom(b)
@@ -34,6 +33,12 @@ def createWorld():
     i.putInRoom(a)
     i = item.Container("cloth bag", "a generic cloth bag", [], 0.1)
     i.putInRoom(a)
+    k = item.Key("Iron Key")
+    j = item.Door(k, "north", c)
+    j.putInRoom(a)
+    k.putInRoom(a)
+    i.putInRoom(c)
+    
     player.location = a
     for x in range(10):
         monster.Skeleton(b)
