@@ -35,6 +35,19 @@ class Weapon(Item):
     def describe(self):
         print(self.desc)
         print("Power: " + str(self.damage))
+        if not self.effects = None:
+            poison = False
+            fire = False
+            for x in self.effects:
+                if x[0] == "poison":
+                    poison = True
+                elif x[0] == "fire":
+                    fire = True
+            if poison:
+                print("This weapon is lathered with poison")
+            if fire:
+                print("This weapon is enchanted with fire magic")
+                
         print()
 
 class Armor(Item):

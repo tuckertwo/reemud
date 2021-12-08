@@ -64,6 +64,7 @@ class ApplyTo(Command):
                     if weapon:
                         if weapon.weapon:
                             target.applyTo(weapon)
+                            player.removeItem(target)
                         else:
                             raise CmdRunError(objex[1] + " is not a weapon")
                     else:

@@ -1,0 +1,82 @@
+Due to the fact that it is possible to complete our game without utilizing some of the features implemented, and that the code, at places, is nearly obfuscated, I thought it prurient to write a list of the notable features, and how to test them.
+
+FEATURES FROM THE MENU OF POSSIBLE IMPROVEMENTS:	
+
+"drop" command:
+	Typing "drop <item name>" and with the name of an item in the player's inventory will drop the item
+
+"wait" command:
+	Typing "wait" will wait one tick. Typing "wait for x seconds" will wait x tics and all updatable entities will update x times
+	
+"me" command:
+	Typing "me" will give the player a reading of their current level, experience to next level, health (out of maximum health), their stats, and any armor or equipment they have equipped
+	
+Bigger world:
+	Self-evident
+
+Inventory maximum size:
+	The player has a maximum carrying capacity, and all items have weight. The carrying capacity is increased when strength is increased.
+
+"Inspect" command:
+	Implemented as described. Items with special attributes (e.g. the amount of health a healing potion restores, or the maximum damage of a weapon, or if a weapon has poison on it) also have these special attributes displayed with this command. Type "inspect <object>" to see its description.
+
+Weapons:
+	There is a variety of different weapons which the player can find, equip, and use (via the "hit" command during battle). Weapons can be enchanted with a spell scroll or lathered with poison. The player may only equip one weapon at a time (with the equip command). Note: Equipped weapons & armor do not count towards inventory weight. This is intentional. Type "equip <weapon>" or "unequip <weapon>" to equip or unequip. Type "hit <enemy name>" to hit an enemy in battle with a weapon.
+
+Armor:
+	Different sets of armor are implemented, and they reduce damage according to their strength. Type "eq <armor name>" or "unequip <armor name>" to equip or unequip. The player may only wear one suit of armor at the time.
+
+Victory condition:
+	Killing the lich king wins the game.
+
+Healing items:
+	Potions of healing, potions of regeneration, and scrolls of healing all heal the player, albeit in different ways (potions of healing heal the player a set amount, potions of regeneration heal the player a certain random (decreasing) amount per turn, scrolls of healing heal the player to full health, and are rarer). Type "drink <potion name>" for the first two, or "cast <scroll of healing>" for the latter type.
+
+Locked chests:
+	These exist, and can be unlocked and relocked. Relocking chests has a very minor purpose, in that intelligent enemies will take items from chests and use them against the player unless they are locked (however, simply slaying all nearby enemies is usually more useful than locking items in chests). Type "Unlock <container>" or "Lock <container>" to do this, if the container is lockable and you have the proper key for it. 
+
+Locked doors:
+	These exist and work as described. Type "unlock <door name>" to unlock a door. 
+
+Containers:
+	These exist, and work as described. Containers can be put in each other recursively, or picked up by the player and redeposited without their contents being lost. Type "put x in y" to put x in y, if x is an item and y is a container.
+
+Stacking items:
+	This works as described. Type "inv" to see the inventory.
+
+Regeneration:
+	This occurs if a player drinks a potion of regeneration. The number of rounds a potion of regeneration will last can be found by inspecting it. The amount of health regained each round is randomized.
+
+Loot:
+	This occurs when the world is generated. Some loot is given to specific monsters, other loot is randomly assorted. The sheep sometimes spawn with swords. This is intentional.
+
+More monsters:
+	There are many different types of monsters with different attacks. Some can use weapons (e.g. skeletons). Others (such as rats) don't have prehensile thumbs. Some monsters have different resistences than others (e.g. undead can't be poisoned). Most importantly, however, is how behavior works. "Passive" monsters cannot attack the player (even if they're a sheep who spawned with a sword). "Dumb" monsters will randomly choose an attack if the player angers them. They may choose a good attack or a weak attack without prejudice. They never flee and cannot use items. "Smart" monsters will use items (such as drinking potions when their health is low), will pick up items in the rooms they are in (and, for instance, don armor they find if its better than their current armor, or adopt a new weapon), they will flee battles if their health is low and they don't have potions to drink, and they choose attacks with more intelligence (they select two attacks from all possible attacks randomly, then choose the attack with more power). "Murderous" monsters will always choose the most powerful attack they have available to use against the player. The final boss lich has his own special powers and behavior (such as summoning skeletons to fight with him).
+
+Player attributes:
+	The player has four main attributes, which they can increase when they level up. Dexterity increases a player's ability to hit enemies, and decreases the chance of detection when sneaking. Strength increases the damage the player does with weapons, and increases the carrying capacity. Constitution increases the hit point maximum. Intelligence/magic skill decreases the probability that a spell-scroll will fail.
+
+Command abbreviations:
+	This works in an ingenious way- users may enter the shortest possible differentiable string for each command, and it will resolve. For instance, for the command "inventory" to show the inventory, the player may type "invento", "inve", "inv" or any other permeutation. Simply "i" doesn't work, because other commands start with i.
+
+Levelling up:
+	When monsters are defeated, xp is earned (using a formula so that it decreases when higher levels are reached, so easy monsters give less xp). Typing "me" shows the amount of xp to the next level. Levelling up is done with the "level up" command if the player has enough xp.
+
+Crafting:
+	There is not a full system of crafting in the game. However, using the apply command (apply x to y), spell scrolls or potions of poison can be consumed to render upgrades onto weapons.
+
+Magic:
+	Spells can be cast with spell scroll items. There are four types: scrolls of healing, damage, poison, fireball, and polymorph. The middle three render specific effects onto all enemies in combat, making them powerful weapons. Polymorph randomly replaces all enemies with other enemies
+
+Saving:
+	A functional save system is implemented. To save the game, type "save <filename>". To load a saved game, when starting the program, type <py main.py filename>
+
+
+OTHER NOTABLE ADVANCEMENTS:
+
+Sneaking:
+	The player may try to sneak past monsters. Their success at this endeavor depends on their dexterity score, and the perception scores of the opposing monsters.
+
+Effects:
+	The player and enemies may suffer from two ongoing effects. The first is poison. Poison inflicts a set amount of damage to the player/enemy until they die or drink an antidote. The second is fire. Fire works like regeneration, and gives a random but decreasing amount of damage to the player/enemy until it is extinguished. The player may use poison or spell scrolls to inflict these effects on enemies (or themselves, if they are unwise)
+

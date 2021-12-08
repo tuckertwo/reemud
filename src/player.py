@@ -417,7 +417,7 @@ class Hit(Command):
                 if player.weapon == None:
                     print("You punch " + targetName + " with your fists for " + str(target.takeDamage(1 + player.skill[1])) + " damage")
                 else:
-                    print("You hit " + targetName + " with " + player.weapon.name + " for " + str(target.takeDamage(player.weapon.damage + player.skill[1])) + " damage")
+                    print("You hit " + targetName + " with " + player.weapon.name + " for " + str(target.takeDamage(player.weapon.damage + (3 * player.skill[1]))) + " damage")
                     if not player.weapon.effects == None:
                         target.applyEffects(player.weapon.effects)
             else:
