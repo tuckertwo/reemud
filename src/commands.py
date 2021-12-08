@@ -216,6 +216,33 @@ class PickupCmd(Command):
             raise CmdRunError("no such item")
           
 
+class PutinCmd(Command):
+    args = [None, Arg("x in y", False, False, True)]
+    desc = "puts an item in a container"
+    sideeffects = True
+    
+    def func_ap(self, player, _updater, args_parsed):
+        targetName = args_parsed["x in y"] 
+        objex = targetName.lower().split(" in ")
+        if len(objex) == 2:
+            target = player.getItemByName(objex[0])
+            if target:
+                container = player.location.getItemByName(objex[1])
+                if container:
+                    if container.container:
+                        if not container.locked:
+                            container.putInside(target)
+                            player.removeItem(target)
+                        else:
+                            print("The " + container.name + " is locked!")
+                else:
+                    raise CmdRunError("no such container")
+            else:
+                raise CmdRunError("no such item in inventory")
+        else:
+            raise CmdRunError("Incorrect number of arguments")
+
+
 class SaveCmd(Command):
     # Attention: this saves a complete log of every salient action taken
     # by the player.
@@ -264,7 +291,8 @@ class WaitCmd(Command):
 
     def func_ap(self, _p, u, args_parsed):
         if "time" in args_parsed:
-            time = args_parsed["time"]
+            if type(args_parsed["time"]) == int:
+                time = args_parsed["time"]
         else:
             time = 1
         for i in range(time+1):
@@ -292,6 +320,7 @@ commands = {
     "sneak": SneakCmd(),
     "pickup": PickupCmd(),
     "drop": DropCmd(),
+    "put": PutinCmd(),
     "drink": DrinkCmd(),
     "inventory": Inventory(),
     "inspect": InspectCmd(),

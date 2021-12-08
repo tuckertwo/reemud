@@ -139,6 +139,11 @@ class Smart(Monster):
     def update():
         if len(self.room.items) > 0:
             x = random.choice(self.room.items)
+            if x.container:
+                if not x.locked:
+                    if len(x.contents) > 0:
+                        y = random.choice(x.contents)
+                        x = y
             if x.potion:
                 self.inventory.append(x)
                 self.room.removeItem(x)

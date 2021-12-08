@@ -32,6 +32,8 @@ def createWorld():
     i.putInRoom(a)
     i = item.Antidote()
     i.putInRoom(a)
+    i = item.Container("cloth bag", "a generic cloth bag", [], 0.1)
+    i.putInRoom(a)
     player.location = a
     for x in range(10):
         monster.Skeleton(b)

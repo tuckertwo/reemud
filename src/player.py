@@ -150,6 +150,15 @@ class Player:
                 print(name + " unequipped!")
                 return True
         print ("You are already not wearing or weilding " + name)
+    def drop(self, item):
+        for x in self.location.items:
+            if x.container and not x.locked:
+                x.putInside(item)
+                self.removeItem(item)
+                print("You put the " + item.name + " inside the " + x.name)
+                return None
+        self.location.addItem(item)
+        self.removeItem(item)
     def drink(self, name):
         item = self.getItemByName(name)
         if item:
@@ -271,7 +280,7 @@ class Player:
                 self.condition.pop("fire")
         if "regeneration" in self.condition:
             hal = int(random.random() * self.condition["regeneration"])
-            print("You regenerate " + str(hal) " hp")
+            print("You regenerate " + str(hal) + " hp")
             self.heal(hal)
             self.condition["regenerate"] -= 2
             if self.condition["regenerate"] < 0:
@@ -317,7 +326,7 @@ class Player:
                             k.effectsOccur()
                             if k.health <= 0:
                                 if k.isDead():
-                                    xp0 = int(k.xp / self.level)
+                                    xp0 = int(k.xp / (1 + int(self.level/4))
                                     k.die()
                                     if xp0 > 0:
                                         print("You gain " + str(xp0) + " xp")

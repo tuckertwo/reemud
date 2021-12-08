@@ -9,6 +9,7 @@ class Item:
     book = False
     potion = False
     container = False
+    key = False
     def __init__(self, name, desc, weight=1):
         self.name = name
         self.desc = desc
@@ -122,10 +123,10 @@ class Regeneration(Potion):
     
 class Container(Item):
     container = True
-    def __init__(self, name, desc, room, contents=[], weight=100):
-        self.room = room
+    locked = False
+    def __init__(self, name, desc, contents=[], weight=100):
         self.contents = contents
-        item.__init__(self, name, desc, weight)
+        Item.__init__(self, name, desc, weight)
     
     def putInside(self, item):
         self.contents.append(item)
@@ -133,7 +134,7 @@ class Container(Item):
     
     def getItemByName(self, targetName):
         for i in self.contents:
-            if i.name.lower() == name.lower():
+            if i.name.lower() == targetName.lower():
                 return v
             elif i.container:
                 k = i.getItemByName(name)
@@ -154,3 +155,57 @@ class Container(Item):
         for x in self.contents:
             print("  - " + x.name)
         print()
+        
+    def unlock(self, keys):
+        print("The " + self.name + " isn't locked")
+    
+    def lock(self, keys):
+        print("The " + self.name + " can't be locked")
+ 
+class Key(Item):
+    key = True
+    def __init__(self, name):
+        item.__init__(self, name, "A " + name, .05)
+ 
+class LockedChest(Container):
+    
+    def __init__(self, name, desc, key, contents=[], locked=True, weight=100):
+        self.locked = locked
+        self.key = key
+        Container.__init__(self, name, desc, contents, weight)
+        
+    def getItemByName(self, targetName):
+        if locked:
+            return False
+        else:
+            return Container.getItemByName(self, targetName)
+            
+    def describe(self):
+        if locked:
+            print(self.desc)
+            print("The " + self.name + " is locked")
+            print()
+        else"
+            Container.describe(self)
+            
+    def unlock(self, keys):
+        if locked:
+            for k in keys:
+                if k.name == self.key.name:
+                    print("You unlock the " + self.name + " with " + k.name)
+                    locked = False
+                    return True
+                print("You do not have the key to unlock the " + self.name)
+        else: 
+            print("The " + self.name + " isn't locked")    
+            
+    def lock(self, keys): #some wandering monsters take items from unlocked chests
+        if not locked:
+            for k in keys:
+                if k.name == self.key.name:
+                    print("You lock the " + self.name + " with " + k.name)
+                    locked = True
+                    return True
+                print("You do not have the key to lock the " + self.name)
+        else: 
+            print("The " + self.name + " is already locked") 
