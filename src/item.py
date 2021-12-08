@@ -51,8 +51,13 @@ class Armor(Item):
 
 class Book(Item):
     book = True
-    def __init__(self, name, desc, weight=1):
-        Item.__init__(self, name, desc, weight)
+    def __init__(self, name, desc):
+        Item.__init__(self, name, desc, .5)
+        
+    def describe(self):
+        print("The text reads as follows:")
+        print(self.desc)
+        print()
         
 class Potion(Item):
     potion = True

@@ -97,8 +97,6 @@ class Monster:
                     print(x.name)
         self.room.removeMonster(self)
         updater.deregister(self)
-    def findAttack(self): #only should be used in the case of nonviolent monsters
-        return(["", " cannot attack you", 0, 0, False, 99999, None])
     def triesToFlee(self):
         print(self.name + " flees!")
         self.moveTo(self.room.randomNeighbor())
@@ -118,6 +116,11 @@ class Monster:
         for x in self.attacks:
             if x[5] < 1:
                 attacks.remove(x)
+
+class Passive(Monster):
+    def findAttack(self): #only should be used in the case of nonviolent monsters
+        return(["", " cannot attack you", 0, 0, False, 99999, None])
+
 
 class Dumb(Monster):
     def findAttack(self): #Dumb monsters randomly choose between their powerful and ineffective attacks
@@ -191,13 +194,20 @@ class Smart(Monster):
         x = random.randrange(len(self.attacks))
         y = random.randrange(len(self.attacks))
         if self.attacks[x][2] > self.attacks[x][2]:
-            self.attacks[x][4] -= 1
+            self.attacks[x][5] -= 1
             return self.attacks[x]
         else:
-            self.attacks[y][4] -= 1
+            self.attacks[y][5] -= 1
             return self.attacks[y]
         
-        
+class Murderous(Smart):
+    def findAttackHelper(self):
+        y = self.attacks[0]
+        for x in self.attacks:
+            if x[2] > y[2]:
+                y = x
+        y[4] -= 1
+        return y
 
 class Undead(Dumb):
     def poison(self, amount): #Undead cannot be poisoned
@@ -214,3 +224,7 @@ class Skeleton(Undead):
     def __init__(self, room, armor=None):
         Undead.__init__(self, True, random.choice(adjectives) + "skeleton", 3, room, 25, 1, armor)
         self.Punch()
+        
+class Sheep(Passive):
+    def __init__(self, room):
+        Monster.__init__(self, False, "Sheep", 3, room, 2, 1)

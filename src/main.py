@@ -10,43 +10,17 @@ from txt_parser import CmdParseError, CmdRunError, good_split_spc, abbrev_cmd
 import random, ast, sys, os
 
 def createWorld():
-    a = Room("You are in room 1\ntest")
-    b = Room("You are in room 2")
-    c = Room("You are in room 3")
-    d = Room("You are in room 4")
-    Room.connectRooms(a, "east", b, "west")
-    Room.connectRooms(c, "east", d, "west")
-    Room.connectRooms(b, "north", d, "south")
-    i = item.Item("Rock", "This is just a rock.", 5)
-    i.putInRoom(b)
-    i = item.Item("Rock", "This is just a rock.", 5)
-    j = item.Weapon("Sharp Rock", "A sharp rock that might hurt somebody.", 5, 5)
-    i.putInRoom(c)
-    j.putInRoom(c)
-    i = item.Item("Orange Clock", "This is not a rock.")
-    i.putInRoom(c)
-    i = item.HealingPotion(30)
-    i.putInRoom(a)
-    i = item.Poison(15)
-    i.putInRoom(a)
-    i = item.Antidote()
-    i.putInRoom(a)
-    i = item.Container("cloth bag", "a generic cloth bag", [], 0.1)
-    i.putInRoom(a)
-    k = item.Key("Iron Key")
-    j = item.Door(k, "north", c)
-    j.putInRoom(a)
-    k.putInRoom(a)
-    i = item.HealingScroll()
-    i.putInRoom(a)
-    i = item.DamageScroll(10)
-    i.putInRoom(a)
-    i = item.Fireball(10)
-    i.putInRoom(a)
-    
+
+    #starting room
+    a = Room("A grassy field. Several animals graze placidly. Flowers poke out from the green grass. The sun shines, the sky is blue, but ahead of you, the dark gate of a crumbling structure yawns\nTip: Try the command 'inspect instruction manual'")
+    itm = item.Book("Instruction Manual", "Every year, according to Sacred Tradition, our village sends one human sacrifice to the Evil Necromancer Cultists. This year, you have been unwillingly elected to fill that role! But if you somehow manage to defeat the Necromancer, you can come back home I guess.\n(Type Help for a list of actions)")
+    itm.putInRoom(a)
+    for x in range(5):
+        monster.Sheep(a)
+
+
+
     player.location = a
-    for x in range(10):
-        monster.Skeleton(b)
     updater.allocateLoot()
         
 class Game:
