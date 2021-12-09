@@ -236,7 +236,7 @@ class Cultist(Smart):
 
 class HeadCultist(Murderous):
     def __init__(self, room):
-        Smart.__init__(self, True, "cultist priest", 5, room, 50, 5, armor)
+        Smart.__init__(self, True, "cultist priest", 5, room, 150, 5, armor)
         self.Punch()
         self.addAttack(" hits you with a magical Fire Bolt", " tries to hit you with a spell but misses ", 4, .5, False, 4, [["fire", 5]])
         self.addAttack(" hits you with a magical Witch Bolt", " tries to hit you with a spell but misses ", 8, .5, False, 5)
@@ -293,6 +293,7 @@ class Zombie(Undead):
     def __init__(self, room, armor=None):
         Undead.__init__(self, True, random.choice(adjectives) + "zombie", 15, room, 100, 1, armor)
         self.Punch()
+        
 
 class LichKing(Murderous):
     def __init__(self, room)
@@ -302,3 +303,8 @@ class LichKing(Murderous):
         print("The lich king screams out 'Noooo! I'm dying!'")
         print("The lich king dies")
         print("Congrats, I guess. You won the game. Now you can go home to your village.")
+        
+    def FindAttack(self)
+        print("The Lich King raises a zombie out of the cauldron")
+        Zombie(self.room)
+        return None

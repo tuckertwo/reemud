@@ -85,7 +85,7 @@ def createWorld():
     tinykey = item.Key("Tiny Key")
     kl = Room("An empty room except for a chest")
     Room.connectRooms(k, "west", kl)
-    x = LockedChest("infuriating locked chest", "an infuriating locked chest", tinykey)
+    x = LockedChest("infuriating locked chest", "an infuriating locked chest", tinykey, [itm01, itm01])
 
     #e corridor n-Signed
     l = Room("A dusky corridor")
@@ -102,6 +102,18 @@ def createWorld():
     #library
     m = Room("Shelves line the walls, books stacked neatly on them. Charts of various astrological configurations are tacked to the fine oak-paneled walls. Luxurious black furst cover the floor, and two unlit braziers hang from the ceiling")
     Room.connectRooms(k, "north", m)
+    libbook = item.Book("heavy tome", "The first page is titled 'how I became a lich at 40'. the rest of the volume is blank")
+    mp1 = item.HealingScroll()
+    mp2 = item.DamageScroll(20)
+    mp3 = item.PoisonScroll(10)
+    mp4 = item.Fireball(15)
+    mp5 = item.Polymorph()
+    mp1.putInRoom(m)
+    mp2.putInRoom(m)
+    mp3.putInRoom(m)
+    mp4.putInRoom(m)
+    mp5.putInRoom(m)
+    
 
     #wizard's laboratory:
     n = Room("A large table is cluttered with magical scrolls. A cauldron smolders over a hearth. A large purple wizard hat sits on a chair.")
@@ -111,10 +123,16 @@ def createWorld():
     o = Room("An open chamber with many bunk beds, lined up in rows")
     Room.connectRooms(m, "east", o)
     Room.connectRooms(n, "west", o)
+    monster.Ork(o)
+    monster.Ork(o)
+    monster.Ork(o)
+    monster.Ork(o)
+    
 
     #priest's bedroom
     p = Room("A thick carpet covers the stone floor in this room. A bed is canopied by silken curtains.")
     Room.connectRooms(o, "north", p)
+    HeadCultist(p)
 
     #commemoration hall
     q = Room("A high and solemn hall. Four tapestries adorn the walls. Two depict a grey star on a black background. The other two show scenes of black-robed priests plunging corpses into a huge undead cauldron, after which the corpses walk away. In the center of the room is another huge bronze statue with an iron crown.")
@@ -204,6 +222,7 @@ def createWorld():
     #BARROW OF THE LICH KING!!!!!!!
     z = Room("A grand hall, lit only by the sickly green bubbling of a huge cauldron, ornately inscribed with skulls. The ceiling is lost in darkness. At the far end of the hall stands a massive stone-hewn throne. A sign on top of it says 'Throne of the Lich King'")
     Room.connectRooms(z, "north", y6)
+    monster.LichKing(z)
 
     player.location = a
     updater.allocateLoot()
