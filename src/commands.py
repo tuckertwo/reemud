@@ -52,9 +52,9 @@ class ApplyTo(Command):
     args = [None, Arg("x to y", False, False, True)]
     desc = "applies a potion or spell scroll to a weapon"
     sideeffects = True
-    
+
     def func_ap(self, player, _updater, args_parsed):
-        targetName = args_parsed["x to y"] 
+        targetName = args_parsed["x to y"]
         objex = targetName.lower().split(" to ")
         if len(objex) == 2:
             target = player.getItemByName(objex[0])
@@ -80,7 +80,7 @@ class Cast(Command):
     args = [None, Arg("spell scroll", False, False, True)]
     desc = "Cast a spell scroll"
     sideeffects = True
-    
+
     def func_ap(self, player, _updater, args_parsed):
         ssname = args_parsed["spell scroll"]
         sscroll = player.getItemByName(ssname)
@@ -97,7 +97,7 @@ class Cast(Command):
 
         else:
             raise CmdRunError("you don't have any such spell scroll")
-        
+
 
 
 class ClearScreenCmd(Command):
@@ -112,7 +112,7 @@ class DrinkCmd(Command):
     args = [None, Arg("item", False, False, True)]
     desc = "Drinks a potion"
     sideeffects = True
-    
+
     def func_ap(self, player, _updater, args_parsed):
         targetName = args_parsed["item"]
         player.drink(targetName)
@@ -121,9 +121,9 @@ class DropCmd(Command):
     args = [None, Arg("item", False, False, True)]
     desc = "Drops an item"
     sideeffects = True
-    
+
     def func_ap(self, player, _updater, args_parsed):
-        targetName = args_parsed["item"] 
+        targetName = args_parsed["item"]
         target = player.getItemByName(targetName)
         if target:
             player.location.addItem(target)
@@ -150,7 +150,7 @@ class Equip(Command):
     def func_ap(self, player, _updater, args_parsed):
         targetName = args_parsed["item"]
         player.equip(targetName)
-     
+
 
 class Exit(Command):
     args = []
@@ -234,9 +234,9 @@ class Lock(Command):
     args = [None, Arg("object", False, False, True)]
     desc = "Lock a container"
     sideeffects = True
-    
+
     def func_ap(self, player, _updater, args_parsed):
-        targetName = args_parsed["object"] 
+        targetName = args_parsed["object"]
         target = player.location.getItemByName(targetName)
         if target:
             if target.container:
@@ -263,7 +263,7 @@ class Me(Command):
     args = []
     desc = "gives a summary of your condition"
     sideeffects = False
-    
+
     def func(self, player, _updater, args_passed):
         return player.showStats()
 
@@ -297,9 +297,9 @@ class PutinCmd(Command):
     args = [None, Arg("x in y", False, False, True)]
     desc = "puts an item in a container"
     sideeffects = True
-    
+
     def func_ap(self, player, _updater, args_parsed):
-        targetName = args_parsed["x in y"] 
+        targetName = args_parsed["x in y"]
         objex = targetName.lower().split(" in ")
         if len(objex) == 2:
             target = player.getItemByName(objex[0])
@@ -354,18 +354,18 @@ class UnEquip(Command):
     args = [None, Arg("item", False, False, True)]
     desc = "Unequips a Weapon or Armour Suit"
     sideeffects = True
-    
+
     def func_ap(self, player, _updater, args_parsed):
         targetName = args_parsed["item"]
         player.unequip(targetName)
-      
+
 class Unlock(Command):
     args = [None, Arg("object", False, False, True)]
     desc = "Unlock a container or door"
     sideeffects = True
-    
+
     def func_ap(self, player, _updater, args_parsed):
-        targetName = args_parsed["object"] 
+        targetName = args_parsed["object"]
         target = player.location.getItemByName(targetName)
         if target:
             if target.door or target.container:

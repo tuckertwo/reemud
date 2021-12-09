@@ -48,7 +48,7 @@ class Monster:
         if not ((self.armor == None) or ignorearmor):
             dam = int(dam / self.armor.stren)
         self.health -= dam
-        return dam  
+        return dam
     def isDead(self):
         return True
     def applyEffects(self, effex):
@@ -113,7 +113,7 @@ class Monster:
                     print("You try to disarm " + self.name + " but fail")
         else:
             print("You try to disarm " + self.name + " but fail")
-            
+
     def cullAttacks(self):
         for x in self.attacks:
             if x[5] < 1:
@@ -143,7 +143,7 @@ class Smart(Monster):
                         self.condition.remove("poison")
                         self.inventory.remove(m)
         Monster.effectsOccur(self)
-            
+
     def update(self):
         if len(self.room.items) > 0:
             x = random.choice(self.room.items)
@@ -191,7 +191,7 @@ class Smart(Monster):
             self.triesToFlee()
         else:
             return self.findAttackHelper()
-    
+
     def findAttackHelper(self): #made a different class so easily replacable
         x = random.randrange(len(self.attacks))
         y = random.randrange(len(self.attacks))
@@ -201,7 +201,7 @@ class Smart(Monster):
         else:
             self.attacks[y][5] -= 1
             return self.attacks[y]
-        
+
 class Murderous(Smart):
     def findAttackHelper(self):
         y = self.attacks[0]
@@ -225,15 +225,15 @@ class Undead(Dumb):
             return False
         else:
             return True
- 
- 
+
+
 class Cultist(Smart):
     def __init__(self, room, armor=None):
         Smart.__init__(self, True, random.choice(adjectives) + "cultist", 5, room, 50, 1, armor)
         self.Punch()
         self.addAttack(" hits you with a magical Fire Bolt", " tries to hit you with a spell but misses ", 4, .4, False, 1, [["fire", 5]])
         self.addAttack(" hits you with a magical Witch Bolt", " tries to hit you with a spell but misses ", 8, .4, False, 3)
- 
+
 class HeadCultist(Murderous):
     def __init__(self, room):
         Smart.__init__(self, True, "cultist priest", 5, room, 50, 5, armor)
@@ -241,7 +241,7 @@ class HeadCultist(Murderous):
         self.addAttack(" hits you with a magical Fire Bolt", " tries to hit you with a spell but misses ", 4, .5, False, 4, [["fire", 5]])
         self.addAttack(" hits you with a magical Witch Bolt", " tries to hit you with a spell but misses ", 8, .5, False, 5)
         self.addAttack(" casts FIREBALL!", " tries to hit you with a spell but misses ", 9, 1, False, 1, [["fire", 10]])
-        
+
 
 class Ork(Dumb):
     def __init__(self, room, armor=None):
@@ -252,18 +252,18 @@ class Rat(Animal):
     def __init__(self, room, name="Rat"):
         Monster.__init__(self, False, name, 3, room, 10)
         self.addAttack(" bites you", " tries to bite you, but only gnaws on your shoe", 4, .3)
-        
+
     def update(self):
         self.effectsOccur()
         if self.health <= 0:
             self.die(False)
 
- 
+
 class Skeleton(Undead):
     def __init__(self, room, armor=None):
         Undead.__init__(self, True, random.choice(adjectives) + "skeleton", 3, room, 25, 1, armor)
         self.Punch()
-        
+
 class Sheep(Passive):
     def __init__(self, room):
         Monster.__init__(self, False, "Sheep", 3, room, 2, 0)
@@ -273,6 +273,6 @@ class Sheep(Passive):
             self.moveTo(self.room.randomNeighbor())
         if self.health <= 0:
             self.die(False)
-        
+
 
         #self, sverb, fverb, damage, prob, disarmable=False, limit=9999, effects=None)
