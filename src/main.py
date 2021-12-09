@@ -119,6 +119,7 @@ def createWorld():
     #wizard's laboratory:
     n = Room("A large table is cluttered with magical scrolls. A cauldron smolders over a hearth. A large purple wizard hat sits on a chair.")
     Room.connectRooms(l, "north", n)
+    monster.BigBeast("magical abomination", n)
 
     #barracks
     o = Room("An open chamber with many bunk beds, lined up in rows")
@@ -148,6 +149,9 @@ def createWorld():
     #morgue
     s = Room("This room is filled with crude wooden coffins. It reeks of carrion.")
     Room.connectRooms(r, "east", s)
+    monster.Zombie(s)
+    monster.Zombie(s)
+    monster.Zombie(s)
 
     #wine cellar
     sr = Room("Mead and wine barrels line the walls of this room.")
@@ -194,6 +198,10 @@ def createWorld():
     Room.connectRooms(v, "north", y)
     vdoor = item.Door(AncientKey, "north", y)
     vdoor.putInRoom(v)
+    for x in range(5):
+        monster.Skeleton(y)
+        monster.Zombie(y)
+        monster.Ghost(y)
 
     #Barrow2
     yy = Room("A circular barrow. Along the walls are niches inhabited by ancient corpses.")
