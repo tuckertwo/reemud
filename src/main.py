@@ -205,7 +205,7 @@ class Game:
                                             cmd_split[0],
                                             CmdParseError("ambiguous command"),
                                             CmdParseError("invalid command"))]
-                    cmd_obj.func(player, updater, cmdstr)
+                    cmd_obj.func(player, cmdstr)
                     if cmd_obj.sideeffects:
                         player.log.append(cmdstr)
                     if player.sneak: #That is right, I have sulled the main loop
