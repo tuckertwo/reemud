@@ -208,6 +208,8 @@ class Player:
         print("Constitution: +" + str(self.skill[2]))
         print("Intelligence: +" + str(self.skill[3]))
         print()
+        print("Sneaking: " + self.sneak)
+        print()
     def getItemByName(self, name):
         for i in self.items:
             if i.name.lower()[:len(name)] == name.lower():
@@ -315,7 +317,7 @@ class Player:
                                             cmd_split[0],
                                             CmdParseError("ambiguous command"),
                                             CmdParseError("invalid commandx"))]
-                    cmd_obj.func(updater, cmdstr)
+                    cmd_obj.func(self, cmdstr)
                     if cmd_obj.sideeffects:
                         self.log.append(cmdstr)
                         self.effectsOccur()
