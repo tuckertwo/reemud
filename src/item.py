@@ -158,14 +158,14 @@ class Container(Item):
     
     def getItemByName(self, targetName):
         for i in self.contents:
-            if i.name.lower() == targetName.lower():
+            if i.name.lower()[:len(targetName)] == targetName.lower():
                 return i
         return False
         
     def removeItem(self, item):
         if item in self.contents:
-            self.weight -= i.weight
-            self.contents.remove(i)
+            self.weight -= item.weight
+            self.contents.remove(item)
             return True
         return False
 

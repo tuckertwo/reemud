@@ -172,11 +172,6 @@ class Player:
                 print("You can't drink your " + name + "!")
         else:
             print("Item Not In Inventory")
-    def getItemByName(self, name):
-        for i in self.items: #note- to be improved later so exact names aren't needed
-            if i.name.lower() == name.lower():
-                return i
-        return False
     def heal(self, amount):
         self.health += amount
         if self.health > self.maxhealth:
@@ -215,7 +210,7 @@ class Player:
         print()
     def getItemByName(self, name):
         for i in self.items:
-            if i.name.lower() == name.lower():
+            if i.name.lower()[:len(name)] == name.lower():
                 return i
         return False
     def removeItem(self, item):
@@ -416,9 +411,9 @@ class Hit(Command):
         if target:
             if random.random() < (.3 + (player.skill[0] / 15)):
                 if player.weapon == None:
-                    print("You punch " + targetName + " with your fists for " + str(target.takeDamage(1 + player.skill[1])) + " damage")
+                    print("You punch " + target.name + " with your fists for " + str(target.takeDamage(1 + player.skill[1])) + " damage")
                 else:
-                    print("You hit " + targetName + " with " + player.weapon.name + " for " + str(target.takeDamage(player.weapon.damage + (3 * player.skill[1]))) + " damage")
+                    print("You hit " + target.name + " with " + player.weapon.name + " for " + str(target.takeDamage(player.weapon.damage + (3 * player.skill[1]))) + " damage")
                     if not player.weapon.effects == None:
                         target.applyEffects(player.weapon.effects)
             else:
