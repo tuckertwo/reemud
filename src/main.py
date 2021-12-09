@@ -48,13 +48,13 @@ def createWorld():
     itm7 = item.Armor("Black leather armor", "Soiled and worn black leather armor", 1.1)
     monster.Ork(e)
     x = monster.Ork(e)
-    e.giveItem(itm7)
+    x.giveItem(itm7)
     
     #storeroom
     f = Room("A dingy store-room.")
     Room.connectRooms(d, "east", f)
     itm8 = item.Book("Intraoffice Memo", "Why do we make the front enterance guards the weakest fighters? Almost as if we're intentionally allowing any adventurer who enters to get enough xp to level up with the level up command\n-Signed, the Necromancy Union")
-    itm9 = item.Container("Large wooden crate", "A large wooden crate", [itm01, itm9])
+    itm9 = item.Container("Large wooden crate", "A large wooden crate", [itm01, itm8])
     itm9.putInRoom(f)
     
     #west corridor s 
@@ -83,10 +83,10 @@ def createWorld():
     
     #pantry
     lm = Room("A pantry, well-stocked with food. Unfortunately, you aren't hungry. I guess even necromancers have to eat")
-    Room.connectRooms(l, "east", ll)
-    monster.Rat(ll)
-    monster.Rat(ll)
-    monster.Rat(ll)
+    Room.connectRooms(l, "east", lm)
+    monster.Rat(lm)
+    monster.Rat(lm)
+    monster.Rat(lm)
     
     #library
     m = Room("Shelves line the walls, books stacked neatly on them. Charts of various astrological configurations are tacked to the fine oak-paneled walls. Luxurious black furst cover the floor, and two unlit braziers hang from the ceiling")
@@ -136,44 +136,46 @@ def createWorld():
     
     #alchemist's laboratory
     w = Room("This room looks like a small laboratory. It smells of formaldehyde. A wide table is cluttered with bubbling potions")
-    room.connectRooms(v, "west", w)
+    Room.connectRooms(v, "west", w)
     
     #alchemist's bedroom
     x = Room("A simple bedroom. A dirty shovel leans against the wall.")
-    room.connectRooms(v, "east", x)
+    Room.connectRooms(v, "east", x)
     
     #Barrow1
     y = Room("A circular barrow. Along the walls are niches inhabited by ancient corpses.\nA sign stuck in the ground says 'Welcome to the barrow!!' with a smiley face crudely drawn")
-    room.ConnectRooms(v, "north", y)
+    Room.connectRooms(v, "north", y)
     
     #Barrow2
     yy = Room("A circular barrow. Along the walls are niches inhabited by ancient corpses.")
-    room.ConnectRooms(y, "north", yy)
+    Room.connectRooms(y, "north", yy)
     
     yyy = Room("A circular barrow. Along the walls are niches inhabited by ancient corpses.")
-    room.ConnectRooms(y, "west", yy)
+    Room.connectRooms(y, "west", yy)
     
     yyyy = Room("A circular barrow. Along the walls are niches inhabited by ancient corpses.")
-    room.ConnectRooms(yyy, "west", yyyy)
-    room.ConnectRooms(yyy, "north", yyyy)
+    Room.connectRooms(yyy, "west", yyyy)
+    Room.connectRooms(yyy, "north", yyyy)
     
     y5 = Room("A circular barrow. Along the walls are niches inhabited by ancient corpses.")
-    room.ConnectRooms(y, "west", y5)
+    Room.connectRooms(y, "west", y5)
     
     y6 = Room("A circular barrow. Along the walls are niches inhabited by ancient corpses.")
-    room.ConnectRooms(yyyy, "north", y6)
+    Room.connectRooms(yyyy, "north", y6)
     
     y7 = Room("A circular barrow. Along the walls are niches inhabited by ancient corpses.")
-    room.ConnectRooms(yy, "north", y7)
-    room.ConnectRooms(yy, "east", y7)
-    room.ConnectRooms(yy, "west", y7) #I don't care about geometry
+    Room.connectRooms(yy, "north", y7)
+    Room.connectRooms(yy, "east", y7)
+    Room.connectRooms(yy, "west", y7) #I don't care about geometry
     
-    player.location = a
-    updater.allocateLoot()
+
     
     #BARROW OF THE LICH KING!!!!!!!
     z = Room("A grand hall, lit only by the sickly green bubbling of a huge cauldron, ornately inscribed with skulls. The ceiling is lost in darkness. At the far end of the hall stands a massive stone-hewn throne. A sign on top of it says 'Throne of the Lich King'")
-    room.ConnectRooms(z, "north", y6)
+    Room.connectRooms(z, "north", y6)
+    
+    player.location = a
+    updater.allocateLoot()
         
 class Game:
     def __init__(self, replay=[], rep_flag=False):

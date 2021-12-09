@@ -29,7 +29,7 @@ class Monster:
         self.inventory.append(item)
         if item.weapon:
             self.giveWeapon(item)
-        elif item.armor and self.armor = None:
+        elif item.armor and self.armor == None:
             self.armor = item
     def giveWeapon(self, weapon):
         self.addAttack(" hits you with " + weapon.name, " tries to hit you with " + weapon.name + ", but misses", weapon.damage + self.skills[1], self.perception * (.25 + (self.skills[0] / 15)), True, 9999, weapon.effects)
@@ -234,6 +234,15 @@ class Cultist(Smart):
         self.addAttack(" hits you with a magical Fire Bolt", " tries to hit you with a spell but misses ", 4, .4, False, 1, [["fire", 5]])
         self.addAttack(" hits you with a magical Witch Bolt", " tries to hit you with a spell but misses ", 8, .4, False, 3)
  
+class HeadCultist(Murderous):
+    def __init__(self, room):
+        Smart.__init__(self, True, "cultist priest", 5, room, 50, 5, armor)
+        self.Punch()
+        self.addAttack(" hits you with a magical Fire Bolt", " tries to hit you with a spell but misses ", 4, .5, False, 4, [["fire", 5]])
+        self.addAttack(" hits you with a magical Witch Bolt", " tries to hit you with a spell but misses ", 8, .5, False, 5)
+        self.addAttack(" casts FIREBALL!", " tries to hit you with a spell but misses ", 9, 1, False, 1, [["fire", 10]])
+        
+
 class Ork(Dumb):
     def __init__(self, room, armor=None):
         Dumb.__init__(self, True, random.choice(adjectives) + "ork", 10, room, 75, 1, armor, 0, 8)

@@ -159,7 +159,7 @@ class Container(Item):
     def getItemByName(self, targetName):
         for i in self.contents:
             if i.name.lower() == targetName.lower():
-                return v
+                return i
         return False
         
     def removeItem(self, item):

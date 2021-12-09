@@ -56,7 +56,7 @@ class Room:
         return self.items != []
     def getItemByName(self, name):
         for i in self.items:
-            if i.name.lower() == name.lower():
+            if i.name.lower()[:len(name)] == name.lower():
                 return i
             elif i.container:
                 k = i.getItemByName(name)
@@ -67,7 +67,7 @@ class Room:
         return self.monsters != []
     def getMonsterByName(self, name):
         for i in self.monsters:
-            if i.name.lower() == name.lower():
+            if i.name.lower()[:len(name)] == name.lower():
                 return i
         return False
     def randomNeighbor(self):
