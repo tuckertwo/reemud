@@ -17,7 +17,7 @@ def allocateLoot():
     for i in range(5):
         loot.append(item.Weapon("Sword", "A nondescript metal sword.", 6, 3))
         loot.append(item.HealingPotion(15))
-        loot.append(item.Poison(15)
+        loot.append(item.Poison(15))
         loot.append(item.Regeneration(15))
         loot.append(item.Water(15))
         loot.append(item.DamageScroll(10))
