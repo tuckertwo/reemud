@@ -440,16 +440,19 @@ class Cast(Command):
                 elif sscroll.effect[0] == "polymorph":
                     for x in player.location.getAggro():
                         if not (x.name == "Lich King"):
-                            m = random.randrange(3)
+                            m = random.randrange(4)
                             if m == 0: #sadly, there's no efficient way to do this
                                 print(x.name + " is turned into a sheep!")
                                 monster.Sheep(player.location)
-                            if m == 1:
+                            elif m == 1:
                                 print(x.name + " is turned into a rat!")
                                 monster.Rat(player.location)
-                            if m == 2:
+                            elif m == 2:
                                 print(x.name + " is turned into a skeleton!")
                                 monster.Skeleton(player.location)
+                            elif m == 3:
+                                print(x.name + " is turned into a hulking beast!")
+                                monster.BigBeast("hulking beast", player.location)
 
                             x.die(False)
                 else:

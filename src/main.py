@@ -82,8 +82,10 @@ def createWorld():
     Room.connectRooms(g, "north", k)
 
     #infuriating locked chest room
+    tinykey = item.Key("Tiny Key")
     kl = Room("An empty room except for a chest")
     Room.connectRooms(k, "west", kl)
+    x = LockedChest("infuriating locked chest", "an infuriating locked chest", tinykey)
 
     #e corridor n-Signed
     l = Room("A dusky corridor")
@@ -94,7 +96,8 @@ def createWorld():
     Room.connectRooms(l, "east", lm)
     monster.Rat(lm)
     monster.Rat(lm)
-    monster.Rat(lm)
+    x = monster.Rat(lm)
+    x.giveItem(tinykey)
 
     #library
     m = Room("Shelves line the walls, books stacked neatly on them. Charts of various astrological configurations are tacked to the fine oak-paneled walls. Luxurious black furst cover the floor, and two unlit braziers hang from the ceiling")
