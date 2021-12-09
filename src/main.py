@@ -10,7 +10,7 @@ from txt_parser import CmdParseError, CmdRunError, good_split_spc, abbrev_cmd
 import random, ast, sys, os
 
 def createWorld():
-
+    itm01 = item.HealingPotion(20)
 
     #starting room
     a = Room("A grassy field. Several animals graze placidly. Flowers poke out from the green grass. The sun shines, the sky is blue, but ahead of you, to the north, the dark gate of a crumbling ruin yawns\nTip: Try the command 'inspect instruction manual'")
@@ -42,7 +42,20 @@ def createWorld():
     Room.connectRooms(c, "north", d)
     monster.Cultist(a)
     
+    #converted storeroom
+    e = Room("A dingy store-room. Two brown sleeping bags lie on the ground.")
+    Room.connectRooms(d, "west", e)
+    itm7 = item.Armor("Black leather armor", "Soiled and worn black leather armor", 1.1)
+    monster.Ork(e)
+    x = monster.Ork(e)
+    e.giveItem(itm7)
     
+    #storeroom
+    f = Room("A dingy store-room.")
+    Room.connectRooms(d, "east", f)
+    itm8 = item.Book("Intraoffice Memo", "Why do we make the front enterance guards the weakest fighters? Almost as if we're intentionally allowing any adventurer who enters to get enough xp to level up with the level up command\n-Signed, the Necromancy Union")
+    itm9 = item.Container("Large wooden crate", "A large wooden crate", [itm01, itm9])
+    itm9.putInRoom(f)
     
     
     player.location = a

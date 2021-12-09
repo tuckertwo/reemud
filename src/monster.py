@@ -234,7 +234,7 @@ class Cultist(Smart):
  
 class Ork(Dumb):
     def __init__(self, room, armor=None):
-        Dumb.__init__(self, True, random.choice(adjectives) + "ork", 7, room, 50, 1, armor, 0, 8)
+        Dumb.__init__(self, True, random.choice(adjectives) + "ork", 10, room, 75, 1, armor, 0, 8)
         self.Punch()
 
 class Rat(Animal):
