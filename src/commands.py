@@ -341,7 +341,10 @@ class SleepCmd(Command):
     sideeffects = False
 
     def func_ap(self, _p, args_parsed):
-        time.sleep(float(args_parsed["time"]))
+        try:
+            time.sleep(float(args_parsed["time"]))
+        except KeyboardInterrupt:
+            return None
 
 class SneakCmd(Command):
     args = []
