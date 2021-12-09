@@ -388,6 +388,7 @@ class WaitCmd(Command):
     sideeffects = True
 
     def func_ap(self, _p, args_parsed):
+        time = 1
         if "time" in args_parsed:
             if type(args_parsed["time"]) == int:
                 time = args_parsed["time"]
