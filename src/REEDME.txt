@@ -1,6 +1,7 @@
-Due to the fact that it is possible to complete our game without utilizing some of the features implemented, and that the code, at places, is nearly obfuscated, I thought it prurient to write a list of the notable features, and how to test them. 
+NOTICE: This is an incomplete game. However, I daresay that the reason we did not complete the game on time was due to excessive ambition, rather than laziness.
 
-NOTICE: This is an incomplete game. Maybe we were too ambitious. However, it has a full set of features, even if the gameplay largely consists of wandering through empty rooms.
+Tucker and I collaborated over Github, primarily. Statistics can be found at https://github.com/tuckertwo/reemud/pulse (wherein I am AtomicMoloch and Tucker is tuckertwo). It is hard to precisely delimit what I did and what Tucker did, for he largely worked on structural improvements, while I implemented specific features. Every single feature noted below used at least some of my code and at least some of Tucker's code.
+-Kavi W.
 
 FEATURES FROM THE MENU OF POSSIBLE IMPROVEMENTS:	
 
