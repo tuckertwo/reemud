@@ -1,4 +1,6 @@
-Due to the fact that it is possible to complete our game without utilizing some of the features implemented, and that the code, at places, is nearly obfuscated, I thought it prurient to write a list of the notable features, and how to test them.
+Due to the fact that it is possible to complete our game without utilizing some of the features implemented, and that the code, at places, is nearly obfuscated, I thought it prurient to write a list of the notable features, and how to test them. 
+
+NOTICE: This is an incomplete game. Maybe we were too ambitious. However, it has a full set of features, even if the gameplay largely consists of wandering through empty rooms.
 
 FEATURES FROM THE MENU OF POSSIBLE IMPROVEMENTS:	
 

@@ -315,7 +315,7 @@ class Player:
                                             cmd_split[0],
                                             CmdParseError("ambiguous command"),
                                             CmdParseError("invalid commandx"))]
-                    cmd_obj.func(self, updater, cmdstr)
+                    cmd_obj.func(updater, cmdstr)
                     if cmd_obj.sideeffects:
                         self.log.append(cmdstr)
                         self.effectsOccur()

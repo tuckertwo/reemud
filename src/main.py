@@ -69,8 +69,8 @@ def createWorld():
     #meeting hall
     i = Room("A large, impressive-looking stone chair stands against the north wall, at the head of a long table. A large brass brazier lights the room.")
     Room.connectRooms(g, "south", i)
-    IronKey = item.key("Iron Key")
-    x = HeadCultist(i)
+    IronKey = item.Key("Iron Key")
+    x = monster.HeadCultist(i)
     x.giveItem(IronKey)
 
     #Boggle's room
@@ -86,7 +86,7 @@ def createWorld():
     tinykey = item.Key("Tiny Key")
     kl = Room("An empty room except for a chest")
     Room.connectRooms(k, "west", kl)
-    x = LockedChest("infuriating locked chest", "an infuriating locked chest", tinykey, [itm01, itm01])
+    x = item.LockedChest("infuriating locked chest", "an infuriating locked chest", tinykey, [itm01, itm01])
 
     #e corridor n-Signed
     l = Room("A dusky corridor")
@@ -134,7 +134,7 @@ def createWorld():
     #priest's bedroom
     p = Room("A thick carpet covers the stone floor in this room. A bed is canopied by silken curtains.")
     Room.connectRooms(o, "north", p)
-    HeadCultist(p)
+    monster.HeadCultist(p)
 
     #commemoration hall
     q = Room("A high and solemn hall. Four tapestries adorn the walls. Two depict a grey star on a black background. The other two show scenes of black-robed priests plunging corpses into a huge undead cauldron, after which the corpses walk away. In the center of the room is another huge bronze statue with an iron crown.")
@@ -179,7 +179,7 @@ def createWorld():
     mp2 = item.Poison(70, "Mysterious Potion", "A mysterious swirling vial of potion")
     mp3 = item.Antidote("Mysterious Potion", "A mysterious swirling vial of potion")
     mp4 = item.Water("Mysterious Potion", "A mysterious swirling vial of potion")
-    mp5 = item.Regeneration((70, "Mysterious Potion", "A mysterious swirling vial of potion")
+    mp5 = item.Regeneration(70, "Mysterious Potion", "A mysterious swirling vial of potion")
     mp1.putInRoom(w)
     mp2.putInRoom(w)
     mp3.putInRoom(w)
@@ -242,7 +242,7 @@ class Game:
         self.rep_flag = rep_flag
 
     def main(self):
-        createWorld(player)
+        createWorld()
         printSituation(player)
         while player.playing and player.alive:
             try:
