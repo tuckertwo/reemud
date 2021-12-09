@@ -1,4 +1,5 @@
 from txt_parser import good_split_spc, Arg, Command, CmdRunError
+import updater
 import time
 import os
 
@@ -39,7 +40,7 @@ class Attack(Command):
     desc = "Attacks a monster"
     sideeffects = False #appended in a different way
 
-    def func_ap(self, player, _updater, args_parsed):
+    def func_ap(self, player, args_parsed):
         targetName = args_parsed["monster"]
         target = player.location.getMonsterByName(targetName)
         if target:
@@ -52,9 +53,9 @@ class ApplyTo(Command):
     args = [None, Arg("x to y", False, False, True)]
     desc = "applies a potion or spell scroll to a weapon"
     sideeffects = True
-    
-    def func_ap(self, player, _updater, args_parsed):
-        targetName = args_parsed["x to y"] 
+
+    def func_ap(self, player, args_parsed):
+        targetName = args_parsed["x to y"]
         objex = targetName.lower().split(" to ")
         if len(objex) == 2:
             target = player.getItemByName(objex[0])
@@ -80,8 +81,8 @@ class Cast(Command):
     args = [None, Arg("spell scroll", False, False, True)]
     desc = "Cast a spell scroll"
     sideeffects = True
-    
-    def func_ap(self, player, _updater, args_parsed):
+
+    def func_ap(self, player, args_parsed):
         ssname = args_parsed["spell scroll"]
         sscroll = player.getItemByName(ssname)
         if sscroll:
@@ -97,7 +98,7 @@ class Cast(Command):
 
         else:
             raise CmdRunError("you don't have any such spell scroll")
-        
+
 
 
 class ClearScreenCmd(Command):
@@ -112,8 +113,8 @@ class DrinkCmd(Command):
     args = [None, Arg("item", False, False, True)]
     desc = "Drinks a potion"
     sideeffects = True
-    
-    def func_ap(self, player, _updater, args_parsed):
+
+    def func_ap(self, player, args_parsed):
         targetName = args_parsed["item"]
         player.drink(targetName)
 
@@ -121,9 +122,9 @@ class DropCmd(Command):
     args = [None, Arg("item", False, False, True)]
     desc = "Drops an item"
     sideeffects = True
-    
-    def func_ap(self, player, _updater, args_parsed):
-        targetName = args_parsed["item"] 
+
+    def func_ap(self, player, args_parsed):
+        targetName = args_parsed["item"]
         target = player.getItemByName(targetName)
         if target:
             player.location.addItem(target)
@@ -139,7 +140,7 @@ class EchoCmd(Command):
 
     # To-do: re-write the parser to make infinite args actually capture
     # strings instead of split strings
-    def func_ap(self, _p, _u, args_parsed):
+    def func_ap(self, _p, args_parsed):
         print(" ".join(args_parsed["string"]))
 
 class Equip(Command):
@@ -147,10 +148,10 @@ class Equip(Command):
     desc = "Equips a Weapon or Armour Suit"
     sideeffects = True
 
-    def func_ap(self, player, _updater, args_parsed):
+    def func_ap(self, player, args_parsed):
         targetName = args_parsed["item"]
         player.equip(targetName)
-     
+
 
 class Exit(Command):
     args = []
@@ -175,7 +176,7 @@ class GoCmd(Command):
             self.direction = None
         Command.__init__(self)
 
-    def func_ap(self, player, updater, args_parsed):
+    def func_ap(self, player, args_parsed):
         if self.direction is not None:
             direction = self.direction
         else:
@@ -194,7 +195,7 @@ class Help(Command):
         Command.__init__(self)
         self.commands = commands
 
-    def func(self, _p, _u, _cmdstr):
+    def func(self, _p, _cmdstr):
         commands_full = {}
         commands_full.update(self.commands)
         commands_full.update({"help": self}) # Recursion has its limits
@@ -210,7 +211,7 @@ class InspectCmd(Command):
     desc = "Inspects an item"
     sideeffects = False
 
-    def func_ap(self, player, updater, args_parsed):
+    def func_ap(self, player, args_parsed):
         targetName = args_parsed["item"]
         player.inspect(targetName)
 
@@ -219,7 +220,7 @@ class Inventory(Command):
     desc = "Prints the player's inventory"
     sideeffects = False
 
-    def func(self, p, _u, _cmdstr):
+    def func(self, p, _cmdstr):
         return p.showInventory()
 
 class LevelUpCmd(Command):
@@ -227,16 +228,16 @@ class LevelUpCmd(Command):
     desc = "Levels up, if you have enough xp"
     sideeffects = False #appended in a different way
 
-    def func(self, player, _updater, _cmdstr):
+    def func(self, player, _cmdstr):
         player.levelUpHelper()
 
 class Lock(Command):
     args = [None, Arg("object", False, False, True)]
     desc = "Lock a container"
     sideeffects = True
-    
-    def func_ap(self, player, _updater, args_parsed):
-        targetName = args_parsed["object"] 
+
+    def func_ap(self, player, args_parsed):
+        targetName = args_parsed["object"]
         target = player.location.getItemByName(targetName)
         if target:
             if target.container:
@@ -256,15 +257,15 @@ class LookCmd(Command):
     desc = "Look around"
     sideeffects = False
 
-    def func(self, player, _updater, _cmdstr):
+    def func(self, player, _cmdstr):
         printSituation(player)
 
 class Me(Command):
     args = []
     desc = "gives a summary of your condition"
     sideeffects = False
-    
-    def func(self, player, _updater, args_passed):
+
+    def func(self, player, args_passed):
         return player.showStats()
 
 class PauseCmd(Command):
@@ -272,7 +273,7 @@ class PauseCmd(Command):
     desc = "Pause for user input"
     sideeffects = False
 
-    def func_ap(self, p, _u, _args_parsed):
+    def func_ap(self, p, _args_parsed):
         pause()
 
 class PickupCmd(Command):
@@ -280,22 +281,26 @@ class PickupCmd(Command):
     desc = "Picks up an item"
     sideeffects = True
 
-    def func_ap(self, player, updater, args_parsed):
+    def func_ap(self, player, args_parsed):
         targetName = args_parsed["item"]
         target = player.location.getItemByName(targetName)
-        if target:
-            player.pickup(target, updater)
+        if targetName == "all":
+            while len(player.location.items) > 0:
+                player.pickup(player.location.items[0], updater)
         else:
-            raise CmdRunError("no such item")
-          
+            target = player.location.getItemByName(targetName)
+            if target:
+                player.pickup(target, updater)
+            else:
+                raise CmdRunError("no such item")
 
 class PutinCmd(Command):
     args = [None, Arg("x in y", False, False, True)]
     desc = "puts an item in a container"
     sideeffects = True
-    
-    def func_ap(self, player, _updater, args_parsed):
-        targetName = args_parsed["x in y"] 
+
+    def func_ap(self, player, args_parsed):
+        targetName = args_parsed["x in y"]
         objex = targetName.lower().split(" in ")
         if len(objex) == 2:
             target = player.getItemByName(objex[0])
@@ -325,7 +330,7 @@ class SaveCmd(Command):
     desc = "Save the game to a file on disk."
     sideeffects = False
 
-    def func_ap(self, p, _u, args_parsed):
+    def func_ap(self, p, args_parsed):
         with open(args_parsed["file"], "w") as f:
             f.write(repr((p.seed, p.log)))
             f.write("\n")
@@ -335,7 +340,7 @@ class SleepCmd(Command):
     desc = "Wait for a specific time in seconds"
     sideeffects = False
 
-    def func_ap(self, _p, _u, args_parsed):
+    def func_ap(self, _p, args_parsed):
         time.sleep(float(args_parsed["time"]))
 
 class SneakCmd(Command):
@@ -343,25 +348,25 @@ class SneakCmd(Command):
     desc = "Begin sneaking"
     sideeffects = True
 
-    def func(self, _player, _updater, _cmdstr):
+    def func(self, _player, _cmdstr):
         _player.sneak = True
 
 class UnEquip(Command):
     args = [None, Arg("item", False, False, True)]
     desc = "Unequips a Weapon or Armour Suit"
     sideeffects = True
-    
-    def func_ap(self, player, _updater, args_parsed):
+
+    def func_ap(self, player, args_parsed):
         targetName = args_parsed["item"]
         player.unequip(targetName)
-      
+
 class Unlock(Command):
     args = [None, Arg("object", False, False, True)]
     desc = "Unlock a container or door"
     sideeffects = True
-    
-    def func_ap(self, player, _updater, args_parsed):
-        targetName = args_parsed["object"] 
+
+    def func_ap(self, player, args_parsed):
+        targetName = args_parsed["object"]
         target = player.location.getItemByName(targetName)
         if target:
             if target.door or target.container:
@@ -382,14 +387,14 @@ class WaitCmd(Command):
     desc = "Waits for time to pass"
     sideeffects = True
 
-    def func_ap(self, _p, u, args_parsed):
+    def func_ap(self, _p, args_parsed):
         if "time" in args_parsed:
             if type(args_parsed["time"]) == int:
                 time = args_parsed["time"]
         else:
             time = 1
         for i in range(time+1):
-            u.updateAll()
+            updater.updateAll()
 
 commands = {
     "go": GoCmd(None),
@@ -412,6 +417,7 @@ commands = {
     "look": LookCmd(),
     "sneak": SneakCmd(),
     "pickup": PickupCmd(),
+    "take": PickupCmd(),
     "drop": DropCmd(),
     "put": PutinCmd(),
     "drink": DrinkCmd(),

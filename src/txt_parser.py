@@ -58,8 +58,8 @@ class Command():
             else:
                 self.args_hr = ""
 
-    def func(self, p, u, cmdstr):
-        return self.func_ap(p, u, self.cmdparse(cmdstr))
+    def func(self, p, cmdstr):
+        return self.func_ap(p, self.cmdparse(cmdstr))
 
     def cmdparse(self, cmdstr):
         # Awful mutable data stuff ahead

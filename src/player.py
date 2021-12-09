@@ -42,7 +42,7 @@ class Player:
         while self.xp >= 100:
             self.xp -= 100
             self.levelUp()
-            
+
     def levelUp(self):
         self.level += 1
         print("You have enough xp to level up!")
@@ -83,7 +83,7 @@ class Player:
                 print("Error: Stat not found")
                 notdone = True
         self.log.append(cmdstr)
-            
+
     def goDirection(self, direction):
         newloc = self.location.getDestination(direction)
         if newloc is None:
@@ -133,7 +133,7 @@ class Player:
         item = self.location.getItemByName(name)
         if not item:
             item = self.getItemByName(name) #checks room before inventory
-        
+
         if item:
             item.describe()
         else:
@@ -266,7 +266,7 @@ class Player:
         if "poison" in self.condition:
             dam = int(random.random() * self.condition["poison"])
             print("You take " + str(dam) + " points of poison damage")
-            self.takeDamage(dam, True)    
+            self.takeDamage(dam, True)
         if "fire" in self.condition:
             dam = int(random.random() * self.condition["fire"])
             print("You take " + str(dam) + " damage from the fire")
@@ -297,7 +297,7 @@ class Player:
                 n += 1
             print("Your health is at " + str(self.health) + " points")
             print()
-            try: 
+            try:
                 if self.game.replay:
                     cmdstr   = self.game.replay[0]
                     self.game.replay   = self.game.replay[1:]
@@ -332,25 +332,25 @@ class Player:
                             attk = j.findAttack()
                             if not (attk == None):
                                 if random.random() < attk[3]:
-                                        print(j.name + attk[0] + " for " + str(self.takeDamage(attk[2])) + " damage!") 
+                                        print(j.name + attk[0] + " for " + str(self.takeDamage(attk[2])) + " damage!")
                                         if not (attk[6] == None):
                                             self.applyEffects(attk[6])
                                 else:
                                     print(j.name + attk[1])
-                                
-                    
+
+
                 else:
                     print("Well I guess you're doing nothing (type Help for battle-commands)")
-                        
+
             except CmdParseError as e: # Pass all other errors through, I guess.
                 print("Error parsing command: " + str(e))
             except CmdRunError as e:
                 print("Error running command: " + str(e))
             except EOFError:
                 print("End-Of_File Error")
-                
 
-                
+
+
 
 class Flee(Command):
     desc = "Flees the battle"
@@ -378,7 +378,7 @@ class Flee(Command):
 
 
 
-        
+
 class WaitCmd(Command):
     args = [None]
     desc = "Waits for time to pass"
@@ -386,12 +386,12 @@ class WaitCmd(Command):
 
     def func_ap(self, _p, u, useless):
         print("You do nothing in battle")
-        
+
 class Disarm(Command):
     args = [None, Arg("monster", False, False, True)]
     desc = "Attempt to disarm a monster's weapons"
-    sideeffects = True       
-    
+    sideeffects = True
+
     def func_ap(self, player, _updater, args_parsed):
         targetName = args_parsed["monster"]
         target = player.location.getMonsterByName(targetName)
@@ -420,12 +420,12 @@ class Hit(Command):
                 print("You try to hit " + targetName + " but miss")
         else:
             raise CmdRunError("no such monster")
-            
+
 class Cast(Command):
     args = [None, Arg("spell scroll", False, False, True)]
     desc = "Cast a spell scroll"
     sideeffects = True
-    
+
     def func_ap(self, player, _updater, args_parsed):
         ssname = args_parsed["spell scroll"]
         sscroll = player.getItemByName(ssname)
@@ -450,8 +450,8 @@ class Cast(Command):
                             if m == 2:
                                 print(x.name + " is turned into a skeleton!")
                                 monster.Skeleton(player.location)
-                            
-                            x.die(False)    
+
+                            x.die(False)
                 else:
                     print(sscroll.bdes)
                     for x in player.location.getAggro():
@@ -464,8 +464,8 @@ class Cast(Command):
                     player.removeItem(sscroll)
         else:
             raise CmdRunError("you don't have any such spell scroll")
-        
-      
+
+
 
 
 attackcommands = {
@@ -496,12 +496,12 @@ attackcommands = {
     "me": commands.Me(),
     "exit": commands.Exit(),
     "save": commands.SaveCmd(),
-    
+
     "wait": WaitCmd(),
     "hit": Hit(),
     "disarm": Disarm(),
     "cast": Cast(),
-    
+
 }
-attackcommands["help"] = commands.Help(attackcommands) 
+attackcommands["help"] = commands.Help(attackcommands)
 
