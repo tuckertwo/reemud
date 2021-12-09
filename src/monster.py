@@ -115,7 +115,7 @@ class Monster:
     def cullAttacks(self):
         for x in self.attacks:
             if x[5] < 1:
-                attacks.remove(x)
+                self.attacks.remove(x)
 
 class Passive(Monster):
     def findAttack(self): #only should be used in the case of nonviolent monsters
@@ -142,7 +142,7 @@ class Smart(Monster):
                         self.inventory.remove(m)
         Monster.effectsOccur(self)
             
-    def update():
+    def update(self):
         if len(self.room.items) > 0:
             x = random.choice(self.room.items)
             if x.container:
@@ -185,10 +185,10 @@ class Smart(Monster):
                         found = True
             if not found:
                 self.triesToFlee()
-        elif len(attacks) == 0:
+        elif len(self.attacks) == 0:
             self.triesToFlee()
         else:
-            return findAttackHelper()
+            return self.findAttackHelper()
     
     def findAttackHelper(self): #made a different class so easily replacable
         x = random.randrange(len(self.attacks))
@@ -229,8 +229,8 @@ class Cultist(Smart):
     def __init__(self, room, armor=None):
         Smart.__init__(self, True, random.choice(adjectives) + "cultist", 5, room, 50, 1, armor)
         self.Punch()
-        self.addAttack(" hits you with a magical Fire Bolt ", " tries to hit you with a spell but misses ", 1, .4, limit=1, effects=[fire, 5])
-        self.addAttack(" hits you with a magical Witch Bolt ", " tries to hit you with a spell but misses ", 8, .4, limit=3)
+        self.addAttack(" hits you with a magical Fire Bolt", " tries to hit you with a spell but misses ", 4, .4, False, 1, [["fire", 5]])
+        self.addAttack(" hits you with a magical Witch Bolt", " tries to hit you with a spell but misses ", 8, .4, False, 3)
  
 class Ork(Dumb):
     def __init__(self, room, armor=None):
@@ -240,7 +240,7 @@ class Ork(Dumb):
 class Rat(Animal):
     def __init__(self, room, name="Rat"):
         Monster.__init__(self, False, name, 3, room, 10)
-        self.addAttack(" bites you ", " tries to bite you, but only gnaws on your shoe", 4, .3)
+        self.addAttack(" bites you", " tries to bite you, but only gnaws on your shoe", 4, .3)
         
     def update(self):
         self.effectsOccur()

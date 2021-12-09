@@ -35,12 +35,12 @@ def createWorld():
     itm6 = item.Door(itm5, "north", c)
     itm6.putInRoom(b)
     monster.Skeleton(c)
-    monster.Skeledton(c)
+    monster.Skeleton(c)
     
     #blood river shrine
     d = Room("The blood river seems to have its source here, beneath a gigantic statue of a grim-faced bronze king. Ghostly chanting echoes from afar.")
     Room.connectRooms(c, "north", d)
-    monster.Cultist(d)
+    monster.Cultist(a)
     
     
     
