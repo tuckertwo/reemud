@@ -241,6 +241,7 @@ class HeadCultist(Murderous):
         self.addAttack(" hits you with a magical Fire Bolt", " tries to hit you with a spell but misses ", 4, .5, False, 4, [["fire", 5]])
         self.addAttack(" hits you with a magical Witch Bolt", " tries to hit you with a spell but misses ", 8, .5, False, 5)
         self.addAttack(" casts FIREBALL!", " tries to hit you with a spell but misses ", 9, 1, False, 1, [["fire", 10]])
+        self.addAttack(" casts poison cloud", " tries to hit you with a spell but misses ", 9, 1, False, 1, [["poison", 10]])
         
 
 class Ork(Dumb):
@@ -276,3 +277,23 @@ class Sheep(Passive):
         
 
         #self, sverb, fverb, damage, prob, disarmable=False, limit=9999, effects=None)
+        
+class BigBeast(Dumb):
+    def __init__(self, name, room):
+        Dumb.__init__(self, True, name, 20, room, 300, 10, None, 0, 20)
+        self.Punch()
+        self.addAttack(" bites you", " tries to bite you, but only gnaws on your shoe", 14, .3)
+        self.addAttack(" pounds you into the ground", " tries to punch you", 14, .3)
+        
+class Ghost(Undead):
+    def __init__(self, room, armor=None):
+        Undead.__init__(self, True, random.choice(adjectives) + "ghost", 15, room, 100, 1, armor)
+        self.addAttack(" chokes you with its chilly fingers", " swoops down at you but misses", 14, .3)
+
+class Zombie(Undead):
+    def __init__(self, room, armor=None):
+        Undead.__init__(self, True, random.choice(adjectives) + "zombia", 15, room, 100, 1, armor)
+        self.Punch()
+        
+class LichKing(Murderous):
+    

@@ -205,6 +205,7 @@ class LockedChest(Container):
         if locked:
             print(self.desc)
             print("The " + self.name + " is locked")
+            print("It needs " + self.key.name + " to open")
             print()
         else:
             Container.describe(self)
@@ -250,6 +251,11 @@ class Door(Item):
                 player.location.removeItem(self)
                 return True
         print("You don't have the right key")
+        
+    def describe(self):
+        print(self.desc)
+        print("It needs " + self.key.name + " to open")
+        print()
             
         
 class MagicScroll(Item):

@@ -40,7 +40,7 @@ def createWorld():
     #blood river shrine
     d = Room("The blood river seems to have its source here, beneath a gigantic statue of a grim-faced bronze king. Ghostly chanting echoes from afar.")
     Room.connectRooms(c, "north", d)
-    monster.Cultist(a)
+    monster.Cultist(d)
     
     #converted storeroom
     e = Room("A dingy store-room. Two brown sleeping bags lie on the ground.")
@@ -68,14 +68,22 @@ def createWorld():
     #meeting hall
     i = Room("A large, impressive-looking stone chair stands against the north wall, at the head of a long table. A large brass brazier lights the room.")
     Room.connectRooms(g, "south", i)
+    IronKey = item.key("Iron Key")
+    x = HeadCultist(i)
+    x.giveItem(IronKey)
     
     #Boggle's room
     j = Room("This room bears all the signs of having once been a bedroom, but its furnishings have been smashed and burned into uselessness")
     Room.connectRooms(h, "south", j)
+    monster.BigBeast("Boggle", j)
     
     #w corridor n
     k = Room("A shadowy corridor")
     Room.connectRooms(g, "north", k)
+    
+    #infuriating locked chest room
+    kl = Room("An empty room except for a chest")
+    Room.connectRooms(k, "west", kl)
     
     #e corridor n-Signed
     l = Room("A dusky corridor")
@@ -112,6 +120,8 @@ def createWorld():
     
     #hidden spiral staircase
     r = Room("A winding spiral staircase goes down. Beside it is a very steep ramp. The necromancer's dungeon is ADA-compliant")
+    qdoor = item.Door(IronKey, "north", r)
+    qdoor.putInRoom(q)
     
     #morgue
     s = Room("This room is filled with crude wooden coffins. It reeks of carrion.")
@@ -124,11 +134,13 @@ def createWorld():
     #prison block
     t = Room("A rusted and disused prison block")
     Room.connectRooms(s, "east", t)
+    monster.BigBeast("Hulking Ogre", t)
     
     #ghost room
     u = Room("A dusty room full of old furniture. It smells of age and mildew.")
     Room.connectRooms(sr, "east", u)
     Room.connectRooms(t, "north", u)
+    monster.Ghost(u)
     
     #preperation room
     v = Room("A large stone slab sits in the center of this room. It is stained with dried blood")
@@ -137,14 +149,29 @@ def createWorld():
     #alchemist's laboratory
     w = Room("This room looks like a small laboratory. It smells of formaldehyde. A wide table is cluttered with bubbling potions")
     Room.connectRooms(v, "west", w)
+    mp1 = item.HealingPotion(70, "Mysterious Potion", "A mysterious swirling vial of potion")
+    mp2 = item.Poison(70, "Mysterious Potion", "A mysterious swirling vial of potion")
+    mp3 = item.Antidote("Mysterious Potion", "A mysterious swirling vial of potion")
+    mp4 = item.Water("Mysterious Potion", "A mysterious swirling vial of potion")
+    mp5 = item.Regeneration((70, "Mysterious Potion", "A mysterious swirling vial of potion")
+    mp1.putInRoom(w)
+    mp2.putInRoom(w)
+    mp3.putInRoom(w)
+    mp4.putInRoom(w)
+    mp5.putInRoom(w)
+    
     
     #alchemist's bedroom
     x = Room("A simple bedroom. A dirty shovel leans against the wall.")
     Room.connectRooms(v, "east", x)
+    AncientKey = item.Key("Ancient Key")
+    AncientKey.putInRoom(x)
     
     #Barrow1
     y = Room("A circular barrow. Along the walls are niches inhabited by ancient corpses.\nA sign stuck in the ground says 'Welcome to the barrow!!' with a smiley face crudely drawn")
     Room.connectRooms(v, "north", y)
+    vdoor = item.Door(AncientKey, "north", y)
+    vdoor.putInRoom(v)
     
     #Barrow2
     yy = Room("A circular barrow. Along the walls are niches inhabited by ancient corpses.")
@@ -159,6 +186,7 @@ def createWorld():
     
     y5 = Room("A circular barrow. Along the walls are niches inhabited by ancient corpses.")
     Room.connectRooms(y, "west", y5)
+    Room.connectRooms(y5, "north", y5)
     
     y6 = Room("A circular barrow. Along the walls are niches inhabited by ancient corpses.")
     Room.connectRooms(yyyy, "north", y6)
