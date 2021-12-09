@@ -62,8 +62,8 @@ def createWorld(player):
     #meeting hall
     i = Room("A large, impressive-looking stone chair stands against the north wall, at the head of a long table. A large brass brazier lights the room.")
     Room.connectRooms(g, "south", i)
-    IronKey = item.key("Iron Key")
-    x = HeadCultist(i)
+    IronKey = item.Key("Iron Key")
+    x = monster.HeadCultist(i)
     x.giveItem(IronKey)
 
     #Boggle's room
@@ -147,7 +147,7 @@ def createWorld(player):
     mp2 = item.Poison(70, "Mysterious Potion", "A mysterious swirling vial of potion")
     mp3 = item.Antidote("Mysterious Potion", "A mysterious swirling vial of potion")
     mp4 = item.Water("Mysterious Potion", "A mysterious swirling vial of potion")
-    mp5 = item.Regeneration((70, "Mysterious Potion", "A mysterious swirling vial of potion")
+    mp5 = item.Regeneration(70, "Mysterious Potion", "A mysterious swirling vial of potion")
     mp1.putInRoom(w)
     mp2.putInRoom(w)
     mp3.putInRoom(w)

@@ -277,7 +277,7 @@ class Game:
                 print("Error running command: " + str(e))
             except EOFError:
                 print()
-                commands["exit"].func(player, updater, "^D")
+                commands["exit"].func(player, "^D")
 
 
 

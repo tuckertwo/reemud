@@ -106,7 +106,7 @@ class ClearScreenCmd(Command):
     desc = "Clear the screen"
     sideeffects = False
 
-    def func(self, _player, _updater, _cmdstr):
+    def func(self, _player, cmdstr):
         clear()
 
 class DrinkCmd(Command):
@@ -159,7 +159,7 @@ class Exit(Command):
     sideeffects = False # Well, really it does but we don't want it recorded in
                         # the save nevertheless
 
-    def func(self, p, _u, _cmdstr):
+    def func(self, p, _cmdstr):
         p.playing = False
 
 class GoCmd(Command):

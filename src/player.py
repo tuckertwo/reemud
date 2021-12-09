@@ -369,7 +369,7 @@ class Flee(Command):
             self.direction = None
         Command.__init__(self)
 
-    def func_ap(self, player, updater, args_parsed):
+    def func_ap(self, player, args_parsed):
         if self.direction is not None:
             direction = self.direction
         else:
@@ -394,7 +394,7 @@ class Disarm(Command):
     desc = "Attempt to disarm a monster's weapons"
     sideeffects = True
 
-    def func_ap(self, player, _updater, args_parsed):
+    def func_ap(self, player, args_parsed):
         targetName = args_parsed["monster"]
         target = player.location.getMonsterByName(targetName)
         if target:
@@ -407,7 +407,7 @@ class Hit(Command):
     desc = "Hit the monster."
     sideeffects = True
 
-    def func_ap(self, player, _updater, args_parsed):
+    def func_ap(self, player, args_parsed):
         targetName = args_parsed["monster"]
         target = player.location.getMonsterByName(targetName)
         if target:
@@ -428,7 +428,7 @@ class Cast(Command):
     desc = "Cast a spell scroll"
     sideeffects = True
 
-    def func_ap(self, player, _updater, args_parsed):
+    def func_ap(self, player, args_parsed):
         ssname = args_parsed["spell scroll"]
         sscroll = player.getItemByName(ssname)
         if sscroll:

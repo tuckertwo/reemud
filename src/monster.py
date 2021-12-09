@@ -293,17 +293,17 @@ class Zombie(Undead):
     def __init__(self, room, armor=None):
         Undead.__init__(self, True, random.choice(adjectives) + "zombie", 15, room, 100, 1, armor)
         self.Punch()
-        
+
 
 class LichKing(Murderous):
     def __init__(self, room):
         Murderous.__init__(self, True, random.choice(adjectives) + "Lich King", 250, room, 9900, 1, None)
-        
+
     def die(self, inBattle=True):
         print("The lich king screams out 'Noooo! I'm dying!'")
         print("The lich king dies")
         print("Congrats, I guess. You won the game. Now you can go home to your village.")
-        
+
     def FindAttack(self):
         print("The Lich King raises a zombie out of the cauldron")
         Zombie(self.room)
