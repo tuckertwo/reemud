@@ -297,7 +297,7 @@ class Zombie(Undead):
 
 class LichKing(Murderous):
     def __init__(self, room):
-        Murderous.__init__(self, True, random.choice(adjectives) + "Lich King", 250, room, 9900, 1, None)
+        Murderous.__init__(self, True, "Lich King", 250, room, 9900, 1, None)
 
     def die(self, inBattle=True):
         print("The lich king screams out 'Noooo! I'm dying!'")

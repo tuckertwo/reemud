@@ -120,6 +120,8 @@ def createWorld():
     n = Room("A large table is cluttered with magical scrolls. A cauldron smolders over a hearth. A large purple wizard hat sits on a chair.")
     Room.connectRooms(l, "north", n)
     monster.BigBeast("magical abomination", n)
+    blackkey = item.Key("Black Key")
+    blackkey.putInRoom(n)
 
     #barracks
     o = Room("An open chamber with many bunk beds, lined up in rows")
@@ -135,6 +137,9 @@ def createWorld():
     p = Room("A thick carpet covers the stone floor in this room. A bed is canopied by silken curtains.")
     Room.connectRooms(o, "north", p)
     monster.HeadCultist(p)
+    x = item.LockedChest("fancy locked chest", "a locked chest that is fancy", blackkey, [item.Weapon("Epic sword", "This sword is so cool, its surprising its wielded by an ordinary skeleton", 100, 3)])
+    
+    x.putInRoom(p)
 
     #commemoration hall
     q = Room("A high and solemn hall. Four tapestries adorn the walls. Two depict a grey star on a black background. The other two show scenes of black-robed priests plunging corpses into a huge undead cauldron, after which the corpses walk away. In the center of the room is another huge bronze statue with an iron crown.")

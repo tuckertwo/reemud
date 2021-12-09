@@ -326,6 +326,10 @@ class Player:
                             if k.health <= 0:
                                 if k.isDead():
                                     xp0 = int(k.xp / (1 + int(self.level/3)))
+                                    if k.name == "Lich King":
+                                        self.playing = False
+                                        k.die()
+                                        input("Please press 'enter' to continue.")
                                     k.die()
                                     if xp0 > 0:
                                         print("You gain " + str(xp0) + " xp")
