@@ -1,7 +1,7 @@
 NOTICE: This is an incomplete game. However, I daresay that the reason we did not complete the game on time was due to excessive ambition, rather than laziness.
 
-Tucker and I collaborated over Github, primarily. Statistics can be found at https://github.com/tuckertwo/reemud/pulse (wherein I am AtomicMoloch and Tucker is tuckertwo). It is hard to precisely delimit what I did and what Tucker did, for he largely worked on structural improvements, while I implemented specific features. Every single feature noted below used at least some of my code and at least some of Tucker's code.
--Kavi W.
+We collaborated over Github, primarily. Statistics can be found at https://github.com/tuckertwo/reemud/pulse and, more generally, in the repository's commit history (wherein I am AtomicMoloch and Tucker is tuckertwo). It is hard to precisely delimit what either of us did, for Tucker largely worked on structural improvements, while I implemented specific features. Every single feature noted below was a joint work, using some of both of our code.
+-Kavi W. and Tucker T.
 
 FEATURES FROM THE MENU OF POSSIBLE IMPROVEMENTS:	
 
