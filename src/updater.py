@@ -18,7 +18,7 @@ def allocateLoot():
         loot.append(item.Weapon("Sword", "A nondescript metal sword.", int(random.random() * 20), 3))
         x = item.Weapon("Sword", "A nondescript metal sword.", int(random.random() * 20), 3)
         y = item.Poison(int(random.random() * 15))
-        y.applyTo(x)
+        y.applyTo(x, False)
         loot.append(x)
         loot.append(item.HealingPotion(int(random.random() * 15)))
         loot.append(item.Poison(int(random.random() * 15)))

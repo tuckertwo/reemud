@@ -111,11 +111,12 @@ class Poison(Potion):
         print("Power: " + str(self.amount))
         print()
 
-    def applyTo(self, weapon):
+    def applyTo(self, weapon, byPlayer=True):
         if weapon.effects == None:
             weapon.effects = []
         weapon.effects.append(["poison", self.amount])
-        print("The " + self.name + " has been applied to the " + weapon.name)
+        if byPlayer:
+            print("The " + self.name + " has been applied to the " + weapon.name)
 
 class Antidote(Potion):
     antidote = True
