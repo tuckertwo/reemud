@@ -239,7 +239,7 @@ def createWorld():
     Room.connectRooms(y6, "north", z)
     monster.LichKing(z)
 
-    player.location = z
+    player.location = a
     updater.allocateLoot()
 
 class Game:
