@@ -87,6 +87,7 @@ def createWorld():
     kl = Room("An empty room except for a chest")
     Room.connectRooms(k, "west", kl)
     x = item.LockedChest("infuriating locked chest", "an infuriating locked chest", tinykey, [itm01, itm01])
+    x.putInRoom(kl)
 
     #e corridor n-Signed
     l = Room("A dusky corridor")
@@ -137,7 +138,7 @@ def createWorld():
     p = Room("A thick carpet covers the stone floor in this room. A bed is canopied by silken curtains.")
     Room.connectRooms(o, "north", p)
     monster.HeadCultist(p)
-    x = item.LockedChest("fancy locked chest", "a locked chest that is fancy", blackkey, [item.Weapon("Epic sword", "This sword is so cool, its surprising its wielded by an ordinary skeleton", 100, 3)])
+    x = item.LockedChest("fancy locked chest", "a locked chest that is fancy", blackkey, [item.Weapon("Epic sword", "A sword known only through legend. How'd it end up here?", 100, 3)])
     
     x.putInRoom(p)
 
