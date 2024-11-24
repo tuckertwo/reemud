@@ -220,7 +220,7 @@ def createWorld():
     Room.connectRooms(yyy, "north", yyyy)
 
     y5 = Room("A circular barrow. Along the walls are niches inhabited by ancient corpses.")
-    Room.connectRooms(y, "west", y5)
+    Room.connectRooms(yyy, "east", y5)
     Room.connectRooms(y5, "north", y5)
 
     y6 = Room("A circular barrow. Along the walls are niches inhabited by ancient corpses.")
@@ -229,7 +229,6 @@ def createWorld():
     y7 = Room("A circular barrow. Along the walls are niches inhabited by ancient corpses.")
     Room.connectRooms(yy, "north", y7)
     Room.connectRooms(yy, "east", y7)
-    Room.connectRooms(yy, "west", y7) #I don't care about geometry
 
 
 
