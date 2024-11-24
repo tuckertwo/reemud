@@ -275,7 +275,10 @@ class Player:
             dam = int(random.random() * self.condition["fire"])
             print("You take " + str(dam) + " damage from the fire")
             self.takeDamage(dam, True)
-            self.condition["fire"] -= 2
+            if self.condition["fire"] > 4:
+                self.condition["fire"] = floor(self.condition["fire"] / 4)
+            else:
+                self.condition["fire"] -= 2
             if self.condition["fire"] < 0:
                 print("The fire is extinguished")
                 self.condition.pop("fire")
