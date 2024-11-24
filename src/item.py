@@ -35,6 +35,7 @@ class Weapon(Item):
     def describe(self):
         print(self.desc)
         print("Power: " + str(self.damage))
+        print("Weight: " + str(self.weight))
         if not self.effects == None:
             poison = False
             fire = False
