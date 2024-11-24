@@ -220,7 +220,7 @@ class LockedChest(Container):
                     self.locked = False
                     self.name = "unlocked " + self.name
                     return True
-                print("You do not have the key to unlock the " + self.name)
+                print("The " + k.name + " doesn't fit in the keyhole")
         else:
             print("The " + self.name + " isn't locked")
 
