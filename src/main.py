@@ -200,7 +200,6 @@ def createWorld():
 
     #Barrow1
     y = Room("A circular barrow. Along the walls are niches inhabited by ancient corpses.\nA sign stuck in the ground says 'Welcome to the barrow!!' with a smiley face crudely drawn")
-    Room.connectRooms(v, "north", y)
     vdoor = item.Door(AncientKey, "north", y)
     vdoor.putInRoom(v)
     for x in range(5):
