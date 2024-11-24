@@ -140,7 +140,7 @@ class Smart(Monster):
             for m in self.inventory:
                 if m.potion:
                     if m.antidote:
-                        self.condition.remove("poison")
+                        self.condition.pop("poison")
                         self.inventory.remove(m)
         Monster.effectsOccur(self)
 
