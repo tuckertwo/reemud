@@ -281,9 +281,10 @@ class Player:
             hal = int(random.random() * self.condition["regeneration"])
             print("You regenerate " + str(hal) + " hp")
             self.heal(hal)
-            self.condition["regenerate"] -= 2
-            if self.condition["regenerate"] < 0:
+            self.condition["regeneration"] -= 2
+            if self.condition["regeneration"] < 0:
                 print("The regeneration wears off")
+                self.condition.pop("regeneration")
     def attackMonster(self, mon, attacked=False):
         mon.agg = True
         if not attacked:
