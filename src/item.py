@@ -198,13 +198,13 @@ class LockedChest(Container):
         Container.__init__(self, name, desc, contents, weight)
 
     def getItemByName(self, targetName):
-        if locked:
+        if self.locked:
             return False
         else:
             return Container.getItemByName(self, targetName)
 
     def describe(self):
-        if locked:
+        if self.locked:
             print(self.desc)
             print("The " + self.name + " is locked")
             print("It needs " + self.key.name + " to open")
@@ -212,23 +212,24 @@ class LockedChest(Container):
         else:
             Container.describe(self)
 
-    def unlock(self, keys):
-        if locked:
+    def unlock(self, keys, player):
+        if self.locked:
             for k in keys:
                 if k.name == self.key.name:
                     print("You unlock the " + self.name + " with " + k.name)
-                    locked = False
+                    self.locked = False
+                    self.name = "unlocked " + self.name
                     return True
                 print("You do not have the key to unlock the " + self.name)
         else:
             print("The " + self.name + " isn't locked")
 
     def lock(self, keys, player): #some wandering monsters take items from unlocked chests
-        if not locked:
+        if not self.locked:
             for k in keys:
                 if k.name == self.key.name:
                     print("You lock the " + self.name + " with " + k.name)
-                    locked = True
+                    self.locked = True
                     return True
                 print("You do not have the key to lock the " + self.name)
         else:
