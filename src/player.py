@@ -3,6 +3,7 @@ import commands
 from txt_parser import CmdParseError, CmdRunError, good_split_spc, abbrev_cmd, Arg, Command
 import updater
 import monster
+import math
 
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -45,6 +46,7 @@ class Player:
 
     def levelUp(self):
         self.level += 1
+        self.health += math.floor(0.5 * (self.maxhealth - self.health))
         print("You have enough xp to level up!")
         self.showStats()
         print("What stat would you like to improve?")
