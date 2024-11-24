@@ -450,7 +450,7 @@ class Cast(Command):
                 elif sscroll.effect[0] == "dam":
                     print("You let loose destruction on all your opponents!")
                     for x in player.location.getAggro():
-                        print(x.name + " takes " + str(x.takeDamage(sscroll.amt)) + " damage!")
+                        print(x.name + " takes " + str(x.takeDamage(sscroll.amt + 10 * player.skill[3])) + " damage!")
                 elif sscroll.effect[0] == "polymorph":
                     for x in player.location.getAggro():
                         if not (x.name == "Lich King"):
