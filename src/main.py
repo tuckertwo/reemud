@@ -203,30 +203,32 @@ def createWorld():
     y = Room("A circular barrow. Along the walls are niches inhabited by ancient corpses.\nA sign stuck in the ground says 'Welcome to the barrow!!' with a smiley face crudely drawn")
     vdoor = item.Door(AncientKey, "north", y)
     vdoor.putInRoom(v)
-    for x in range(5):
+    for _ in range(5):
         monster.Skeleton(y)
         monster.Zombie(y)
         monster.Ghost(y)
 
     #Barrow2
-    yy = Room("A circular barrow. Along the walls are niches inhabited by ancient corpses.")
+    yy = Room("circular barrow. Along the walls are niches inhabited by ancient corpses.")
     Room.connectRooms(y, "north", yy)
 
-    yyy = Room("A circular barrow. Along the walls are niches inhabited by ancient corpses.")
-    Room.connectRooms(y, "west", yy)
+    yyy = Room("circular barrow. Along the walls are niches inhabited by ancient corpses.")
+    Room.connectRooms(y, "west", yyy)
 
-    yyyy = Room("A circular barrow. Along the walls are niches inhabited by ancient corpses.")
+    yyyy = Room("circular barrow. Along the walls are niches inhabited by ancient corpses.")
     Room.connectRooms(yyy, "west", yyyy)
     Room.connectRooms(yyy, "north", yyyy)
 
-    y5 = Room("A circular barrow. Along the walls are niches inhabited by ancient corpses.")
-    Room.connectRooms(yyy, "east", y5)
+    y5 = Room("circular barrow. Along the walls are niches inhabited by ancient corpses.")
+    Room.connectRooms(y, "east", y5)
     Room.connectRooms(y5, "north", y5)
 
-    y6 = Room("A circular barrow. Along the walls are niches inhabited by ancient corpses.")
+    y6 = Room("circular barrow. Along the walls are niches inhabited by ancient corpses.")
     Room.connectRooms(yyyy, "north", y6)
+    monster.Ghost(y6)
+    monster.Ghost(y6)
 
-    y7 = Room("A circular barrow. Along the walls are niches inhabited by ancient corpses.")
+    y7 = Room("circular barrow. Along the walls are niches inhabited by ancient corpses.")
     Room.connectRooms(yy, "north", y7)
     Room.connectRooms(yy, "east", y7)
 
@@ -234,10 +236,10 @@ def createWorld():
 
     #BARROW OF THE LICH KING!!!!!!!
     z = Room("A grand hall, lit only by the sickly green bubbling of a huge cauldron, ornately inscribed with skulls. The ceiling is lost in darkness. At the far end of the hall stands a massive stone-hewn throne. A sign on top of it says 'Throne of the Lich King'")
-    Room.connectRooms(z, "north", y6)
+    Room.connectRooms(y6, "north", z)
     monster.LichKing(z)
 
-    player.location = a
+    player.location = z
     updater.allocateLoot()
 
 class Game:
