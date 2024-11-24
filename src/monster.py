@@ -142,6 +142,7 @@ class Smart(Monster):
                     if m.antidote:
                         self.condition.pop("poison")
                         self.inventory.remove(m)
+                        print(self.name + " drinks an antidote!")
         Monster.effectsOccur(self)
 
     def update(self):
@@ -304,7 +305,20 @@ class LichKing(Murderous):
         print("The lich king dies")
         print("Congrats, I guess. You won the game. Now you can go home to your village.")
 
-    def FindAttack(self):
-        print("The Lich King raises a zombie out of the cauldron")
-        Zombie(self.room)
+    def findAttack(self):
+        match random.randint(1, 4):
+            case 1:
+                print("The Lich King raises a skeleton out of the cauldron!")
+                Skeleton(self.room)
+            case 2:
+                print("The Lich King raises a ghost out of the cauldron!")
+                Ghost(self.room)
+            case _:
+                print("The Lich King raises a zombie out of the cauldron!")
+                Zombie(self.room)
         return None
+
+    def update(self):
+        self.effectsOccur()
+        if self.health <= 0:
+            self.die(False)
