@@ -276,7 +276,7 @@ class Player:
             print("You take " + str(dam) + " damage from the fire")
             self.takeDamage(dam, True)
             if self.condition["fire"] > 4:
-                self.condition["fire"] = floor(self.condition["fire"] / 4)
+                self.condition["fire"] = math.floor(self.condition["fire"] / 4)
             else:
                 self.condition["fire"] -= 2
             if self.condition["fire"] < 0:
