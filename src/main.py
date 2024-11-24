@@ -138,7 +138,7 @@ def createWorld():
     p = Room("A thick carpet covers the stone floor in this room. A bed is canopied by silken curtains.")
     Room.connectRooms(o, "north", p)
     monster.HeadCultist(p)
-    x = item.LockedChest("fancy locked chest", "a locked chest that is fancy", blackkey, [item.Weapon("Epic sword", "A sword known only through legend. How'd it end up here?", 100, 3)])
+    x = item.LockedChest("fancy locked chest", "a locked chest that is fancy", blackkey, [item.Weapon("Legendary sword", "A sword known through legend, but it's not featured in any epics", 50, 2)])
     
     x.putInRoom(p)
 

@@ -16,7 +16,7 @@ def allocateLoot():
     loot = []
     for i in range(6):
         loot.append(item.Weapon("Sword", "A nondescript metal sword.", int(random.random() * 20), 3))
-        x = item.Weapon("Sword", "A nondescript metal sword.", int(random.random() * 20), 3)
+        x = item.Weapon("Sword", "A nondescript metal sword.", int(random.random() * 20), 2)
         y = item.Poison(int(random.random() * 15))
         y.applyTo(x, False)
         loot.append(x)
@@ -28,7 +28,7 @@ def allocateLoot():
         loot.append(item.DamageScroll(int(random.random() * 20)))
         loot.append(item.PoisonScroll(int(random.random() * 15)))
         loot.append(item.Fireball(int(random.random() * 20)))
-    loot.append(item.Weapon("Epic sword", "This sword is so cool, its surprising its wielded by an ordinary skeleton", 100, 3))
+    loot.append(item.Weapon("Epic sword", "This sword is so cool, its surprising its wielded by an ordinary skeleton", 100, 2))
     while len(loot) > 0:
         x = random.randrange(len(loot))
         y = random.choice(updates)
