@@ -223,7 +223,7 @@ class Player:
     def takeDamage(self, amt, ignorearmor=False):
         dam = int(random.random() * amt) + 1
         if not ((self.armor == None) or ignorearmor):
-            dam = int(dam / self.armor.stren)
+            dam = int(dam / (self.armor.stren + (self.skill[2] * 0.2)))
         self.health -= dam
         if self.health <= 0:
             print("You have died.")
