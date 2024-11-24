@@ -516,6 +516,7 @@ attackcommands = {
 
     "wait": WaitCmd(),
     "hit": Hit(),
+    "attack": Hit(),
     "disarm": Disarm(),
     "cast": Cast(),
 
