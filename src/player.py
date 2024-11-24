@@ -479,7 +479,7 @@ class Cast(Command):
 
 
 attackcommands = {
-    "flee": Flee(None), #flee differs from  go in that flee doesn't update monster positions
+    #"flee": Flee(None), #flee differs from  go in that flee doesn't update monster positions
     "north": Flee("north"),
     "n": Flee("north"),
     "south": Flee("south"),
