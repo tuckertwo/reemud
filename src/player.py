@@ -208,7 +208,7 @@ class Player:
         print("Constitution: +" + str(self.skill[2]))
         print("Intelligence: +" + str(self.skill[3]))
         print()
-        print("Sneaking: " + self.sneak)
+        print("Sneaking: " + str(self.sneak))
         print()
     def getItemByName(self, name):
         for i in self.items:
@@ -281,9 +281,10 @@ class Player:
             hal = int(random.random() * self.condition["regeneration"])
             print("You regenerate " + str(hal) + " hp")
             self.heal(hal)
-            self.condition["regenerate"] -= 2
-            if self.condition["regenerate"] < 0:
+            self.condition["regeneration"] -= 2
+            if self.condition["regeneration"] < 0:
                 print("The regeneration wears off")
+                self.condition.pop("regeneration")
     def attackMonster(self, mon, attacked=False):
         mon.agg = True
         if not attacked:
@@ -478,7 +479,7 @@ class Cast(Command):
 
 
 attackcommands = {
-    "flee": Flee(None), #flee differs from  go in that flee doesn't update monster positions
+    #"flee": Flee(None), #flee differs from  go in that flee doesn't update monster positions
     "north": Flee("north"),
     "n": Flee("north"),
     "south": Flee("south"),
