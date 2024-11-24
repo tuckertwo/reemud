@@ -265,7 +265,9 @@ class Player:
         elif effect == "water":
             if "fire" in self.condition:
                 print("The fire was extinguished")
-            self.condition.pop("fire")
+                self.condition.pop("fire")
+            else:
+                print("Aah, a nice refreshing fire extinguisher. Perfect for a hot day!")
     def effectsOccur(self):
         if "poison" in self.condition:
             dam = int(random.random() * self.condition["poison"])
