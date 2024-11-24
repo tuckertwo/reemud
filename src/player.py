@@ -470,7 +470,7 @@ class Cast(Command):
                 else:
                     print(sscroll.bdes)
                     for x in player.location.getAggro():
-                        x.applyEffects(sscroll.effect)
+                        x.applyEffects([sscroll.effect])
                 player.removeItem(sscroll)
             else:
                 print("You make a mistake in the casting!")
