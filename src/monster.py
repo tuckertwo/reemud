@@ -304,6 +304,8 @@ class LichKing(Murderous):
         print("The lich king screams out 'Noooo! I'm dying!'")
         print("The lich king dies")
         print("Congrats, I guess. You won the game. Now you can go home to your village.")
+        self.room.removeMonster(self)
+        updater.deregister(self)
 
     def findAttack(self):
         match random.randint(1, 4):
