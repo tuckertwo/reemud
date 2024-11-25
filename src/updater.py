@@ -28,7 +28,8 @@ def allocateLoot():
         loot.append(item.DamageScroll(int(random.random() * 20)))
         loot.append(item.PoisonScroll(int(random.random() * 15)))
         loot.append(item.Fireball(int(random.random() * 20)))
-    loot.append(item.Weapon("Epic sword", "This sword is so cool, its surprising its wielded by an ordinary skeleton", 100, 2))
+        loot.append(item.Armor("Old adventurer's armor", "Left here by someone more unfortunate than you", 1 + (random.randint(1, 10) / 10)))
+    loot.append(item.Weapon("Epic sword", "This sword is so cool, its surprising its wielded by an ordinary skeleton", 50, 2))
     while len(loot) > 0:
         x = random.randrange(len(loot))
         y = random.choice(updates)

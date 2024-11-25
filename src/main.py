@@ -110,6 +110,7 @@ def createWorld():
     mp3 = item.PoisonScroll(10)
     mp4 = item.Fireball(15)
     mp5 = item.Polymorph()
+    libbook.putInRoom(m)
     mp1.putInRoom(m)
     mp2.putInRoom(m)
     mp3.putInRoom(m)
@@ -121,8 +122,6 @@ def createWorld():
     n = Room("A large table is cluttered with magical scrolls. A cauldron smolders over a hearth. A large purple wizard hat sits on a chair.")
     Room.connectRooms(l, "north", n)
     monster.BigBeast("magical abomination", n)
-    blackkey = item.Key("Black Key")
-    blackkey.putInRoom(n)
 
     #barracks
     o = Room("An open chamber with many bunk beds, lined up in rows")
@@ -132,13 +131,16 @@ def createWorld():
     monster.Ork(o)
     monster.Ork(o)
     monster.Ork(o)
+    x = monster.Ork(o)
+    blackkey = item.Key("Black Key")
+    x.giveItem(blackkey)
 
 
     #priest's bedroom
     p = Room("A thick carpet covers the stone floor in this room. A bed is canopied by silken curtains.")
     Room.connectRooms(o, "north", p)
     monster.HeadCultist(p)
-    x = item.LockedChest("fancy locked chest", "a locked chest that is fancy", blackkey, [item.Weapon("Legendary sword", "A sword known through legend, but it's not featured in any epics", 50, 2)])
+    x = item.LockedChest("fancy locked chest", "a locked chest that is fancy", blackkey, [item.Weapon("Legendary sword", "A sword known through legend, but it's not featured in any epics", 30, 2)])
     
     x.putInRoom(p)
 
