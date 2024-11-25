@@ -84,7 +84,7 @@ class Monster:
             self.takeDamage(dam, True)
             self.condition["fire"] -= 2
             if self.condition["fire"] < 0:
-                if InBattle:
+                if inBattle:
                     print("The fire burning " + self.name + "is extinguished")
                 self.condition.pop("fire")
     def die(self, inBattle=True):
